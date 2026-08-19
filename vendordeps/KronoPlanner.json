@@ -1,0 +1,21 @@
+{
+    "fileName": "KronoPlanner.json",
+    "name": "Krono Planner",
+    "version": "1.6.1",
+    "uuid": "ae9fd30d-1ca5-4ebb-8e1b-b9a2de7bc695",
+    "frcYear": "2026",
+    "mavenUrls": [
+        "https://jitpack.io"
+    ],
+    "jsonUrl": "https://krono10935.github.io/pathplanner/KronoPlanner.json",
+    "javaDependencies": [
+        {
+            "groupId": "com.github.krono10935",
+            "artifactId": "pathplanner",
+            "version": "1.6.1"
+        }
+    ],
+    "jniDependencies": [],
+    "nativeDependencies": [],
+    "cppDependencies": []
+}
