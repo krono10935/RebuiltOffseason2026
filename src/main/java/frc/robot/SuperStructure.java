@@ -26,6 +26,6 @@ public class SuperStructure extends SuperStructureBase{
     }
 
     protected void configureBindings(){
-
+        
     }
 }

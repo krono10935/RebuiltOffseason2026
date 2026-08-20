@@ -14,16 +14,18 @@ import frc.lib.statemachine.StateMachine.State;
 import frc.lib.statemachine.StateMachine.StateName;
 import frc.robot.Constants;
 
-public class SuperStructureBase extends SubsystemBase {
-    /** Creates a new SuperStructure. */
-    private final List<State> states;
+public abstract class SuperStructureBase extends SubsystemBase {
+    
+    // All registered states of the SuperStructure
+    private final List<State> registeredStates;
 
+    // The actual statemachine command
     private final StateMachine statemachine;
 
     protected SuperStructureBase() {
         statemachine = new StateMachine("SuperStructure");
 
-        states = new ArrayList<>();
+        registeredStates = new ArrayList<>();
 
         statemachine.setInitialState(
             registerState(
@@ -33,26 +35,40 @@ public class SuperStructureBase extends SubsystemBase {
         );
     }
 
+    /**
+     * Initialize and register a state to the superstructure statemachine.
+     * @param cmd The command of the State.
+     * @param stateName The name of the State which you are registering.
+     * @return The state that has just been initialized and registered.
+     */
     protected State registerState(Command cmd, StateName stateName){
         var state = statemachine.addState(cmd, stateName);
-        states.add(state);
+        registeredStates.add(state);
         return state;
     }
 
+    /**
+     * Adds a transition from every state other than the current state to the current state.
+     * @param to The state being switched to.
+     * @param trigger The trigger for the state transition.
+     */
     protected void switchFromAnyOtherThanMyself(State to, Trigger trigger){
-        for (State from : states){
-            if (from == to) {
-                continue;
-            }
-
-            from.switchTo(to).when(trigger);
-        }
+        registeredStates.forEach((from) -> {if (from != to) from.switchTo(to).when(trigger);});
     }
 
+    /**
+     * Add a binding of a state to a trigger.
+     * @param to The state to activate on the trigger activation.
+     * @param binding The trigger which trigger's the state.
+     */
     protected void configureBinding(State to, Trigger binding){
         switchFromAnyOtherThanMyself(to, binding);
     }
 
+    /**
+     * Get the Command to execute the statemachine.
+     * @return The command which holds the statemachine.
+     */
     public Command getCommand(){
         return statemachine;
     }
