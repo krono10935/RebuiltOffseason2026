@@ -57,11 +57,11 @@ public class IndexerSubsystem extends SubsystemBase {
   }
 
   /**
-   * get the 
-   * @return
+   * get the temp of the motors in celsius
+   * @return motors temp in celsius
    */
-  public double getTempCel(){
-    return inputs.tempCel;
+  public double[] getTempCel(){
+    return inputs.tempCel.clone();
   }
 
 }
