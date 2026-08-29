@@ -42,7 +42,16 @@ public class IndexerIOCTRE implements IndexerIO {
     @Override
     public void updateInputs(IndexerInputs inputs) {
         inputs.speedRPS = getLeadMotor().getVelocity().getValueAsDouble();
-        inputs.tempCel = getLeadMotor().getDeviceTemp().getValueAsDouble();
+
+        double[] temps = new double[3];
+
+        for (int i = 0; i < temps.length; i++) {
+            temps[i] = getLeadMotor().getDeviceTemp().getValueAsDouble();
+        }
+
+        inputs.tempCel = temps;
+
+        
     }
 
 }

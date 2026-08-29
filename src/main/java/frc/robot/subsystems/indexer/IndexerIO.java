@@ -1,10 +1,13 @@
 package frc.robot.subsystems.indexer;
 
+import org.littletonrobotics.junction.AutoLog;
+
 public interface IndexerIO {
 
+    @AutoLog
     public class IndexerInputs{
         double speedRPS;
-        double tempCel;
+        double[] tempCel;
     }
 
     /**

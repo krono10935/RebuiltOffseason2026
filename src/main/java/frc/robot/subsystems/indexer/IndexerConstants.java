@@ -8,6 +8,9 @@ public class IndexerConstants {
     public static final int[] CAN_IDS = {0, 1, 2};
     public static final boolean[] MOTORS_INVERTED = {false, false, true};
 
+    public static final double DUTY_CYCLE_FORWARD = 0.67;
+    public static final double DUTY_CYCLE_BACKWARD = -0.67;
+
     /**
      * get the config
      * @param isInverted is the motor going to spin clockwise or counter clockwise
