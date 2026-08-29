@@ -16,7 +16,7 @@ public class IndexerSubsystem extends SubsystemBase {
   
   /** Creates a new Indexer. */
   public IndexerSubsystem() {
-    io = RobotBase.isReal() ? new IndexerIOCTRE() : null;
+    io = RobotBase.isReal() ? new IndexerIOCTRE() : new IndexerIOSim();
 
     inputs = new IndexerInputsAutoLogged();
   }
