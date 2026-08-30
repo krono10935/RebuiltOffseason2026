@@ -14,6 +14,12 @@ public class PivotConstants {
 
         config.Slot0.kG = 0;
         config.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
+        
+        config.CurrentLimits.StatorCurrentLimit = 120;
+        config.CurrentLimits.SupplyCurrentLimit = 90;
+
+        config.CurrentLimits.StatorCurrentLimitEnable = true;
+        config.CurrentLimits.SupplyCurrentLimitEnable = true;
 
         return config;        
     }

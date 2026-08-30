@@ -17,6 +17,7 @@ public class RollerConstants {
         SparkMaxConfig motorConfig = new SparkMaxConfig();
 
         motorConfig.encoder.positionConversionFactor(UNIT_CONVERSION);
+        motorConfig.smartCurrentLimit(80,30);
 
         return motorConfig;
     }
@@ -27,6 +28,7 @@ public class RollerConstants {
         motorConfig.encoder.positionConversionFactor(UNIT_CONVERSION);
 
         motorConfig.follow(MOTOR_ONE_CANID, true);
+        motorConfig.smartCurrentLimit(80,30);
 
         return motorConfig;
     }
