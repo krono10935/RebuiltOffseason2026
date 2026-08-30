@@ -27,6 +27,4 @@ public interface RollerIO {
      * @param inputs The inputs of the roller.
      */
     void updateInputs(RollerInputs inputs);
-
-
 }

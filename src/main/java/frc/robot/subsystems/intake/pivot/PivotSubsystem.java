@@ -33,7 +33,7 @@ public class PivotSubsystem extends SubsystemBase {
      * Get the pivot angle
      * @return The angle of the pivot
      */
-    public Rotation2d getangle(){
+    public Rotation2d getAngle(){
         return inputs.angle;
     }
 
