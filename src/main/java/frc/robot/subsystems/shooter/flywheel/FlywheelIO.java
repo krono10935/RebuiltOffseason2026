@@ -6,8 +6,8 @@ public interface FlywheelIO {
 
     @AutoLog
     public class FlywheelInputs {
-        boolean isAtGoal; // is the flywheel at speed setpoint
         double speedMPS; // flywheel speed in meters/second
+        boolean isAtGoal; // is the flywheel at speed setpoint
     }
 
     /**
