@@ -1,0 +1,124 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.0,
+        "y": 4.0
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.6118372725271657,
+        "y": 3.5374056750230825
+      },
+      "isLocked": false,
+      "linkedName": "Hub"
+    },
+    {
+      "anchor": {
+        "x": 1.632409090909091,
+        "y": 4.674022727272727
+      },
+      "prevControl": {
+        "x": 1.799107805777341,
+        "y": 4.487712398892164
+      },
+      "nextControl": {
+        "x": 0.5811136363589906,
+        "y": 5.84899999999511
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 0.7769431818135362,
+        "y": 5.673784090904201
+      },
+      "prevControl": {
+        "x": 1.4365795454499,
+        "y": 4.643102272722382
+      },
+      "nextControl": {
+        "x": 0.4068135939910962,
+        "y": 6.252111571876764
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.7560909090909091,
+        "y": 6.9930568181818185
+      },
+      "prevControl": {
+        "x": 0.8058492246903829,
+        "y": 6.9930568181818185
+      },
+      "nextControl": {
+        "x": 2.3848068181818176,
+        "y": 6.9930568181818185
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.858681818181818,
+        "y": 5.55
+      },
+      "prevControl": {
+        "x": 3.2196590909090905,
+        "y": 5.5913295454545455
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "LBump45"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.7295597484276729,
+      "rotationDegrees": -57.15625173913402
+    },
+    {
+      "waypointRelativePos": 3.0,
+      "rotationDegrees": -90.0
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "open Intake",
+      "waypointRelativePos": 1.9174147217235182,
+      "endWaypointRelativePos": null,
+      "command": null
+    },
+    {
+      "name": "Close Intake",
+      "waypointRelativePos": 2.578096947935366,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -62.96115391568521
+  },
+  "reversed": false,
+  "folder": "Depot",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": true
+}
