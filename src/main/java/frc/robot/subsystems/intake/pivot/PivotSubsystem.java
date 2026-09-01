@@ -3,8 +3,10 @@ package frc.robot.subsystems.intake.pivot;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.intake.pivot.PivotIO.PivotInputs;
+import frc.robot.Constants;
+import frc.robot.Constants.Mode;
 
 public class PivotSubsystem extends SubsystemBase {
     private final PivotInputsAutoLogged inputs;
@@ -13,7 +15,7 @@ public class PivotSubsystem extends SubsystemBase {
     //Create a new PivotSubsystem
     public PivotSubsystem(){
         inputs = new PivotInputsAutoLogged();
-        io = new PivotIOCTRE();
+        io = RobotBase.isReal() ? new PivotIOCTRE() : new PivotIOSim(); 
     }
 
     @Override
@@ -24,7 +26,7 @@ public class PivotSubsystem extends SubsystemBase {
 
     /**
      * Get the motor temprature
-     * @return The temprature of the motor in celsius 
+     * @return The temprature of the motor in celsius
      */
     public double getMotorTempC(){
         return inputs.motorTempC;
@@ -50,6 +52,7 @@ public class PivotSubsystem extends SubsystemBase {
      * Command the hardware to go to a rotation
      * @param rotation the wanted rotation
      */
+
     public void setRotation(Rotation2d rotation){
         io.setRotation(rotation);
     }
@@ -63,7 +66,6 @@ public class PivotSubsystem extends SubsystemBase {
 
     /**
      * Updates the field values of the input object.
-     * @param inputs The input object that we are updating.
      */
     private void updateInputs(){
         io.updateInputs(inputs);
