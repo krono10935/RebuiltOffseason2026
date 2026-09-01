@@ -12,28 +12,28 @@ import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import frc.lib.math.UnitConversions;
 
 public class FlywheelConstants {
-    // CANIDs of all flywheel motors
+    /** CANIDs of all flywheel motors */
     public static final int[] MOTOR_IDS = {0, 1, 2, 3}; // TODO:change to correct CANID
     
-    // flywheel radius 
+    /** flywheel radius */
     private static final double FLYWHEEL_RADIUS = UnitConversions.inchesToMeters(4); // TODO: get the real value from cad
 
-    // flywheel circumference 
+    /** flywheel circumference */
     private static final double FLYWHEEL_CIRCUMFERENCE =  FLYWHEEL_RADIUS * 2 * Math.PI;
 
-    // whether the lead motor is inverted 
+    /** whether the lead motor is inverted */
     public static final boolean LEAD_INVERTED = false; // TODO: get the real value from cad
 
-    // how much we are willing to tolerate differences between set PID speed and the actual speed (in meters/second) 
+    /** how much we are willing to tolerate differences between set PID speed and the actual speed (in meters/second) */
     public static final int MPS_TOLERANCE = 5; // TODO: tweak
 
-    // the gear reduction between the motors and the flywheel 
+    /** the gear reduction between the motors and the flywheel */
     public static final double GEAR_RATIO = 6.9; // TODO: get the real value from cad
 
-    // moment of inertia of the flywheel 
+    /** moment of inertia of the flywheel */
     private static final double MOMENT_OF_INERTIA = 0.001; // TODO: get the real value from cad
 
-    // gear box of all 4 motors (MOTOR_IDS.length=4) 
+    /** gear box of all 4 motors (MOTOR_IDS.length=4) */
     private static final DCMotor GEAR_BOX = DCMotor.getKrakenX60(MOTOR_IDS.length);
         
     /**
