@@ -45,7 +45,7 @@ public class FlywheelSubsystem extends SubsystemBase {
     }
 
     /**
-     * @return gets the current flywheel speed in meters/second
+     * @return the current flywheel speed in meters/second
      */
     public double getSpeed(){
       return inputs.speedMPS;

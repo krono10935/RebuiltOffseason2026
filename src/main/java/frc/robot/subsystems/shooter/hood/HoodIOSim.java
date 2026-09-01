@@ -20,12 +20,15 @@ public class HoodIOSim implements HoodIO {
 
     private final SparkMax hoodMotor;
     private final SingleJointedArmSim hoodSim;
+    private final SparkMaxSim sparkMaxSim;
 
     public HoodIOSim(){
         hoodSim = HoodConstants.getSim();
 
         hoodMotor = new SparkMax(HoodConstants.HOOD_MOTOR_CANID, MotorType.kBrushless);
         hoodMotor.configure(HoodConstants.getHoodConfig(), ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+        sparkMaxSim = new SparkMaxSim(hoodMotor, HoodConstants.GEAR_BOX);
     }
 
     @Override
@@ -45,8 +48,6 @@ public class HoodIOSim implements HoodIO {
 
     @Override
     public void updateInputs(HoodInputs inputs) {
-        SparkMaxSim sparkMaxSim = new SparkMaxSim(hoodMotor, HoodConstants.GEAR_BOX); // get the sim state
-
         hoodSim.setInput(sparkMaxSim.getAppliedOutput() * RoboRioSim.getVInVoltage());
 
         // Next, we update it. The standard loop time is 20ms.

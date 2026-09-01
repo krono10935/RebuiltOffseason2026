@@ -28,7 +28,9 @@ public class FlywheelIOSim implements FlywheelIO{
         for (int i = 1; i < flywheelMotors.length; i++){
             flywheelMotors[i] = new TalonFX(FlywheelConstants.MOTOR_IDS[i]);
 
-            flywheelMotors[i].getConfigurator().apply(FlywheelConstants.getFollowerConfig(i >= flywheelMotors.length / 2)); // set half the motors to inverted
+            boolean inverted = i >= flywheelMotors.length / 2; // half the motors are inverted
+
+            flywheelMotors[i].getConfigurator().apply(FlywheelConstants.getFollowerConfig(inverted));
 
             flywheelMotors[i].setControl(new Follower(FlywheelConstants.MOTOR_IDS[0], MotorAlignmentValue.Aligned)); // TODO: understand how aligned works, we set it to inverted above this
         }
