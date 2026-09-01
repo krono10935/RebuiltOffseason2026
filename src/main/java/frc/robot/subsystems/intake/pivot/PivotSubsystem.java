@@ -23,7 +23,7 @@ public class PivotSubsystem extends SubsystemBase {
 
     /**
      * Get the motor temprature
-     * @return The temprature of the motor in celsius 
+     * @return The temprature of the motor in celsius
      */
     public double getMotorTempC(){
         return inputs.motorTempC;
@@ -49,6 +49,7 @@ public class PivotSubsystem extends SubsystemBase {
      * Command the hardware to go to a rotation
      * @param rotation the wanted rotation
      */
+
     public void setRotation(Rotation2d rotation){
         io.setRotation(rotation);
     }
@@ -62,7 +63,6 @@ public class PivotSubsystem extends SubsystemBase {
 
     /**
      * Updates the field values of the input object.
-     * @param inputs The input object that we are updating.
      */
     private void updateInputs(){
         io.updateInputs(inputs);
