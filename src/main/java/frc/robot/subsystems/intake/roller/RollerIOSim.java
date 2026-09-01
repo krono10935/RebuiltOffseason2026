@@ -75,6 +75,8 @@ public class RollerIOSim implements RollerIO{
      */
     @Override
     public void updateInputs(RollerInputs inputs) {
+        stepSimulation();
+        
         inputs.motorOneTempC = motorOne.getMotorTemperature();
         inputs.motorTwoTempC = motorTwo.getMotorTemperature();
         inputs.speedMPS = motorOne.getEncoder().getVelocity();

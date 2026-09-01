@@ -2,6 +2,7 @@ package frc.robot.subsystems.intake.roller;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.intake.roller.RollerIO.RollerInputs;
 
@@ -12,7 +13,7 @@ public class RollerSubsystem extends SubsystemBase {
     //Create a new PivotSubsystem
     public RollerSubsystem(){
         inputs = new RollerInputsAutoLogged();
-        io = new RollerIORev();
+        io = RobotBase.isReal() ? new RollerIORev() : new RollerIOSim();
     }
 
     @Override
