@@ -57,6 +57,10 @@ public class PivotSubsystem extends SubsystemBase {
         io.setRotation(rotation);
     }
 
+    /**
+     * Command the hardware to go to a rotation, using a trapezoid profile to slow the pivot. The goal is for the balls to not get stuck between the pivot and the shooter
+     * @param rotation The wanted rotation
+s    */
     public void setRotationSlow(Rotation2d rotation){
         io.setRotationSlow(rotation);
     }
