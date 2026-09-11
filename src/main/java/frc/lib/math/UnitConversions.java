@@ -218,4 +218,8 @@ public final class UnitConversions {
   public static double RPMtoRPS(double rotationsPerMinutes){
     return rotationsPerMinutes / kSecondsPerMinute;
   }
+
+  public static double radiansPerSecondToRotationsPerSecond(double radiansPerSecond){
+    return radiansPerSecond / (2 * Math.PI);
+  }
 }

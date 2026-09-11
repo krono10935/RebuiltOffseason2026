@@ -55,9 +55,14 @@ public class PivotConstants {
         TalonFXConfiguration config = new TalonFXConfiguration();
         
         config.Slot0.kP = 0;
-
         config.Slot0.kG = 0;
         config.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
+
+        config.Slot1.kP = 0;
+        config.Slot1.kG = 0;
+        config.Slot1.GravityType = GravityTypeValue.Arm_Cosine;
+        config.MotionMagic.MotionMagicAcceleration = 1;
+        config.MotionMagic.MotionMagicCruiseVelocity = 1;
         
         config.CurrentLimits.StatorCurrentLimit = 120;
         config.CurrentLimits.SupplyCurrentLimit = 90;

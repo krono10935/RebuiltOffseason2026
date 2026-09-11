@@ -1,9 +1,12 @@
 package frc.robot.subsystems.intake.pivot;
 
+import com.ctre.phoenix6.controls.ControlRequest;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.sim.TalonFXSimState;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
@@ -15,18 +18,21 @@ public class PivotIOSim implements PivotIO {
 
     private final TalonFX motor;
     private final SingleJointedArmSim pivotSim;
-    private final TalonFXSimState motorSim;
 
     public PivotIOSim(){
         motor = new TalonFX(PivotConstants.MOTOR_CANID);
         
         pivotSim = PivotConstants.getSim();
-        motorSim = motor.getSimState();
     }
     @Override
     public void setRotation(Rotation2d rotation) {
         motor.setControl(new PositionVoltage(rotation.getRotations()));
     }
+
+    @Override
+    public void setRotationSlow(Rotation2d rotation) {
+        motor.setControl(new MotionMagicVoltage(rotation.getRotations()).withSlot(1));
+     }
 
     @Override
     public void stop() {
@@ -37,6 +43,8 @@ public class PivotIOSim implements PivotIO {
      * Steps the simulation by Constants.LOOP_PERIOD_SECONDS(20ms).
      */
     private void simulateStep(){
+        
+        TalonFXSimState motorSim = motor.getSimState();
 
         motorSim.setSupplyVoltage(RobotController.getBatteryVoltage());
 
@@ -44,11 +52,11 @@ public class PivotIOSim implements PivotIO {
         pivotSim.update(Constants.LOOP_PERIOD_SECONDS);
 
         motorSim.setRawRotorPosition(
-            pivotSim.getAngleRads() * PivotConstants.GEAR_RATIO - motor.getPosition().getValueAsDouble()
+            UnitConversions.radiansToRotations(pivotSim.getAngleRads() * PivotConstants.GEAR_RATIO)
         );
         
         motorSim.setRotorVelocity(
-            pivotSim.getVelocityRadPerSec() * PivotConstants.GEAR_RATIO
+            UnitConversions.radiansPerSecondToRotationsPerSecond(pivotSim.getVelocityRadPerSec() * PivotConstants.GEAR_RATIO)
         ); 
     }
 
@@ -59,6 +67,5 @@ public class PivotIOSim implements PivotIO {
         inputs.angle = Rotation2d.fromRotations(motor.getPosition().getValueAsDouble());
         inputs.motorTempC = motor.getDeviceTemp().getValueAsDouble();
         inputs.angularVelocityRPS = motor.getVelocity().getValueAsDouble();
-
     }
 }

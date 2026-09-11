@@ -57,6 +57,10 @@ public class PivotSubsystem extends SubsystemBase {
         io.setRotation(rotation);
     }
 
+    public void setRotationSlow(Rotation2d rotation){
+        io.setRotationSlow(rotation);
+    }
+
     /**
      * Stops the pivot
      */

@@ -1,5 +1,6 @@
 package frc.robot.subsystems.intake.pivot;
 
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
@@ -11,6 +12,11 @@ public class PivotIOCTRE implements PivotIO {
         motor = new TalonFX(PivotConstants.MOTOR_CANID);
 
         motor.getConfigurator().apply(PivotConstants.getMotorConfig());
+    }
+
+    @Override
+    public void setRotationSlow(Rotation2d rotation) {
+        motor.setControl(new MotionMagicVoltage(rotation.getRotations()).withSlot(1));
     }
 
     @Override
@@ -29,5 +35,4 @@ public class PivotIOCTRE implements PivotIO {
         inputs.motorTempC = motor.getDeviceTemp().getValueAsDouble();
         inputs.angularVelocityRPS = motor.getVelocity().getValueAsDouble();
     }
-    
 }
