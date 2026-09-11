@@ -219,6 +219,11 @@ public final class UnitConversions {
     return rotationsPerMinutes / kSecondsPerMinute;
   }
 
+    /**
+   * Converts radians per second RPS.
+   * @param radiansPerSecond The radians per second to convert into RPS;
+   * @return RPS converted from radians per second
+   */
   public static double radiansPerSecondToRotationsPerSecond(double radiansPerSecond){
     return radiansPerSecond / (2 * Math.PI);
   }
