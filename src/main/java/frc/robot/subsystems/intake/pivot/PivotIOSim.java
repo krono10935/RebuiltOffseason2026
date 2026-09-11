@@ -15,10 +15,11 @@ public class PivotIOSim implements PivotIO {
 
     private final TalonFX motor;
     private final SingleJointedArmSim pivotSim;
-    TalonFXSimState motorSim;
+    private final TalonFXSimState motorSim;
 
     public PivotIOSim(){
         motor = new TalonFX(PivotConstants.MOTOR_CANID);
+        
         pivotSim = PivotConstants.getSim();
         motorSim = motor.getSimState();
     }
@@ -42,18 +43,18 @@ public class PivotIOSim implements PivotIO {
         // Next, we update it. The standard loop time is 20ms.
         pivotSim.update(Constants.LOOP_PERIOD_SECONDS);
 
-        motorSim.addRotorPosition(
-            pivotSim.getAngleRads() / PivotConstants.GEAR_RATIO - motor.getPosition().getValueAsDouble()
+        motorSim.setRawRotorPosition(
+            pivotSim.getAngleRads() * PivotConstants.GEAR_RATIO - motor.getPosition().getValueAsDouble()
         );
         
         motorSim.setRotorVelocity(
-            motor.getVelocity().getValueAsDouble()
+            pivotSim.getVelocityRadPerSec() * PivotConstants.GEAR_RATIO
         ); 
     }
 
     @Override
     public void updateInputs(PivotInputs inputs) {
-        simulateStep();        
+        simulateStep();
         
         inputs.angle = Rotation2d.fromRotations(motor.getPosition().getValueAsDouble());
         inputs.motorTempC = motor.getDeviceTemp().getValueAsDouble();
