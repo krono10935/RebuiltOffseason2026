@@ -3,14 +3,15 @@ package frc.robot.subsystems.intake.pivot;
 import org.littletonrobotics.junction.AutoLog;
 
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 public interface PivotIO {
 
     @AutoLog
     public class PivotInputs{
-        double motorTempC;
+        double motorTempratureC;
+        /**The angular velocity of the roller in RPS */
         double angularVelocityRPS;
+        /**The current angle of the roller read from the encoder */
         Rotation2d angle;
     }
 
