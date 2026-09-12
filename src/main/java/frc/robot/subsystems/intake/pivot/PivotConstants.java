@@ -14,13 +14,19 @@ import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 public class PivotConstants {
     public final static int MOTOR_CANID = 4;
 
+    /**The motors that are spinning the pivot*/
     public final static DCMotor GEAR_BOX = DCMotor.getKrakenX60(1);
-    private static final double MOMENT_OF_INERTIA = 0.001;                                  // TODO: change to correct
-    private static final double PIVOT_LENGTH_METERS = 0.3;                                  // TODO: change to correct
-    private static final Rotation2d PIVOT_CLOSE_ANGLE = Rotation2d.fromDegrees(67); // TODO: change to correct
-    private static final Rotation2d PIVOT_MAX_ANGLE = Rotation2d.fromDegrees(0); // TODO: change to correct
+    private static final double MOMENT_OF_INERTIA = 0.001; // TODO: get value from CAD
+    private static final double PIVOT_LENGTH_METERS = 0.3; // TODO: get value from CAD
+    
+    /** The angle where the pivot is closed */
+    private static final Rotation2d PIVOT_CLOSE_ANGLE = Rotation2d.fromDegrees(67); // TODO: get value from CAD
+    /** The angle where the pivot is opened */
+    private static final Rotation2d PIVOT_OPEN_ANGLE = Rotation2d.fromDegrees(0);// TODO: get value from CAD
+    /**whether we are accounting for gravity in the simulation */
     private static final boolean SIMULATE_GRAVITY = true;                              // TODO: change to wanted mode
-    public static final double GEAR_RATIO = 90;                                              // TODO: change to correct
+    /** The gear ratio between the motor and the pivot arm (a single roation of the arm is equal to GEAR_RATIO roations of the pivot).*/
+    public static final double GEAR_RATIO = 45;  // TODO: get value from CAD
 
 
     /**
@@ -35,6 +41,7 @@ public class PivotConstants {
     }
 
     /**
+     * The pivot arm's simulation
      * @return the pivot's sim
      */
     public static SingleJointedArmSim getSim() {
@@ -44,23 +51,30 @@ public class PivotConstants {
                 GEAR_RATIO,
                 PIVOT_LENGTH_METERS,
                 PIVOT_CLOSE_ANGLE.getRadians(),
-                PIVOT_MAX_ANGLE.getRadians(),
+                PIVOT_OPEN_ANGLE.getRadians(),
                 SIMULATE_GRAVITY,
                 PIVOT_CLOSE_ANGLE.getRadians()
         );
     }
 
-
+    /**
+     * The config we will be using for the TalonFX motor
+     * @return The config
+     */
     public static TalonFXConfiguration getMotorConfig(){
         TalonFXConfiguration config = new TalonFXConfiguration();
-        
+        //TODO: Tweak the PID values
         config.Slot0.kP = 0;
+        config.Slot0.kD = 0;
+        config.Slot0.kI = 0;
         config.Slot0.kG = 0;
         config.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
 
+        //TODO: Tweak the PID values for setRotationSlow()
         config.Slot1.kP = 0;
         config.Slot1.kG = 0;
         config.Slot1.GravityType = GravityTypeValue.Arm_Cosine;
+        //The trapezoid profile for setRotationSlow()
         config.MotionMagic.MotionMagicAcceleration = 1;
         config.MotionMagic.MotionMagicCruiseVelocity = 1;
         

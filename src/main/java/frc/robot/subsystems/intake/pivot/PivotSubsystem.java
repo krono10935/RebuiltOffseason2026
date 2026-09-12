@@ -29,7 +29,7 @@ public class PivotSubsystem extends SubsystemBase {
      * @return The temprature of the motor in celsius
      */
     public double getMotorTempC(){
-        return inputs.motorTempC;
+        return inputs.motorTempratureC;
     }
 
     /**
