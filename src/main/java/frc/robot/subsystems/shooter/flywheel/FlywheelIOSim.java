@@ -17,6 +17,8 @@ public class FlywheelIOSim implements FlywheelIO{
     private final TalonFX[] flywheelMotors; 
     private final FlywheelSim flywheelSim;
 
+    private final TalonFXSimState simState;
+
     public FlywheelIOSim(){
 
         flywheelSim = FlywheelConstants.getSim();
@@ -24,6 +26,8 @@ public class FlywheelIOSim implements FlywheelIO{
 
         flywheelMotors[0] = new TalonFX(FlywheelConstants.MOTOR_IDS[0]); // flywheelMotors[0] is the leading motor
         flywheelMotors[0].getConfigurator().apply(FlywheelConstants.getLeadConfig(FlywheelConstants.LEAD_INVERTED));
+
+        simState = getLeadMotor().getSimState();
 
         for (int i = 1; i < flywheelMotors.length; i++){
             flywheelMotors[i] = new TalonFX(FlywheelConstants.MOTOR_IDS[i]);
@@ -59,10 +63,8 @@ public class FlywheelIOSim implements FlywheelIO{
         getLeadMotor().stopMotor();
     }
 
-    @Override
-    public void updateInputs(FlywheelInputs inputs) {
-
-        TalonFXSimState simState = getLeadMotor().getSimState();
+    private void simulateStep()
+    {
         simState.setSupplyVoltage(RobotController.getBatteryVoltage());
 
         double motorVoltage = simState.getMotorVoltage();
@@ -80,7 +82,13 @@ public class FlywheelIOSim implements FlywheelIO{
             flywheelSim.getAngularVelocity().times(
                 FlywheelConstants.GEAR_RATIO
             )
-        ); 
+        );
+    }
+
+    @Override
+    public void updateInputs(FlywheelInputs inputs) {
+
+        simulateStep();
 
         inputs.speedMPS = getLeadMotor().getVelocity().getValueAsDouble();
 
