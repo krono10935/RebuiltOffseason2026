@@ -4,13 +4,12 @@ import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.intake.roller.RollerIO.RollerInputs;
 
 public class RollerSubsystem extends SubsystemBase {
     private final RollerInputsAutoLogged inputs;
     private final RollerIO io;
 
-    //Create a new PivotSubsystem
+    //Create a new RollerSubsystem
     public RollerSubsystem(){
         inputs = new RollerInputsAutoLogged();
         io = RobotBase.isReal() ? new RollerIORev() : new RollerIOSim();
@@ -27,7 +26,7 @@ public class RollerSubsystem extends SubsystemBase {
      * @return The temprature of the motor in celsius 
      */
     public double getMotorOneTempC(){
-        return inputs.motorOneTempC;
+        return inputs.motorOneTemperatureC;
     }
 
     /**
@@ -35,7 +34,7 @@ public class RollerSubsystem extends SubsystemBase {
      * @return The temprature of the motor in celsius 
      */
     public double getMotorTwoTempC(){
-        return inputs.motorTwoTempC;
+        return inputs.motorTwoTemperatureC;
     }
 
     /**

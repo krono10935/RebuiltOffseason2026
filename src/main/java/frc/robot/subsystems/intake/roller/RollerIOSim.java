@@ -18,6 +18,7 @@ public class RollerIOSim implements RollerIO{
     private final SparkMax motorOne;
     private final SparkMax motorTwo; 
     private final FlywheelSim rollerSim;
+    private final SparkMaxSim simState;
 
     public RollerIOSim(){
         rollerSim = RollerConstants.getSim();
@@ -27,6 +28,8 @@ public class RollerIOSim implements RollerIO{
 
         motorOne.configure(RollerConstants.getLeadConfig(), ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         motorTwo.configure(RollerConstants.getFollowerConfig(), ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        simState = new SparkMaxSim(motorOne, RollerConstants.GEAR_BOX);
+
     }
 
     /**
@@ -50,7 +53,6 @@ public class RollerIOSim implements RollerIO{
      * Steps the sim by Constants.LOOP_PERIOD_SECONDS (20ms)
      */
     private void stepSimulation(){
-        SparkMaxSim simState = new SparkMaxSim(motorOne, RollerConstants.GEAR_BOX);
         simState.setBusVoltage(RobotController.getBatteryVoltage());
 
         double motorVoltage = simState.getBusVoltage();
@@ -77,8 +79,8 @@ public class RollerIOSim implements RollerIO{
     public void updateInputs(RollerInputs inputs) {
         stepSimulation();
         
-        inputs.motorOneTempC = motorOne.getMotorTemperature();
-        inputs.motorTwoTempC = motorTwo.getMotorTemperature();
+        inputs.motorOneTemperatureC = motorOne.getMotorTemperature();
+        inputs.motorTwoTemperatureC = motorTwo.getMotorTemperature();
         inputs.speedMPS = motorOne.getEncoder().getVelocity();
     }
 }

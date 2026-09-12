@@ -6,8 +6,9 @@ public interface RollerIO {
 
     @AutoLog
     public class RollerInputs{
-        double motorOneTempC;
-        double motorTwoTempC;
+        double motorOneTemperatureC;
+        double motorTwoTemperatureC;
+        /**speed of the motor meteres per second (skebob) */
         double speedMPS;
     }
 

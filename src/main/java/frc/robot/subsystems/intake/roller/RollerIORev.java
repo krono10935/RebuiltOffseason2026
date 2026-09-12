@@ -14,7 +14,7 @@ public class RollerIORev implements RollerIO {
   private final SparkMax motorOne;
   private final SparkMax motorTwo;
 
-  /** Creates a new RollerIORev. */
+  /** Creates a new RollerIORev. (skebob)*/
   public RollerIORev() {
     motorOne = new SparkMax(RollerConstants.MOTOR_ONE_CANID, MotorType.kBrushless);
     motorTwo = new SparkMax(RollerConstants.MOTOR_TWO_CANID, MotorType.kBrushless);
@@ -37,8 +37,8 @@ public class RollerIORev implements RollerIO {
 
   @Override
   public void updateInputs(RollerInputs inputs) {
-    inputs.motorOneTempC = motorOne.getMotorTemperature();
-    inputs.motorTwoTempC = motorTwo.getMotorTemperature();
+    inputs.motorOneTemperatureC = motorOne.getMotorTemperature();
+    inputs.motorTwoTemperatureC = motorTwo.getMotorTemperature();
 
     inputs.speedMPS = motorOne.getEncoder().getVelocity();
   }

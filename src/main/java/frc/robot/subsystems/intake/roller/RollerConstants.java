@@ -13,11 +13,12 @@ public class RollerConstants {
     public final static int MOTOR_ONE_CANID = 1;
     public final static int MOTOR_TWO_CANID = 2;
 
-    public final static double ROLLER_RADIUS_METER = 0.0275;
+
+    public final static double ROLLER_RADIUS_METER = 0.0275;    //TODO - Get the real Roller radius in meters 
     public final static double UNIT_CONVERSION = UnitConversions.RPMtoRPS(2 * ROLLER_RADIUS_METER * Math.PI); // RPM to MPS
 
     private static final double MOMENT_OF_INERTIA = 0.001;
-    public static final double GEAR_RATIO = 1;
+    public static final double GEAR_RATIO = 1; //TODO - Get the real gear ratio
     public static final DCMotor GEAR_BOX = DCMotor.getKrakenX60(2);
 
     public static SparkMaxConfig getLeadConfig(){
@@ -52,4 +53,6 @@ public class RollerConstants {
         return new FlywheelSim(getPlant(), GEAR_BOX);
     }
 }
+
 //btw skebob
+//also, more skebob
