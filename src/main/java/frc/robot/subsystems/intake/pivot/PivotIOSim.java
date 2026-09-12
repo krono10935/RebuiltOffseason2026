@@ -65,7 +65,7 @@ public class PivotIOSim implements PivotIO {
         simulateStep();
         
         inputs.angle = Rotation2d.fromRotations(motor.getPosition().getValueAsDouble());
-        inputs.motorTempratureC = motor.getDeviceTemp().getValueAsDouble();
+        inputs.motorTemperatureC = motor.getDeviceTemp().getValueAsDouble();
         inputs.angularVelocityRPS = motor.getVelocity().getValueAsDouble();
     }
 }
