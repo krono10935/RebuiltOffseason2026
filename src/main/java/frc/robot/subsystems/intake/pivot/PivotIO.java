@@ -8,7 +8,8 @@ public interface PivotIO {
 
     @AutoLog
     public class PivotInputs{
-        double motorTempratureC;
+        /**The temperature of the motor in celius */
+        double motorTemperatureC;
         /**The angular velocity of the roller in RPS */
         double angularVelocityRPS;
         /**The current angle of the roller read from the encoder */
