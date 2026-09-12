@@ -10,14 +10,14 @@ import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import frc.lib.math.UnitConversions;
 
 public class RollerConstants {
-    public final static int MOTOR_ONE_CANID = 1;
-    public final static int MOTOR_TWO_CANID = 2;
+    public final static int MOTOR_ONE_CANID = 1; //TODO: find the right can id
+    public final static int MOTOR_TWO_CANID = 2; //TODO: find the right can id
 
 
     public final static double ROLLER_RADIUS_METER = 0.0275;    //TODO - Get the real Roller radius in meters 
     public final static double UNIT_CONVERSION = UnitConversions.RPMtoRPS(2 * ROLLER_RADIUS_METER * Math.PI); // RPM to MPS
 
-    private static final double MOMENT_OF_INERTIA = 0.001;
+    private static final double MOMENT_OF_INERTIA = 0.001;//TODO: find the right value
     public static final double GEAR_RATIO = 1; //TODO - Get the real gear ratio
     public static final DCMotor GEAR_BOX = DCMotor.getKrakenX60(2);
 
@@ -25,8 +25,7 @@ public class RollerConstants {
         SparkMaxConfig motorConfig = new SparkMaxConfig();
 
         motorConfig.encoder.positionConversionFactor(UNIT_CONVERSION);  
-        motorConfig.smartCurrentLimit(80,30);
-
+        motorConfig.smartCurrentLimit(80,30); 
         return motorConfig;
     }
 
@@ -55,4 +54,4 @@ public class RollerConstants {
 }
 
 //btw skebob
-//also, more skebob
+//also, even more skebob then last skebob
