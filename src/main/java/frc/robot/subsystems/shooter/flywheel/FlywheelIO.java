@@ -1,0 +1,35 @@
+package frc.robot.subsystems.shooter.flywheel;
+
+import org.littletonrobotics.junction.AutoLog;
+
+public interface FlywheelIO {
+
+    @AutoLog
+    public class FlywheelInputs {
+        boolean isAtGoal; // is the flywheel at speed setpoint
+        double speedMPS; // flywheel speed in meters/second
+    }
+
+    /**
+     * sets the wanted flywheel speed (fast but non accurate PID)
+     * @param mps the wanted speed in meters/second
+     */
+    void setSpeedInaccurate(double mps);
+
+    /**
+     * holds the wanted flywheel (slow but accurate PID)
+     * @param mps the wanted speed in meters/second
+     */
+    void setSpeedAccurate(double mps);
+
+    /**
+     * stops the flywheel
+     */
+    void stop();
+
+    /**
+     * updates the inputs using data from the IO
+     * @param inputs the reference to the input object to update
+     */
+    void updateInputs(FlywheelInputs inputs);
+}
