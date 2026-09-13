@@ -1,0 +1,101 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RTrench - outpost"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "outpost - tower shoot"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "race",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "WaitUntilNoBalls"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 4.0
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ShootAndAim"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "tower - depot pickup"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "depot intake(tower)"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "race",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "WaitUntilNoBalls"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 4.0
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ShootAndAim"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "depot - outpost",
+  "choreoAuto": false
+}

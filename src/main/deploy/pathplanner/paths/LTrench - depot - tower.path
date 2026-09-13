@@ -1,0 +1,122 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.574322929348792,
+        "y": 6.831821149492396
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.6630909090909087,
+        "y": 7.04459090909091
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 0.7447300241820163,
+        "y": 7.243792530321275
+      },
+      "prevControl": {
+        "x": 1.1854420945947384,
+        "y": 7.668608146015507
+      },
+      "nextControl": {
+        "x": 0.332758643344938,
+        "y": 6.846680929464031
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.0036931818181816,
+        "y": 5.199670454545456
+      },
+      "prevControl": {
+        "x": 0.3900298507008588,
+        "y": 5.673864846772479
+      },
+      "nextControl": {
+        "x": 1.6839431818181816,
+        "y": 4.674022727272727
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.0859090909090905,
+        "y": 4.055613636363637
+      },
+      "prevControl": {
+        "x": 1.766397727272727,
+        "y": 4.632795454545455
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "near tower shoot"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.1855345911949708,
+      "rotationDegrees": 90.0
+    },
+    {
+      "waypointRelativePos": 1.8301886792452828,
+      "rotationDegrees": 90.77422016492807
+    }
+  ],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 1.15,
+      "maxWaypointRelativePos": 1.79,
+      "constraints": {
+        "maxVelocity": 1.5,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "Intake",
+      "waypointRelativePos": 1.14721723518851,
+      "endWaypointRelativePos": 1.793536804308797,
+      "command": null
+    },
+    {
+      "name": "Close Intake",
+      "waypointRelativePos": 1.79,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "reversed": false,
+  "folder": "depot - outpost",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.3845296595845079
+  },
+  "useDefaultConstraints": true
+}

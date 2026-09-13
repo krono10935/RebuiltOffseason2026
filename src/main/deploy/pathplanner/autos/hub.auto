@@ -1,0 +1,51 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "hub"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "race",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "WaitUntilNoBalls"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 5.0
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "WaitUntilNoBalls"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Hub",
+  "choreoAuto": false
+}
