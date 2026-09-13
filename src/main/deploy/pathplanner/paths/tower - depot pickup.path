@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.0859090909090905,
+        "y": 4.055613636363637
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.0549886363636363,
+        "y": 4.849238636363636
+      },
+      "isLocked": false,
+      "linkedName": "near tower shoot"
+    },
+    {
+      "anchor": {
+        "x": 0.4677386363636361,
+        "y": 4.859545454545455
+      },
+      "prevControl": {
+        "x": 1.704556818181818,
+        "y": 4.880159090909092
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "depot pickup(tower)"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -90.0
+  },
+  "reversed": false,
+  "folder": "depot - outpost",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": true
+}

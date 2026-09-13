@@ -1,0 +1,102 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 0.468,
+        "y": 4.86
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 0.4680000000000001,
+        "y": 6.11544491867524
+      },
+      "isLocked": false,
+      "linkedName": "depot pickup(tower)"
+    },
+    {
+      "anchor": {
+        "x": 0.468,
+        "y": 6.962136363636364
+      },
+      "prevControl": {
+        "x": 0.46799999999999997,
+        "y": 6.325136363636364
+      },
+      "nextControl": {
+        "x": 0.4680000000000001,
+        "y": 7.599136363636363
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.230204545454545,
+        "y": 5.879920454545454
+      },
+      "prevControl": {
+        "x": 1.5190340909090905,
+        "y": 6.477715909090908
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1,
+      "rotationDegrees": -90.0
+    }
+  ],
+  "constraintZones": [
+    {
+      "name": "Intake",
+      "minWaypointRelativePos": 0.0,
+      "maxWaypointRelativePos": 0.3734290843806101,
+      "constraints": {
+        "maxVelocity": 1.5,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "Intake",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": 0.37,
+      "command": null
+    },
+    {
+      "name": "Close Intake",
+      "waypointRelativePos": 0.37,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -36.90922212801038
+  },
+  "reversed": false,
+  "folder": "depot - outpost",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -90.0
+  },
+  "useDefaultConstraints": true
+}

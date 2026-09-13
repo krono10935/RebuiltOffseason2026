@@ -1,0 +1,102 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.0859090909090905,
+        "y": 4.055613636363637
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.1683636363636363,
+        "y": 2.5405113636363637
+      },
+      "isLocked": false,
+      "linkedName": "near tower shoot"
+    },
+    {
+      "anchor": {
+        "x": 2.5497159090909087,
+        "y": 1.1697045454545458
+      },
+      "prevControl": {
+        "x": 2.598124140324768,
+        "y": 1.871623898345502
+      },
+      "nextControl": {
+        "x": 2.508488636363636,
+        "y": 0.5719090909090916
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 0.8490909090909087,
+        "y": 0.5822159090909098
+      },
+      "prevControl": {
+        "x": 1.5293409090909087,
+        "y": 0.6234431818181827
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "outpost"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.097484276729561,
+      "rotationDegrees": 0.0
+    }
+  ],
+  "constraintZones": [
+    {
+      "name": "Intake",
+      "minWaypointRelativePos": 1.2999999999999998,
+      "maxWaypointRelativePos": 2.0,
+      "constraints": {
+        "maxVelocity": 1.5,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "Intake",
+      "waypointRelativePos": 1.2999999999999998,
+      "endWaypointRelativePos": 3.0,
+      "command": null
+    },
+    {
+      "name": "Close Intake",
+      "waypointRelativePos": 2.0,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0.0,
+    "rotation": 0.0
+  },
+  "reversed": false,
+  "folder": "depot - outpost",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": true
+}

@@ -1,20 +1,26 @@
 {
-  "robotWidth": 0.9,
-  "robotLength": 0.9,
+  "robotWidth": 0.855,
+  "robotLength": 0.82,
   "holonomicMode": true,
   "pathFolders": [
-    "Depot"
+    "2 cycle",
+    "Hub",
+    "depot - outpost"
   ],
-  "autoFolders": [],
+  "autoFolders": [
+    "2 cycle",
+    "Hub",
+    "depot - outpost"
+  ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 540.0,
   "defaultMaxAngAccel": 720.0,
   "defaultNominalVoltage": 12.0,
-  "robotMass": 73.0,
+  "robotMass": 75.0,
   "robotMOI": 6.883,
   "robotTrackwidth": 0.546,
-  "driveWheelRadius": 0.048,
+  "driveWheelRadius": 0.05,
   "driveGearing": 5.143,
   "maxDriveSpeed": 5.45,
   "driveMotorType": "krakenX60",
@@ -31,6 +37,6 @@
   "bumperOffsetX": 0.0,
   "bumperOffsetY": 0.0,
   "robotFeatures": [
-    "{\"name\":\"Rectangle\",\"type\":\"rounded_rect\",\"data\":{\"center\":{\"x\":-0.6,\"y\":0.0},\"size\":{\"width\":0.9,\"length\":0.3},\"borderRadius\":0.04,\"strokeWidth\":0.01,\"filled\":false}}"
+    "{\"name\":\"Rectangle\",\"type\":\"rounded_rect\",\"data\":{\"center\":{\"x\":-0.5215,\"y\":0.0},\"size\":{\"width\":0.855,\"length\":0.223},\"borderRadius\":0.05,\"strokeWidth\":0.01,\"filled\":false}}"
   ]
 }
