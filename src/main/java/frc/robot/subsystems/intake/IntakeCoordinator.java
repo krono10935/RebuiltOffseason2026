@@ -1,8 +1,5 @@
 package frc.robot.subsystems.intake;
 
-import frc.robot.subsystems.intake.pivot.PivotSubsystem;
-import frc.robot.subsystems.intake.roller.RollerSubsystem;
-
 /**This class is used to coordinate the roller and pivot commands */
 public class IntakeCoordinator {
     /**The pivot object we will be using */
