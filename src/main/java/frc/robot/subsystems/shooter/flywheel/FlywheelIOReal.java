@@ -38,12 +38,12 @@ public class FlywheelIOReal implements FlywheelIO {
     }
 
     @Override
-    public void setSpeedInaccurate(double mps) {
+    public void spinUpSpeed(double mps) {
         getLeadMotor().setControl(new VelocityVoltage(mps).withSlot(0));
     }
 
     @Override
-    public void setSpeedAccurate(double mps) {
+    public void holdSpeed(double mps) {
         getLeadMotor().setControl(new VelocityVoltage(mps).withSlot(1));
     }
 

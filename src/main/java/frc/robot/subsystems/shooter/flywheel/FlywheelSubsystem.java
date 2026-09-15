@@ -26,7 +26,7 @@ public class FlywheelSubsystem extends SubsystemBase {
      * @param mps the wanted speed in meters/second
      */
     public void setSpeed(double mps){
-      io.setSpeedInaccurate(mps);
+      io.spinUpSpeed(mps);
     }
 
     /**
@@ -34,7 +34,7 @@ public class FlywheelSubsystem extends SubsystemBase {
      * @param mps the wanted speed in meters/second
      */
     public void holdSpeed(double mps){
-      io.setSpeedAccurate(mps);
+      io.holdSpeed(mps);
     }
 
     /**
