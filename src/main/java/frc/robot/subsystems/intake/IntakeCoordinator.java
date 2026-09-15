@@ -7,7 +7,7 @@ import frc.robot.subsystems.intake.roller.RollerSubsystem;
 public class IntakeCoordinator {
     /**The pivot object we will be using */
     private final PivotSubsystem pivot;
-    /**The pivot object we will be using */
+    /**The roller object we will be using */
     private final RollerSubsystem roller;
 
     /**Create a new IntakeCoordinator */
@@ -16,5 +16,4 @@ public class IntakeCoordinator {
         pivot = new PivotSubsystem();
         roller = new RollerSubsystem();
     }
-
 }
