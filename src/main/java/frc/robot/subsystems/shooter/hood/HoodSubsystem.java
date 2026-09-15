@@ -4,11 +4,18 @@
 
 package frc.robot.subsystems.shooter.hood;
 
+import java.util.function.Supplier;
+
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.statemachine.StateMachine;
+import frc.lib.statemachine.StateMachine.State;
+import frc.lib.statemachine.StateMachine.StateName;
 
 public class HoodSubsystem extends SubsystemBase {
 
@@ -45,10 +52,54 @@ public class HoodSubsystem extends SubsystemBase {
       io.stop();
     }
 
+    /**
+     * @return whether the hood is at goal (within tolerance)
+     */
+    public boolean isAtGoal(){
+      return inputs.isAtGoal;
+    }
+
   @Override
   public void periodic() {
     io.updateInputs(inputs);
-    Logger.processInputs(getName(), inputs);
-    
+    Logger.processInputs(getName(), inputs); 
+  }
+
+    /**
+   * @param angleSupplier the wanted angle
+   * @return the command the set the hood's angle
+   */
+  public Command setAngleCommand(Supplier<Rotation2d> angleSupplier){
+    return Commands.run(() -> this.setAngle(angleSupplier.get()), this).repeatedly();
+  }
+
+  /**
+   * @param angleSupplier the wanted angle
+   * @return the command the hold the hood's angle
+   */
+  public Command holdAngleCommand(Supplier<Rotation2d> angleSupplier){
+    return Commands.run(() -> this.holdAngle(angleSupplier.get()), this).repeatedly();
+  }
+
+  /**
+  * @return the command to stop the flywheel
+  */
+  public Command stopCommand(){
+    return Commands.run(() -> this.stop(), this);
+  }
+
+  public Command disableHoodCommand()
+  {
+    StateMachine stateMachine = new StateMachine("DisableHood_StateMachine");
+
+    State zeroHoodState = stateMachine.addState(setAngleCommand(() -> HoodConstants.HOOD_CLOSE_ANGLE), HoodConstants.ZERO_HOOD_STATE_NAME);
+
+    State stopHoodState = stateMachine.addState(stopCommand(), HoodConstants.STOP_HOOD_STATE_NAME);
+
+    stateMachine.setInitialState(zeroHoodState);
+
+    zeroHoodState.switchTo(stopHoodState).when(() -> inputs.isAtGoal);
+
+    return stateMachine;
   }
 }
