@@ -11,6 +11,7 @@ import edu.wpi.first.math.system.LinearSystem;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
+import frc.lib.statemachine.StateMachine.StateName;
 
 public class HoodConstants {
     // most beautiful TODOs ever
@@ -33,13 +34,19 @@ public class HoodConstants {
     private static final double HOOD_LENGTH_METERS = 0.3; // TODO: get the real value from cad
 
     /** the angle where is hood is closed (0) */
-    private static final Rotation2d HOOD_CLOSE_ANGLE = Rotation2d.fromDegrees(0); // TODO: get the real value from cad 
+    public static final Rotation2d HOOD_CLOSE_ANGLE = Rotation2d.fromDegrees(0); // TODO: get the real value from cad 
 
     /** the max angle the hood can reach */
-    private static final Rotation2d HOOD_MAX_ANGLE = Rotation2d.fromDegrees(45); // TODO: get the real value from cad
+    public static final Rotation2d HOOD_MAX_ANGLE = Rotation2d.fromDegrees(45); // TODO: get the real value from cad
 
     /** whether the simulation should apply gravity forces */
     private static final boolean SIMULATE_GRAVITY = false; // TODO: change to wanted mode
+
+    /** the state name of the stop hood state machine command */
+    public static final StateName STOP_HOOD_STATE_NAME = new StateName("stop hood");
+
+    /** the state name of the disable hood state machine command */
+    public static final StateName ZERO_HOOD_STATE_NAME = new StateName("set hood close angle");
 
     /**
      * @return the hood motor's configuration

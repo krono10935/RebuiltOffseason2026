@@ -14,7 +14,7 @@ public interface FlywheelIO {
      * sets the wanted flywheel speed (fast but non accurate PID)
      * @param mps the wanted speed in meters/second
      */
-    void spinUpSpeed(double mps);
+    void spinUp(double mps);
 
     /**
      * holds the wanted flywheel (slow but accurate PID)
