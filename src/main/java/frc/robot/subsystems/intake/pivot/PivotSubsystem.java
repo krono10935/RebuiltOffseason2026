@@ -7,11 +7,11 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.math.IsNear;
 
 public class PivotSubsystem extends SubsystemBase {
     private final PivotInputsAutoLogged inputs;
     private final PivotIO io;
-
     //Create a new PivotSubsystem
     public PivotSubsystem(){
         inputs = new PivotInputsAutoLogged();
@@ -79,6 +79,20 @@ s    */
         io.updateInputs(inputs);
     }
 
+    /**
+     * Checks if the pivot is open
+     * @return whether the pivot is open
+     */
+    public boolean isPivotOpen() {
+        return IsNear.isNear(getAngle(), PivotConstants.PIVOT_OPEN_ANGLE, PivotConstants.TOLERANCE);
+    }
+    /**
+     * Checks if the pivot is close
+     * @return whether the pivot is close
+     */
+    public boolean isPivotClose() {
+        return IsNear.isNear(getAngle(), PivotConstants.PIVOT_CLOSE_ANGLE, PivotConstants.TOLERANCE);
+    }
 
     /**
      * A command that opens the pivot

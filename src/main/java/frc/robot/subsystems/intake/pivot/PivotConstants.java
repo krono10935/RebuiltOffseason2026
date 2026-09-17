@@ -27,7 +27,7 @@ public class PivotConstants {
     private static final boolean SIMULATE_GRAVITY = true;                              // TODO: change to wanted mode
     /** The gear ratio between the motor and the pivot arm (a single roation of the arm is equal to GEAR_RATIO roations of the motor).*/
     public static final double GEAR_RATIO = 45;  // TODO: get value from CAD
-
+    public static final Rotation2d TOLERANCE = Rotation2d.fromDegrees(5);
 
     /**
      * @return The plant for the sim
