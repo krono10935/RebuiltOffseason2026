@@ -85,7 +85,7 @@ public class HoodSubsystem extends SubsystemBase {
   * @return the command to stop the flywheel
   */
   public Command stopCommand(){
-    return Commands.run(() -> this.stop(), this).withName("stopHood");
+    return Commands.run(this::stop, this).withName("stopHood");
   }
 
   public Command disableHoodCommand()
@@ -98,7 +98,7 @@ public class HoodSubsystem extends SubsystemBase {
 
     stateMachine.setInitialState(zeroHoodState);
 
-    zeroHoodState.switchTo(stopHoodState).when(() -> inputs.isAtGoal);
+    zeroHoodState.switchTo(stopHoodState).when(this::isAtGoal);
 
     return stateMachine;
   }
