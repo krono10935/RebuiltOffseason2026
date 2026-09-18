@@ -8,6 +8,7 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import frc.lib.math.UnitConversions;
+import frc.lib.statemachine.StateMachine.StateName;
 
 public class RollerConstants {
     public final static int MOTOR_ONE_CANID = 1; //TODO: find the correct can id
@@ -31,6 +32,12 @@ public class RollerConstants {
 
     /**The duty cycle value the roller is considerd reversed */
     public static final double reversedDutyCycle = 1; //TODO - tweak
+    /**The state name of turing on the roller for state machines */
+    public static final StateName turnOnRollerStateName = new StateName("turnOnRollerState");
+    /**The state name of turing reverse the roller for state machine */
+    public static final StateName ReverseRollerStateName = new StateName("turnReverseRollerState");
+    /**The state name of turing off the roller for state machines */
+    public static final StateName turnOffRollerStateName = new StateName("turnOffRollerState");
 
     /**
      * Get the motor config of the lead motor

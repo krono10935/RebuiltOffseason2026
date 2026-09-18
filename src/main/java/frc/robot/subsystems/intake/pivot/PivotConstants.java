@@ -9,6 +9,7 @@ import edu.wpi.first.math.system.LinearSystem;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
+import frc.lib.statemachine.StateMachine.StateName;
 
 
 public class PivotConstants {
@@ -28,6 +29,12 @@ public class PivotConstants {
     /** The gear ratio between the motor and the pivot arm (a single roation of the arm is equal to GEAR_RATIO roations of the motor).*/
     public static final double GEAR_RATIO = 45;  // TODO: get value from CAD
     public static final Rotation2d TOLERANCE = Rotation2d.fromDegrees(5);
+
+    /**The state name of opening the pivot for state machines */
+    public static final StateName openPivotStateName = new StateName("openPivotState");
+    /**The state name of closing the pivot for state machine */
+    public static final StateName closePivotStateName = new StateName("closePivotState");
+
 
     /**
      * @return The plant for the sim
