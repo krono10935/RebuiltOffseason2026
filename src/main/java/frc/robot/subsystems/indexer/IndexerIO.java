@@ -4,9 +4,13 @@ import org.littletonrobotics.junction.AutoLog;
 
 public interface IndexerIO {
 
+
     @AutoLog
     public class IndexerInputs{
         double speedRPS;
+        /**
+         * an array of variables of each motor's temperature
+         */
         double[] tempCel;
     }
 

@@ -12,14 +12,27 @@ import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 
 public class IndexerConstants {
-    public static final int[] CAN_IDS = {0, 1, 2};
+    /** CANIDs of all indexer motors */
+    public static final int[] CAN_IDS = {0, 1, 2}; //TODO: change to correct CANID
+    
+    /**
+     * 
+     */
     public static final boolean[] MOTORS_INVERTED = {false, false, true};
 
-    public static final double DUTY_CYCLE_FORWARD = 0.67;
-    public static final double DUTY_CYCLE_BACKWARD = -0.67;
+    /** what percentage of power to give the motors for spinning forward */
+    public static final double DUTY_CYCLE_FORWARD = 0.67; //TODO: tweak
 
-    private static final double MOMENT_OF_INERTIA = 0.001;
-    public static final double GEAR_RATIO = 2;
+    /** what percentage of power to give the motors for spinning backwards */
+    public static final double DUTY_CYCLE_BACKWARD = -0.67; //TODO: tweak
+
+    /** moment of inertia of the indexer */
+    private static final double MOMENT_OF_INERTIA = 0.001; //TODO: get the real value from cad
+
+    /** the gear ratio between motors and indexer */
+    public static final double GEAR_RATIO = 2; //TODO: get the real value from cad
+
+    /** gear box of all three motors */
     private static final DCMotor GEAR_BOX = DCMotor.getKrakenX60(3);
 
     /**
@@ -43,6 +56,9 @@ public class IndexerConstants {
        return config;
     }
 
+    /**
+     * @return the plant for the sim
+     */
     private static LinearSystem<N1,N1,N1> getPlant(){
         return LinearSystemId.createFlywheelSystem(
             GEAR_BOX, 
@@ -51,6 +67,10 @@ public class IndexerConstants {
         );
     }
 
+    /**
+     * the indexer's sim
+     * @return the indexer's sim
+     */
     public static FlywheelSim getSim(){
         return new FlywheelSim(getPlant(), GEAR_BOX);
     }

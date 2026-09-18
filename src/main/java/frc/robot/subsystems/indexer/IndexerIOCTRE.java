@@ -8,6 +8,9 @@ public class IndexerIOCTRE implements IndexerIO {
 
     private final TalonFX[] motors; 
 
+    /**
+     * creat an array of all the motors
+     */
     public IndexerIOCTRE(){
         motors = new TalonFX[3];
 
