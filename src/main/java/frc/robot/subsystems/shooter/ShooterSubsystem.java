@@ -10,10 +10,11 @@ import frc.robot.subsystems.shooter.flywheel.FlywheelSubsystem;
 import frc.robot.subsystems.shooter.hood.HoodSubsystem;
 
 public class ShooterSubsystem extends SubsystemBase {
-    
+    /** flywheel controller */
     private final FlywheelSubsystem flywheel;
+    /** hood controller */
     private final HoodSubsystem hood;
-
+    /** one instance for all shooting parameters, gets updated in periodic() */
     private ShootingParameters params;
 
     public ShooterSubsystem(FlywheelSubsystem flywheel, HoodSubsystem hood) {
@@ -55,7 +56,7 @@ public class ShooterSubsystem extends SubsystemBase {
         setHoodAngleStateMachine.setInitialState(setAngleState);
 
         // set the state to the hold angle state (slower, more accurate PID) when the hood is close enough to the goal
-        setAngleState.switchTo(holdAngleState).when(()-> hood.isAtGoal()); 
+        setAngleState.switchTo(holdAngleState).when(hood::isAtGoal); 
 
 
         // State Machine for setting the flywheel speed
@@ -74,12 +75,12 @@ public class ShooterSubsystem extends SubsystemBase {
         setFlywheelSpeedStateMachine.setInitialState(setSpeedState);
 
         // set the state to the hold speed state (slower, more accurate PID) when the flywheel is close enough to the goal
-        setSpeedState.switchTo(holdSpeedState).when(()-> flywheel.isAtGoal()); 
+        setSpeedState.switchTo(holdSpeedState).when(flywheel::isAtGoal); 
 
         // create a custom command that runs both the flywheel speed's command and the hood angle's command
-        Command setHoodAndAngleCommand = Commands.parallel(setHoodAngleStateMachine, setFlywheelSpeedStateMachine);
+        Command setHoodAndFlywheelCommand = Commands.parallel(setHoodAngleStateMachine, setFlywheelSpeedStateMachine);
 
-        return setHoodAndAngleCommand;
+        return setHoodAndFlywheelCommand;
     }
 
     @Override

@@ -165,6 +165,10 @@ public class ShotCalculator {
 
     }
 
+    /**
+     * burst a ton of calculations on the ShotCalculator's getParameters function for 10 seconds in order for subsequent runs to be faster
+     * @return the command for warming up the shot calculator
+     */
     public Command warmUpShotCalculator(){
         Random rnd = new Random();
         return new RunCommand(() -> getParameters(new Pose2d(
@@ -177,11 +181,17 @@ public class ShotCalculator {
         .withTimeout(10).ignoringDisable(true);
     }
 
+    /**
+     * wrapper for ShotCalculator::getParameters when you don't are standing still
+     * @param estimatedPose the robot's estimated position
+     * @return ShootingParameters based on the estimated position and the robot not moving (speed = 0)
+     */
     public ShootingParameters getStaticParameters(Pose2d estimatedPose){
         return getParameters(estimatedPose, new ChassisSpeeds());
     }
+
     /**
-     * 
+     * gets shooting parameters based on the robot's estimated position and velocity
      * @param estimatedPose Estimated robot pose
      * @param robotRelativeVelocity Robot-relative velocity
      * @return ShootingParameters based on these parameters

@@ -70,7 +70,7 @@ public class HoodSubsystem extends SubsystemBase {
    * @return the command the set the hood's angle
    */
   public Command setAngleCommand(Supplier<Rotation2d> angleSupplier){
-    return Commands.run(() -> this.setAngle(angleSupplier.get()), this).repeatedly();
+    return Commands.run(() -> this.setAngle(angleSupplier.get()), this).repeatedly().withName("setHoodAngle");
   }
 
   /**
@@ -78,14 +78,14 @@ public class HoodSubsystem extends SubsystemBase {
    * @return the command the hold the hood's angle
    */
   public Command holdAngleCommand(Supplier<Rotation2d> angleSupplier){
-    return Commands.run(() -> this.holdAngle(angleSupplier.get()), this).repeatedly();
+    return Commands.run(() -> this.holdAngle(angleSupplier.get()), this).repeatedly().withName("holdHoodAngle");
   }
 
   /**
   * @return the command to stop the flywheel
   */
   public Command stopCommand(){
-    return Commands.run(() -> this.stop(), this);
+    return Commands.run(() -> this.stop(), this).withName("stopHood");
   }
 
   public Command disableHoodCommand()
