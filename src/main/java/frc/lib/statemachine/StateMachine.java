@@ -11,6 +11,8 @@ import java.util.Map;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -72,10 +74,12 @@ public final class StateMachine extends Command {
     */
     public StateMachine(String name) {
         if (name == null || name.isEmpty()){
-            throw new IllegalArgumentException("The state machine wants a name👹👹👹!");
+            throw new IllegalArgumentException("The state machine wants a name!");
         }
 
         setName(name);
+
+        Logger.recordOutput("Statemachines/" + name + "/hasInitialState", false);
     }
 
     public State getState(StateName statename){
@@ -92,13 +96,13 @@ public final class StateMachine extends Command {
     */
     public State addState(Command command, StateName stateName){
         if (command == null){
-            throw new IllegalArgumentException("Command in state cannot be null🔥🔥🔥!");
+            throw new IllegalArgumentException("Command in state cannot be null!");
         }
         if (stateName == null){
             throw new IllegalArgumentException("State must have name.");
         }
 
-        var state = new State(this, command);
+        var state = new State(this, command, stateName);
         states.put(stateName, state);
         return state;
     }
@@ -154,17 +158,20 @@ public final class StateMachine extends Command {
         }
 
         this.initialState = initialState;
+
+        Logger.recordOutput("Statemachines/" + getName() + "/hasInitialState", true);
     }
     
 
     @Override
     public void initialize(){
+        Logger.recordOutput("Statemachines/" + getName() + "/currentState", "None");
         if (initialState == null) {
             throw new IllegalStateException(
-                getName() + " does not have an initial state😱😱😱. Use .setInitialState() to provide one.");
+                getName() + " does not have an initial state. Use .setInitialState() to provide one.");
             }
 
-        setCurrentState(initialState);
+        queueTransition(initialState);
     }
 
     @Override
@@ -174,18 +181,15 @@ public final class StateMachine extends Command {
 
     @Override
     public void execute(){
-        var currentCommand = currentState.command();
-
         if (queuedTransition){
-            CommandScheduler.getInstance().schedule(currentCommand);
-
-            currentState.runEnterCallbacks();
-            queuedTransition = false;
+            transtionState();
             return;
         }
 
-        if (CommandScheduler.getInstance().isScheduled(currentState.command())){
-            for (var transition : currentState.transitions()){
+        Command currentCommand = currentState.command();
+
+        if (CommandScheduler.getInstance().isScheduled(currentCommand)){
+            for (Transition transition : currentState.transitions()){
                 if (transition.shouldTransition()){
                     // Cancel the current state's command and move to the next state specified by the
                     // transition. Break the state loop early to avoid an unnecessary yield() call and
@@ -197,7 +201,7 @@ public final class StateMachine extends Command {
                     // that the transition is only triggered once per loop iteration.
                     currentState.runExitCallbacks();
                     currentCommand.cancel();
-                    setCurrentState(verifyState(transition.nextState()));
+                    queueTransition(verifyState(transition.nextState()));
                     return;
                 }
             }
@@ -205,13 +209,28 @@ public final class StateMachine extends Command {
         }
 
         currentState.runExitCallbacks();
-        setCurrentState(verifyState(currentState.nextState()));
+        queueTransition(verifyState(currentState.nextState()));
     }
 
-    private void setCurrentState(State state){
+    @Override
+    public void end(boolean interrupted){
+        Logger.recordOutput("Statemachines/" + getName() + "/currentState", "None");
+    }
+
+    private void queueTransition(State state){
         currentState = state;
         queuedTransition = true;
 
+    }
+
+    private void transtionState(){
+        CommandScheduler.getInstance().schedule(currentState.command());
+
+        currentState.runEnterCallbacks();
+
+        Logger.recordOutput("Statemachines/" + getName() + "/currentState", currentState.getName().toString());
+
+        queuedTransition = false;
     }
 
     private State verifyState(State next) {
@@ -222,7 +241,7 @@ public final class StateMachine extends Command {
 
         // Bad user setup
         throw new IllegalStateException(
-            "The next state does not belong to this state machine👺👺👺. Check the state for "
+            "The next state does not belong to this state machine. Check the state for "
             + next.command().getName());
     }
 
@@ -243,6 +262,9 @@ public final class StateMachine extends Command {
         /** The command that will run when this state is active. */
         private final Command command;
 
+        /** The name of the state. */
+        private final StateName name;
+
         /** The possible states to transition to when this state completes. */
         private final List<Completion> m_completions = new ArrayList<>();
 
@@ -258,13 +280,18 @@ public final class StateMachine extends Command {
         private final List<Runnable> enterCallbacks = new ArrayList<>();
         private final List<Runnable> exitCallbacks = new ArrayList<>();
 
-        private State(StateMachine stateMachine, Command command ){
+        private State(StateMachine stateMachine, Command command, StateName name){
             this.stateMachine = stateMachine;
             this.command = command;
+            this.name = name;
         }
 
         private Command command(){
             return command;
+        }
+
+        public StateName getName(){
+            return name;
         }
 
         private void runEnterCallbacks() {
@@ -326,7 +353,7 @@ public final class StateMachine extends Command {
          */
         public void onEnter(Runnable callback) {
             if (callback == null){
-                throw new IllegalArgumentException("Java does not appreciate null runnables📞📞📞.");
+                throw new IllegalArgumentException("Java does not appreciate null runnables.");
             }
 
             enterCallbacks.add(callback);
@@ -342,7 +369,7 @@ public final class StateMachine extends Command {
          */
         public void onExit(Runnable callback) {
             if (callback == null){
-                throw new IllegalArgumentException("Java does not appreciate null runnables📞📞📞.");
+                throw new IllegalArgumentException("Java does not appreciate null runnables.");
             }
 
             exitCallbacks.add(callback);
@@ -386,7 +413,7 @@ public final class StateMachine extends Command {
          */
         public TransitionNeedsConditionStage to(State to) {
             if (to == null){
-                throw new IllegalArgumentException("No nulls allowed 😤😤😤.");
+                throw new IllegalArgumentException("No nulls allowed .");
             }
 
             for (var state : from) {
@@ -407,7 +434,7 @@ public final class StateMachine extends Command {
          */
         public TransitionNeedsConditionStage to(Supplier<State> dynamic) {
             if (dynamic == null){
-                throw new IllegalArgumentException("The dynamic state supplier may not be null💀!");
+                throw new IllegalArgumentException("The dynamic state supplier may not be null!");
             }
             return new TransitionNeedsConditionStage(from, dynamic);
         }
@@ -438,10 +465,10 @@ public final class StateMachine extends Command {
 
         private TransitionNeedsConditionStage(List<State> from, Supplier<State> to) {
             if (from == null){
-                throw new IllegalArgumentException("The list of originating states cannot be null💗!");
+                throw new IllegalArgumentException("The list of originating states cannot be null!");
             }
             if (to == null){
-                throw new IllegalArgumentException("The target state supplier cannot be null🥀!");
+                throw new IllegalArgumentException("The target state supplier cannot be null!");
             }
 
             originatingStates = from;
@@ -603,7 +630,7 @@ public final class StateMachine extends Command {
     /**
      * A type of identifier for states in the statemachine
      */
-    public static class StateName{
+    public static class StateName {
         private final String name;
         
         /**
@@ -612,6 +639,11 @@ public final class StateMachine extends Command {
          */
         public StateName(String name){
             this.name = name;
+        }
+
+        @Override
+        public String toString(){
+            return name;
         }
     }
 }
