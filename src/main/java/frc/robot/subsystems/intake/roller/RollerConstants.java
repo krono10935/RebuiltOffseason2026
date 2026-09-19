@@ -28,16 +28,16 @@ public class RollerConstants {
     public static final DCMotor GEAR_BOX = DCMotor.getKrakenX60(2);
 
     /**The duty cycle value the roller is considerd on */
-    public static final double onDutyCycle = 1; //TODO - tweak
+    public static final double ON_DUTY_CYCLE = 1; //TODO - tweak
 
     /**The duty cycle value the roller is considerd reversed */
-    public static final double reversedDutyCycle = 1; //TODO - tweak
+    public static final double REVERSED_DUTY_CYCLE = 1; //TODO - tweak
     /**The state name of turing on the roller for state machines */
-    public static final StateName turnOnRollerStateName = new StateName("turnOnRollerState");
+    public static final StateName TURN_ON_ROLLER_STATE_NAME = new StateName("turnOnRollerState");
     /**The state name of turing reverse the roller for state machine */
-    public static final StateName ReverseRollerStateName = new StateName("turnReverseRollerState");
+    public static final StateName REVERSE_ROLLER_STATE_NAME = new StateName("turnReverseRollerState");
     /**The state name of turing off the roller for state machines */
-    public static final StateName turnOffRollerStateName = new StateName("turnOffRollerState");
+    public static final StateName TURN_OFF_ROLLER_STATE_NAME = new StateName("turnOffRollerState");
 
     /**
      * Get the motor config of the lead motor

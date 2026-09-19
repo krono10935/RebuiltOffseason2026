@@ -75,7 +75,7 @@ public class RollerSubsystem extends SubsystemBase {
      */
     public Command turnOffRoller(){
         return Commands.runOnce(
-            () -> {stop();},
+            this::stop,
             this
         );
     }
@@ -86,7 +86,7 @@ public class RollerSubsystem extends SubsystemBase {
      */
     public Command reverseRoller(){
         return Commands.runOnce(
-            () -> {setDutyCycle(RollerConstants.reversedDutyCycle);},
+            () -> setDutyCycle(RollerConstants.REVERSED_DUTY_CYCLE),
             this
         );
     }
@@ -97,7 +97,7 @@ public class RollerSubsystem extends SubsystemBase {
      */
     public Command turnOnRoller(){
         return Commands.runOnce(
-            () -> {setDutyCycle(RollerConstants.onDutyCycle);},
+            () -> setDutyCycle(RollerConstants.ON_DUTY_CYCLE),
             this
         );
     }

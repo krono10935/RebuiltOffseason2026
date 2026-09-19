@@ -31,9 +31,9 @@ public class PivotConstants {
     public static final Rotation2d TOLERANCE = Rotation2d.fromDegrees(5);
 
     /**The state name of opening the pivot for state machines */
-    public static final StateName openPivotStateName = new StateName("openPivotState");
+    public static final StateName OPEN_PIVOT_STATE_NAME = new StateName("openPivotState");
     /**The state name of closing the pivot for state machine */
-    public static final StateName closePivotStateName = new StateName("closePivotState");
+    public static final StateName CLOSE_PIVOT_STATE_NAME = new StateName("closePivotState");
 
 
     /**

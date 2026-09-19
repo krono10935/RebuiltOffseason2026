@@ -100,7 +100,7 @@ s    */
      */
     public Command openPivot(){
         return Commands.runOnce(
-            () -> {setRotation(PivotConstants.PIVOT_OPEN_ANGLE);},
+            () -> setRotation(PivotConstants.PIVOT_OPEN_ANGLE),
             this
         );
     }
@@ -111,7 +111,7 @@ s    */
      */
     public Command openPivotSlow(){
         return Commands.runOnce(
-            () -> {setRotationSlow(PivotConstants.PIVOT_OPEN_ANGLE);},
+            () -> setRotationSlow(PivotConstants.PIVOT_OPEN_ANGLE),
             this
         );
     }
@@ -122,7 +122,7 @@ s    */
      */
     public Command closePivot(){
         return Commands.runOnce(
-            () -> {setRotation(PivotConstants.PIVOT_CLOSE_ANGLE);},
+            () -> setRotation(PivotConstants.PIVOT_CLOSE_ANGLE),
             this
         );
     }
@@ -133,7 +133,7 @@ s    */
      */
     public Command closePivotSlow(){
         return Commands.runOnce(
-            () -> {setRotationSlow(PivotConstants.PIVOT_CLOSE_ANGLE);},
+            () -> setRotationSlow(PivotConstants.PIVOT_CLOSE_ANGLE),
             this
         );
     }
