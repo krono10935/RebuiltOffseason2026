@@ -25,18 +25,18 @@ public class IntakeCoordinator {
     /**
      * @return A state machine that opens the pivot and then turns the roller on.
      */
-    public Command OpenPivotOnRoller() {
-        StateMachine activateIntakeStateMachine= new StateMachine("openPivotOnRoller_StateMachine");
+    public Command deployIntake() {
+        StateMachine deployIntakeStateMachine= new StateMachine("deployIntake_StateMachine");
         Command turnOnRoller = roller.turnOnRoller();
         Command openPivot = pivot.openPivot();
 
-        State turnOnRollerState = activateIntakeStateMachine.addState(turnOnRoller, RollerConstants.TURN_ON_ROLLER_STATE_NAME);
-        State openPivotState = activateIntakeStateMachine.addState(openPivot, PivotConstants.OPEN_PIVOT_STATE_NAME);
+        State turnOnRollerState = deployIntakeStateMachine.addState(turnOnRoller, RollerConstants.TURN_ON_ROLLER_STATE_NAME);
+        State openPivotState = deployIntakeStateMachine.addState(openPivot, PivotConstants.OPEN_PIVOT_STATE_NAME);
 
-        activateIntakeStateMachine.setInitialState(openPivotState);
+        deployIntakeStateMachine.setInitialState(openPivotState);
         openPivotState.switchTo(turnOnRollerState).when(pivot::isPivotOpen);
         
-        return activateIntakeStateMachine;
+        return deployIntakeStateMachine;
     }
 
     /**
@@ -76,35 +76,35 @@ public class IntakeCoordinator {
     /**
      * @return A state machine that closes the pivot and then turns the roller off.
      */
-    public Command closePivotOffRoller() {
-        StateMachine closePivotOffRollerStateMachine= new StateMachine("closePivotOffRoller_StateMachine");
+    public Command disableIntake() {
+        StateMachine disableIntakeStateMachine= new StateMachine("disableIntake_StateMachine");
         Command turnOffRoller = roller.turnOffRoller();
         Command closePivot = pivot.closePivotSlow();
 
-        State turnOffRollerState = closePivotOffRollerStateMachine.addState(turnOffRoller, RollerConstants.TURN_OFF_ROLLER_STATE_NAME);
-        State closePivotState = closePivotOffRollerStateMachine.addState(closePivot, PivotConstants.CLOSE_PIVOT_STATE_NAME);
+        State turnOffRollerState = disableIntakeStateMachine.addState(turnOffRoller, RollerConstants.TURN_OFF_ROLLER_STATE_NAME);
+        State closePivotState = disableIntakeStateMachine.addState(closePivot, PivotConstants.CLOSE_PIVOT_STATE_NAME);
 
-        closePivotOffRollerStateMachine.setInitialState(closePivotState);
+        disableIntakeStateMachine.setInitialState(closePivotState);
         closePivotState.switchTo(turnOffRollerState).when(pivot::isPivotClose);
         
-        return closePivotOffRollerStateMachine;
+        return disableIntakeStateMachine;
     }
 
      /**
      * @return A state machine that opens the pivot and then reverses the roller.
      */
-    public Command openPivotReverseRoller() {
-        StateMachine openPivotReverseRollerStateMachine = new StateMachine("openPivotReverseRoller_StateMachine");
+    public Command deployIntakeReverse() {
+        StateMachine deployIntakeReverseStateMachine = new StateMachine("deployIntakeReverse_StateMachine");
         Command reverseRoller = roller.reverseRoller();
         Command openPivot = pivot.openPivot();
 
-        State reverseRollerState = openPivotReverseRollerStateMachine.addState(reverseRoller, RollerConstants.REVERSE_ROLLER_STATE_NAME);
-        State openPivotState = openPivotReverseRollerStateMachine.addState(openPivot, PivotConstants.OPEN_PIVOT_STATE_NAME);
+        State reverseRollerState = deployIntakeReverseStateMachine.addState(reverseRoller, RollerConstants.REVERSE_ROLLER_STATE_NAME);
+        State openPivotState = deployIntakeReverseStateMachine.addState(openPivot, PivotConstants.OPEN_PIVOT_STATE_NAME);
 
-        openPivotReverseRollerStateMachine.setInitialState(openPivotState);
+        deployIntakeReverseStateMachine.setInitialState(openPivotState);
         openPivotState.switchTo(reverseRollerState).when(pivot::isPivotOpen);
         
-        return openPivotReverseRollerStateMachine;
+        return deployIntakeReverseStateMachine;
     }
 
      /**
