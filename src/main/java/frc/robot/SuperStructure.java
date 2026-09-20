@@ -1,11 +1,11 @@
 package frc.robot;
 
 import frc.lib.statemachine.SuperStructureBase;
-import frc.robot.subsystems.drivetrain.Drivetrain;
+import frc.robot.subsystems.drivetrain.DrivetrainReal;
 
 public class SuperStructure extends SuperStructureBase{
     
-    private final Drivetrain drivetrain;
+    private final DrivetrainReal drivetrain;
 
     private static SuperStructure instance = null;
 

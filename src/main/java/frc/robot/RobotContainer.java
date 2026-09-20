@@ -22,14 +22,14 @@ import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
-import frc.robot.subsystems.drivetrain.Drivetrain;
+import frc.robot.subsystems.drivetrain.DrivetrainReal;
 import frc.robot.subsystems.drivetrain.configsStructure.ChassisConstants;
 
 public class RobotContainer {
 
   private static RobotContainer instance = null;
 
-  public final Drivetrain drivetrain;
+  public final DrivetrainReal drivetrain;
 
   private final LoggedDashboardChooser<Command> autoChooser;
 
@@ -42,12 +42,12 @@ public class RobotContainer {
   }
 
   private RobotContainer() {
-    drivetrain = new Drivetrain(ConduitApi.getInstance()::getPDPVoltage, Constants.CHASSIS_TYPE.constants);
+    drivetrain = new DrivetrainReal(ConduitApi.getInstance()::getPDPVoltage, Constants.CHASSIS_TYPE.constants);
 
     autoChooser = registerNamedCommand();
   }
 
-  public Drivetrain getDrivetrain(){
+  public DrivetrainReal getDrivetrain(){
     return drivetrain;
   }
 
@@ -73,7 +73,7 @@ public class RobotContainer {
    */
   private void displayChosenAuto(Command command) {
       if (RobotState.isEnabled()) {
-          drivetrain.clearFiledPath();
+          GeneralRobotState.getInstance().clearFiledPath();
           return;
       }
 
@@ -83,7 +83,7 @@ public class RobotContainer {
           auto = PathPlannerAuto.getPathGroupFromAutoFile(command.getName());
       } catch (IOException | ParseException e) {
           Logger.recordOutput("autoDisplay", e.getMessage());
-          drivetrain.clearFiledPath();
+          GeneralRobotState.getInstance().clearFiledPath();
           return;
       }
 
@@ -93,7 +93,7 @@ public class RobotContainer {
           poses.addAll(path.getPathPoses());
       }
 
-      drivetrain.addPathToField(poses);
+      GeneralRobotState.getInstance().addPathToField(poses);
   }
 
   /**
