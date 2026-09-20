@@ -4,21 +4,20 @@
 
 package frc.robot.subsystems.drivetrain.gyro;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 
-import java.util.Optional;
+import org.littletonrobotics.junction.AutoLog;
 
 public interface GyroIO {
 
-    /**
-     * get the estimated position using the gyro's accelerometer
-     * @return the position if implemented
-     */
-    Optional<GyroPoseOutput> getEstimatedPosition();
+    @AutoLog
+    public class GyroInputs {
+        public Pose2d pose; 
+        public Matrix<N3, N1> stdDevs;
+    }
 
     /**
      * Reset the gyro angle to another angle
@@ -26,9 +25,7 @@ public interface GyroIO {
     void reset(Pose2d pose);
 
     /**
-     * @return Get the new gyro angle
+     * Update gyroInputs
      */
-    Rotation2d update();
-    
-    record GyroPoseOutput(Pose2d pose, Matrix<N3, N1> stdDevs){}
+    void updateInputs(GyroInputs inputs);    
 }

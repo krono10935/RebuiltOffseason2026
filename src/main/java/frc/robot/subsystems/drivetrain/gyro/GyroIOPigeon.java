@@ -1,18 +1,15 @@
 package frc.robot.subsystems.drivetrain.gyro;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
+
+import edu.wpi.first.math.MatBuilder;
+import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import frc.robot.subsystems.drivetrain.configsStructure.ChassisConstants;
-
-
-import java.util.Optional;
-
 
 public final class GyroIOPigeon implements GyroIO{
     private final Pigeon2 gyro;
-
-    private Rotation2d angleOffset = Rotation2d.kZero;
 
     public GyroIOPigeon(int id){
         this.gyro = new Pigeon2(id);
@@ -20,21 +17,15 @@ public final class GyroIOPigeon implements GyroIO{
         gyro.optimizeBusUtilization();
     }
     
-    @Override
-    public Optional<GyroPoseOutput> getEstimatedPosition() {
-        return Optional.empty();
-    }
 
     @Override
     public void reset(Pose2d pose) {
-        gyro.reset();
-        angleOffset = pose.getRotation();
+        gyro.setYaw(pose.getRotation().getDegrees());
     }
 
     @Override
-    public Rotation2d update() {
-        return gyro.getRotation2d().rotateBy(angleOffset);
+    public void updateInputs(GyroInputs inputs) {
+        inputs.pose = new Pose2d(new Translation2d(), gyro.getRotation2d());
+        inputs.stdDevs = MatBuilder.fill(Nat.N3(), Nat.N1(), 1,1,1);
     }
-
-
 }
