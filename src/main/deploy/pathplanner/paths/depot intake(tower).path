@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.468,
-        "y": 4.86
+        "x": 0.519,
+        "y": 4.838931818181818
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.4680000000000001,
-        "y": 6.11544491867524
+        "x": 0.5190000000000001,
+        "y": 6.094376736857058
       },
       "isLocked": false,
       "linkedName": "depot pickup(tower)"
     },
     {
       "anchor": {
-        "x": 0.468,
-        "y": 6.962136363636364
+        "x": 0.519,
+        "y": 6.652931818181819
       },
       "prevControl": {
-        "x": 0.46799999999999997,
-        "y": 6.325136363636364
+        "x": 0.5188206854559775,
+        "y": 6.015931843420207
       },
       "nextControl": {
-        "x": 0.4680000000000001,
-        "y": 7.599136363636363
+        "x": 0.5192727272727271,
+        "y": 7.621772727272727
       },
       "isLocked": false,
       "linkedName": null
@@ -36,8 +36,8 @@
         "y": 5.879920454545454
       },
       "prevControl": {
-        "x": 1.5190340909090905,
-        "y": 6.477715909090908
+        "x": 1.6633295454545454,
+        "y": 6.797227272727273
       },
       "nextControl": null,
       "isLocked": false,
@@ -71,13 +71,23 @@
       "name": "Intake",
       "waypointRelativePos": 0,
       "endWaypointRelativePos": 0.37,
-      "command": null
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "deployIntake"
+        }
+      }
     },
     {
       "name": "Close Intake",
       "waypointRelativePos": 0.37,
       "endWaypointRelativePos": null,
-      "command": null
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "openPivotOffRoller"
+        }
+      }
     }
   ],
   "globalConstraints": {

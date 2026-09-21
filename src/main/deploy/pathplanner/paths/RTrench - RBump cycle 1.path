@@ -79,7 +79,7 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 0.0518867924528302,
-      "rotationDegrees": 0.0
+      "rotationDegrees": 180.0
     },
     {
       "waypointRelativePos": 0.9009433962264151,
@@ -114,7 +114,7 @@
     },
     {
       "name": "Bumper",
-      "minWaypointRelativePos": 2.2692998204667867,
+      "minWaypointRelativePos": 2.21903052064632,
       "maxWaypointRelativePos": 2.5493716337522447,
       "constraints": {
         "maxVelocity": 1.5,
@@ -154,21 +154,36 @@
   "eventMarkers": [
     {
       "name": "intake",
-      "waypointRelativePos": 0.68,
+      "waypointRelativePos": 0.32315978456014355,
       "endWaypointRelativePos": 1.45,
-      "command": null
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "deployIntake"
+        }
+      }
     },
     {
-      "name": "Close Intake",
+      "name": "Close roller",
       "waypointRelativePos": 1.45,
       "endWaypointRelativePos": null,
-      "command": null
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "openPivotOffRoller"
+        }
+      }
     },
     {
       "name": "ShootAndAim",
       "waypointRelativePos": 2.65,
       "endWaypointRelativePos": 3.15,
-      "command": null
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "ShootAndAim"
+        }
+      }
     }
   ],
   "globalConstraints": {
@@ -187,7 +202,7 @@
   "folder": "2 cycle",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

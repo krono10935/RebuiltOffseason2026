@@ -78,7 +78,7 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.0518867924528302,
+      "waypointRelativePos": 0.14465408805031446,
       "rotationDegrees": 0.0
     },
     {
@@ -90,7 +90,7 @@
       "rotationDegrees": 90.0
     },
     {
-      "waypointRelativePos": 2.4465408805031434,
+      "waypointRelativePos": 2.352941176470588,
       "rotationDegrees": -46.26901264064364
     },
     {
@@ -156,13 +156,23 @@
       "name": "intake",
       "waypointRelativePos": 0.8,
       "endWaypointRelativePos": 1.8,
-      "command": null
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "deployIntake"
+        }
+      }
     },
     {
       "name": "Close Intake",
       "waypointRelativePos": 1.8,
       "endWaypointRelativePos": null,
-      "command": null
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "openPivotOffRoller"
+        }
+      }
     },
     {
       "name": "ShootAndAim",

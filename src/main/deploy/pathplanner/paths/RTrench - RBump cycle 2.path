@@ -78,7 +78,7 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.0518867924528302,
+      "waypointRelativePos": 0.1069182389937107,
       "rotationDegrees": 0.0
     },
     {
@@ -90,7 +90,7 @@
       "rotationDegrees": -90.0
     },
     {
-      "waypointRelativePos": 2.4465408805031434,
+      "waypointRelativePos": 2.383647798742136,
       "rotationDegrees": 46.269
     },
     {
@@ -101,7 +101,7 @@
   "constraintZones": [
     {
       "name": "Intake",
-      "minWaypointRelativePos": 0.67,
+      "minWaypointRelativePos": 0.5745062836624774,
       "maxWaypointRelativePos": 1.25,
       "constraints": {
         "maxVelocity": 1.5,
@@ -142,8 +142,8 @@
   "pointTowardsZones": [
     {
       "fieldPosition": {
-        "x": 4.5,
-        "y": 4.0
+        "x": 4.625,
+        "y": 4.03
       },
       "rotationOffset": 0.0,
       "minWaypointRelativePos": 2.65,
@@ -154,21 +154,36 @@
   "eventMarkers": [
     {
       "name": "intake",
-      "waypointRelativePos": 0.6678635547576299,
+      "waypointRelativePos": 0.30879712746858173,
       "endWaypointRelativePos": 1.25,
-      "command": null
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "deployIntake"
+        }
+      }
     },
     {
-      "name": "Close Intake",
+      "name": "",
       "waypointRelativePos": 1.25,
       "endWaypointRelativePos": null,
-      "command": null
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "openPivotOffRoller"
+        }
+      }
     },
     {
       "name": "ShootAndAim",
       "waypointRelativePos": 2.65,
       "endWaypointRelativePos": 3.2,
-      "command": null
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "ShootAndAim"
+        }
+      }
     }
   ],
   "globalConstraints": {

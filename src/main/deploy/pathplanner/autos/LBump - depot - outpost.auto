@@ -27,7 +27,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 5.0
+                        "waitTime": 2.0
                       }
                     }
                   ]
@@ -66,12 +66,6 @@
                       "type": "named",
                       "data": {
                         "name": "WaitUntilNoBalls"
-                      }
-                    },
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 5.0
                       }
                     }
                   ]
