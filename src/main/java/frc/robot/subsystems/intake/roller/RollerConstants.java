@@ -17,7 +17,7 @@ public class RollerConstants {
     /**The roller's radius in meters */
     public final static double ROLLER_RADIUS_METER = 0.0275;    //TODO - Get the real Roller radius in meters
 
-    /**The ratio rotations per second to meters per seoond based on the roller's raidus */
+    /**The ratio of rotations per second to meters per seconnd based on the roller's radius */
     public final static double RPM_TO_MPS_RATIO = UnitConversions.RPMtoRPS(2 * ROLLER_RADIUS_METER * Math.PI); // RPM to MPS
 
     /**The moment of inertia of the roller flywheel */
@@ -27,17 +27,17 @@ public class RollerConstants {
     /**The gear box we are using */
     public static final DCMotor GEAR_BOX = DCMotor.getKrakenX60(2);
 
-    /**The duty cycle value the roller is considerd on */
+    /**The duty cycle value the roller is considered on */
     public static final double ON_DUTY_CYCLE = 1; //TODO - tweak
 
-    /**The duty cycle value the roller is considerd reversed */
+    /**The duty cycle value the roller is considered reversed */
     public static final double REVERSED_DUTY_CYCLE = 1; //TODO - tweak
-    /**The state name of turing on the roller for state machines */
-    public static final StateName TURN_ON_ROLLER_STATE_NAME = new StateName("turnOnRollerState");
-    /**The state name of turing reverse the roller for state machine */
-    public static final StateName REVERSE_ROLLER_STATE_NAME = new StateName("turnReverseRollerState");
-    /**The state name of turing off the roller for state machines */
-    public static final StateName TURN_OFF_ROLLER_STATE_NAME = new StateName("turnOffRollerState");
+    /**The state name of turning on the roller for state machines */
+    public static final StateName ON_ROLLER_STATE_NAME = new StateName("onRollerState");
+    /**The state name of turning reverse the roller for state machine */
+    public static final StateName REVERSE_ROLLER_STATE_NAME = new StateName("reverseRollerState");
+    /**The state name of turning off the roller for state machines */
+    public static final StateName OFF_ROLLER_STATE_NAME = new StateName("offRollerState");
 
     /**
      * Get the motor config of the lead motor

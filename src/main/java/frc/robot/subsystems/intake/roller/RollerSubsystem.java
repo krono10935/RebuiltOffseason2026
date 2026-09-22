@@ -73,7 +73,7 @@ public class RollerSubsystem extends SubsystemBase {
      * A command that turns off the roller
      * @return A command that turns off the roller
      */
-    public Command turnOffRoller(){
+    public Command offRoller(){
         return Commands.runOnce(
             this::stop,
             this
@@ -95,7 +95,7 @@ public class RollerSubsystem extends SubsystemBase {
      * A command that turns on the roller
      * @return A command that turns on the roller
      */
-    public Command turnOnRoller(){
+    public Command onRoller(){
         return Commands.runOnce(
             () -> setDutyCycle(RollerConstants.ON_DUTY_CYCLE),
             this

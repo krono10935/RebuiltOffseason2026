@@ -16,10 +16,10 @@ public class IntakeCoordinator {
     private final RollerSubsystem roller;
 
     /**Create a new IntakeCoordinator */
-    public IntakeCoordinator(){
+    public IntakeCoordinator(PivotSubsystem pivot, RollerSubsystem roller){
         //TODO - we need to initialize the values in robotContainer
-        pivot = new PivotSubsystem();
-        roller = new RollerSubsystem();
+        this.pivot = pivot;
+        this.roller = roller;
     }
 
     /**
@@ -27,14 +27,14 @@ public class IntakeCoordinator {
      */
     public Command deployIntake() {
         StateMachine deployIntakeStateMachine= new StateMachine("deployIntake_StateMachine");
-        Command turnOnRoller = roller.turnOnRoller();
+        Command onRoller = roller.onRoller();
         Command openPivot = pivot.openPivot();
 
-        State turnOnRollerState = deployIntakeStateMachine.addState(turnOnRoller, RollerConstants.TURN_ON_ROLLER_STATE_NAME);
+        State onRollerState = deployIntakeStateMachine.addState(onRoller, RollerConstants.ON_ROLLER_STATE_NAME);
         State openPivotState = deployIntakeStateMachine.addState(openPivot, PivotConstants.OPEN_PIVOT_STATE_NAME);
 
         deployIntakeStateMachine.setInitialState(openPivotState);
-        openPivotState.switchTo(turnOnRollerState).when(pivot::isPivotOpen);
+        openPivotState.switchTo(onRollerState).when(pivot::isPivotOpen);
         
         return deployIntakeStateMachine;
     }
@@ -44,14 +44,14 @@ public class IntakeCoordinator {
      */
     public Command openPivotOffRoller() {
         StateMachine openPivotOffRollerStateMachine= new StateMachine("openPivotOffRoller_StateMachine");
-        Command turnOffRoller = roller.turnOffRoller();
+        Command offRoller = roller.offRoller();
         Command openPivot = pivot.openPivot();
 
-        State turnOffRollerState = openPivotOffRollerStateMachine.addState(turnOffRoller, RollerConstants.TURN_OFF_ROLLER_STATE_NAME);
+        State offRollerState = openPivotOffRollerStateMachine.addState(offRoller, RollerConstants.OFF_ROLLER_STATE_NAME);
         State openPivotState = openPivotOffRollerStateMachine.addState(openPivot, PivotConstants.OPEN_PIVOT_STATE_NAME);
 
         openPivotOffRollerStateMachine.setInitialState(openPivotState);
-        openPivotState.switchTo(turnOffRollerState).when(pivot::isPivotOpen);
+        openPivotState.switchTo(offRollerState).when(pivot::isPivotOpen);
         
         return openPivotOffRollerStateMachine;
     }
@@ -61,14 +61,14 @@ public class IntakeCoordinator {
      */
     public Command closePivotOnRoller() {
         StateMachine closePivotOnRollerStateMachine= new StateMachine("closePivotOnRoller_StateMachine");
-        Command turnOnRoller = roller.turnOnRoller();
+        Command onRoller = roller.onRoller();
         Command closePivot = pivot.closePivotSlow();
 
-        State turnOnRollerState = closePivotOnRollerStateMachine.addState(turnOnRoller, RollerConstants.TURN_ON_ROLLER_STATE_NAME);
+        State onRollerState = closePivotOnRollerStateMachine.addState(onRoller, RollerConstants.ON_ROLLER_STATE_NAME);
         State closePivotState = closePivotOnRollerStateMachine.addState(closePivot, PivotConstants.CLOSE_PIVOT_STATE_NAME);
 
         closePivotOnRollerStateMachine.setInitialState(closePivotState);
-        closePivotState.switchTo(turnOnRollerState).when(pivot::isPivotClose);
+        closePivotState.switchTo(onRollerState).when(pivot::isPivotClose);
         
         return closePivotOnRollerStateMachine;
     }
@@ -78,14 +78,14 @@ public class IntakeCoordinator {
      */
     public Command disableIntake() {
         StateMachine disableIntakeStateMachine= new StateMachine("disableIntake_StateMachine");
-        Command turnOffRoller = roller.turnOffRoller();
+        Command offRoller = roller.offRoller();
         Command closePivot = pivot.closePivotSlow();
 
-        State turnOffRollerState = disableIntakeStateMachine.addState(turnOffRoller, RollerConstants.TURN_OFF_ROLLER_STATE_NAME);
+        State offRollerState = disableIntakeStateMachine.addState(offRoller, RollerConstants.OFF_ROLLER_STATE_NAME);
         State closePivotState = disableIntakeStateMachine.addState(closePivot, PivotConstants.CLOSE_PIVOT_STATE_NAME);
 
         disableIntakeStateMachine.setInitialState(closePivotState);
-        closePivotState.switchTo(turnOffRollerState).when(pivot::isPivotClose);
+        closePivotState.switchTo(offRollerState).when(pivot::isPivotClose);
         
         return disableIntakeStateMachine;
     }
