@@ -17,7 +17,7 @@ public class RollerConstants {
     /**The roller's radius in meters */
     public final static double ROLLER_RADIUS_METER = 0.0275;    //TODO - Get the real Roller radius in meters
 
-    /**The ratio of rotations per second to meters per seconnd based on the roller's radius */
+    /**The ratio of rotations per second to meters per second based on the roller's radius */
     public final static double RPM_TO_MPS_RATIO = UnitConversions.RPMtoRPS(2 * ROLLER_RADIUS_METER * Math.PI); // RPM to MPS
 
     /**The moment of inertia of the roller flywheel */
