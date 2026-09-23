@@ -1,8 +1,11 @@
 package frc.robot.subsystems.intake.roller;
 
+
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class RollerSubsystem extends SubsystemBase {
@@ -64,5 +67,38 @@ public class RollerSubsystem extends SubsystemBase {
      */
     public void updateInputs() {
         io.updateInputs(inputs);
+    }
+
+    /**
+     * A command that turns off the roller
+     * @return A command that turns off the roller
+     */
+    public Command offRoller(){
+        return Commands.runOnce(
+            this::stop,
+            this
+        );
+    }
+
+    /**
+     * A command that reverses the roller
+     * @return A command that reverses the roller
+     */
+    public Command reverseRoller(){
+        return Commands.runOnce(
+            () -> setDutyCycle(RollerConstants.REVERSED_DUTY_CYCLE),
+            this
+        );
+    }
+
+    /**
+     * A command that turns on the roller
+     * @return A command that turns on the roller
+     */
+    public Command onRoller(){
+        return Commands.runOnce(
+            () -> setDutyCycle(RollerConstants.ON_DUTY_CYCLE),
+            this
+        );
     }
 }

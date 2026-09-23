@@ -9,6 +9,7 @@ import edu.wpi.first.math.system.LinearSystem;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
+import frc.lib.statemachine.StateMachine.StateName;
 
 
 public class PivotConstants {
@@ -20,17 +21,23 @@ public class PivotConstants {
     private static final double PIVOT_LENGTH_METERS = 0.3; // TODO: get value from CAD
     
     /** The angle where the pivot is closed */
-    private static final Rotation2d PIVOT_CLOSE_ANGLE = Rotation2d.fromDegrees(67); // TODO: get value from CAD
+    public static final Rotation2d PIVOT_CLOSE_ANGLE = Rotation2d.fromDegrees(67); // TODO: get value from CAD
     /** The angle where the pivot is opened */
-    private static final Rotation2d PIVOT_OPEN_ANGLE = Rotation2d.fromDegrees(0);// TODO: get value from CAD
+    public static final Rotation2d PIVOT_OPEN_ANGLE = Rotation2d.fromDegrees(0);// TODO: get value from CAD
     /**whether we are accounting for gravity in the simulation */
     private static final boolean SIMULATE_GRAVITY = true;                              // TODO: change to wanted mode
-    /** The gear ratio between the motor and the pivot arm (a single roation of the arm is equal to GEAR_RATIO roations of the pivot).*/
+    /** The gear ratio between the motor and the pivot arm (a single roation of the arm is equal to GEAR_RATIO roations of the motor).*/
     public static final double GEAR_RATIO = 45;  // TODO: get value from CAD
+    public static final Rotation2d TOLERANCE = Rotation2d.fromDegrees(5);
+
+    /**The state name of opening the pivot for state machines */
+    public static final StateName OPEN_PIVOT_STATE_NAME = new StateName("openPivotState");
+    /**The state name of closing the pivot for state machine */
+    public static final StateName CLOSE_PIVOT_STATE_NAME = new StateName("closePivotState");
 
 
     /**
-     * @return get the plant for the sim
+     * @return The plant for the sim
      */
     private static LinearSystem<N2, N1, N2> getPlant(){
         return LinearSystemId.createSingleJointedArmSystem(

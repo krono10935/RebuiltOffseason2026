@@ -4,14 +4,14 @@ import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-import frc.robot.Constants.Mode;
+import frc.lib.math.IsNear;
 
 public class PivotSubsystem extends SubsystemBase {
     private final PivotInputsAutoLogged inputs;
     private final PivotIO io;
-
     //Create a new PivotSubsystem
     public PivotSubsystem(){
         inputs = new PivotInputsAutoLogged();
@@ -77,5 +77,64 @@ s    */
      */
     private void updateInputs(){
         io.updateInputs(inputs);
+    }
+
+    /**
+     * Checks if the pivot is open
+     * @return whether the pivot is open
+     */
+    public boolean isPivotOpen() {
+        return IsNear.isNear(getAngle(), PivotConstants.PIVOT_OPEN_ANGLE, PivotConstants.TOLERANCE);
+    }
+    /**
+     * Checks if the pivot is close
+     * @return whether the pivot is close
+     */
+    public boolean isPivotClose() {
+        return IsNear.isNear(getAngle(), PivotConstants.PIVOT_CLOSE_ANGLE, PivotConstants.TOLERANCE);
+    }
+
+    /**
+     * A command that opens the pivot
+     * @return A command that opens the pivot
+     */
+    public Command openPivot(){
+        return Commands.runOnce(
+            () -> setRotation(PivotConstants.PIVOT_OPEN_ANGLE),
+            this
+        );
+    }
+
+    /**
+     * A command that opens the pivot slowly, using a trapezoid profile.
+     * @return A command that opens the pivot slowly, using a trapezoid profile.
+     */
+    public Command openPivotSlow(){
+        return Commands.runOnce(
+            () -> setRotationSlow(PivotConstants.PIVOT_OPEN_ANGLE),
+            this
+        );
+    }
+
+    /**
+     * A command that closes the pivot
+     * @return A command that closes the pivot
+     */
+    public Command closePivot(){
+        return Commands.runOnce(
+            () -> setRotation(PivotConstants.PIVOT_CLOSE_ANGLE),
+            this
+        );
+    }
+
+    /**
+     * A command that opens the pivot slowly, using a trapezoid profile.
+     * @return A command that opens the pivot slowly, using a trapezoid profile.
+     */
+    public Command closePivotSlow(){
+        return Commands.runOnce(
+            () -> setRotationSlow(PivotConstants.PIVOT_CLOSE_ANGLE),
+            this
+        );
     }
 }
