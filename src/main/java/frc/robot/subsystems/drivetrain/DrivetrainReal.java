@@ -8,25 +8,19 @@ import com.pathplanner.lib.util.DriveFeedforwards;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.util.swerve.SwerveSetpoint;
 import com.pathplanner.lib.util.swerve.SwerveSetpointGenerator;
-import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.numbers.N1;
-import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.subsystems.drivetrain.module.SwerveModuleIO;
-import frc.lib.field.AllianceFlipUtil;
 import frc.robot.GeneralRobotState;
 import frc.robot.subsystems.drivetrain.configsStructure.ChassisConstants;
+import frc.robot.subsystems.drivetrain.constants.DrivetrainConstants;
+
 import org.littletonrobotics.junction.AutoLog;
 import org.littletonrobotics.junction.Logger;
-
 
 import java.util.function.Supplier;
 
@@ -39,6 +33,20 @@ public class DrivetrainReal extends Drivetrain {
         public SwerveModuleState[] moduleStates = new SwerveModuleState[4];
     }
 
+    /**
+     * DriveSpeeds contains a target ChassisSpeeds and whether or not to treat it as Field relative
+     */
+    public record DriveSpeeds(ChassisSpeeds targetSpeeds, boolean isFieldRelative) {
+
+        /**
+         * Construct a Field relative DriveSpeeds object
+         * @param goalSpeeds The chassis speeds on the field
+         */
+        public DriveSpeeds (ChassisSpeeds goalSpeeds){
+            this(goalSpeeds, true);
+        }
+    }
+
     private final Supplier<Double> batteryVoltageSupplier;
 
     private final SwerveSetpointGenerator setpointGenerator;
@@ -46,6 +54,8 @@ public class DrivetrainReal extends Drivetrain {
     private SwerveSetpoint previousSetpoint;
 
     private static final DriveFeedforwards ZEROS = DriveFeedforwards.zeros(4);
+
+    private DriveSpeeds goalSpeeds = new DriveSpeeds(new ChassisSpeeds(), false);
 
     public DrivetrainReal(Supplier<Double> batteryVoltageSupplier, ChassisConstants constants) {
         super(constants);
@@ -72,7 +82,8 @@ public class DrivetrainReal extends Drivetrain {
     }
 
     /**
-     * configures the AutoBuilder for PP
+     * Configurates the AutoBuilder for pathplannner
+     * @param config The robot config taken from pathplanner
      */
     private void configPathPlanner(RobotConfig config){
 
@@ -81,7 +92,10 @@ public class DrivetrainReal extends Drivetrain {
                 GeneralRobotState.getInstance()::getEstimatedPose, // Robot pose supplier
                 GeneralRobotState.getInstance()::resetPoseEstimator, // Method to reset odometry (will be called if your auto has a starting pose)
                 GeneralRobotState.getInstance().getChassisSpeedsSupplier(), // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-                (speeds, feedforwards) -> driveWithoutPP(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
+                (speeds, feedforwards) -> 
+                    setGoalSpeeds(
+                        new DriveSpeeds(speeds, false)
+                    ), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
                 new PPController( // PPHolonomicController is the built in path following controller for holonomic drive trains
                             constants.PP_CONFIG.PID_CONSTANTS(), constants.PP_CONFIG.ANGULAR_PID_CONSTANTS() // Rotation PID constants
                 ),
@@ -107,57 +121,15 @@ public class DrivetrainReal extends Drivetrain {
     }
 
     /**
-     * Drives the robot at relative speed
-     *Needs to be called continuously
-     * @param speeds the target speed of the robot
-     */
-    @SuppressWarnings("unused")
-    public void drive(ChassisSpeeds speeds) {
-
-        boolean hasBalls = GeneralRobotState.getInstance().hasGamePiece();
-
-        previousSetpoint = setpointGenerator.generateSetpoint(
-            previousSetpoint, speeds, null,
-                ChassisConstants.LOOP_TIME_SECONDS, batteryVoltageSupplier.get());
-
-        for (int i = 0; i < 4; i++){
-            var targetSpeed = previousSetpoint.moduleStates()[i];
-            if (hasBalls) io[i].setTargetStateWithBalls(targetSpeed); 
-            else io[i].setTargetState(targetSpeed);
-        }
-        Logger.recordOutput("drivetrain/requested speeds", speeds);
-        Logger.recordOutput("drivetrain/target speeds", previousSetpoint.robotRelativeSpeeds());
-        Logger.recordOutput("drivetrain/target states", previousSetpoint.moduleStates());
-    }
-
-    /**
-     * set the speeds which regular kinematics
-     * @param speeds the target speed of the robot
-     */
-    public void driveWithoutPP(ChassisSpeeds speeds) {
-        var targetSpeeds = kinematics.toWheelSpeeds(speeds);
-        SwerveDriveKinematics.desaturateWheelSpeeds(targetSpeeds, constants.SPEED_CONFIG.maxLinearSpeed());
-        for (int i = 0; i < 4; i++){
-            targetSpeeds[i].optimize(io[i].getState().angle);
-            targetSpeeds[i].cosineScale(io[i].getState().angle);
-        }
-        previousSetpoint = new SwerveSetpoint(speeds,kinematics.toSwerveModuleStates(speeds),ZEROS);
-
-        for (int i = 0; i < 4; i++){
-
-            io[i].setTargetState(targetSpeeds[i]);
-        }
-        Logger.recordOutput("drivetrain/requested speeds", speeds);
-        Logger.recordOutput("drivetrain/target speeds", previousSetpoint.robotRelativeSpeeds());
-        Logger.recordOutput("drivetrain/target states", previousSetpoint.moduleStates());
-    }
-
-    /**
      * Function which stops the robot immediately
      */
     public void stop(){
 
-        previousSetpoint = new SwerveSetpoint(new ChassisSpeeds(),kinematics.toSwerveModuleStates(new ChassisSpeeds()),ZEROS);
+        previousSetpoint = new SwerveSetpoint(
+            new ChassisSpeeds(), 
+            kinematics.toSwerveModuleStates(new ChassisSpeeds()), 
+            ZEROS
+        );
 
         for (int i = 0; i < 4; i++){
             io[i].setTargetState(previousSetpoint.moduleStates()[i]);
@@ -168,72 +140,8 @@ public class DrivetrainReal extends Drivetrain {
         Logger.recordOutput("drivetrain/target states", previousSetpoint.moduleStates());
     }
 
-
     /**
-     * Resets the gyros
-     */
-    public void resetGyro(){
-        gyro.reset(new Pose2d(new Translation2d(), AllianceFlipUtil.apply(new Rotation2d())));
-    }
-
-    /**
-     * Adds the vision measurement
-     *
-     * @param pose      the position where the vision think the robot is there
-     * @param timestamp the time when the pose was taken
-     * @param stdDevs   A Vector with 3 parameters in the following order:
-     *                  X standard deviation (in meters).
-     *                  Y standard deviation (in meters).
-     *                  Theta standard deviation (in radians).
-     */
-    // @Override
-    public void addVisionMeasurement(Pose2d pose, double timestamp, Matrix<N3, N1> stdDevs) {
-        Logger.recordOutput("VisionMeasurement/Pose", pose);
-        Logger.recordOutput("VisionMeasurement/timestamp", timestamp);
-        Logger.recordOutput("VisionMeasurement/stdDevs", stdDevs);
-
-        GeneralRobotState.getInstance().addVisionMeasurement(pose, timestamp, stdDevs);
-    }
-
-
-    /**
-     * @return the constants the driveTrain was created with
-     */
-    public ChassisConstants getConstants() {
-        return constants;
-    }
-
-    /**
-     * Return the latest gyro angle
-     * (counterclockwise positive)
-     *
-     * @return the gyro angle
-     */
-    public Rotation2d getGyroAngle() {
-        return gyroInputs.pose.getRotation();
-    }
-
-    /**
-     * Return the latest speeds of the robot
-     *
-     * @return speeds
-     */
-    public ChassisSpeeds getChassisSpeeds() {
-        return inputs.speeds;
-    }
-
-    /**
-     * Set if the module is Brake or Coast
-     * @param isBrake whether the module motor should resist outside change in disable
-     */
-    public void setBrakeMode(boolean isBrake){
-        for (SwerveModuleIO module : io){
-            module.setBrakeMode(isBrake);
-        }
-    }
-
-    /**
-     *
+     * Drives to a pose on the field
      * @param goalPose goal position to drive to
      * @return a command which drives the chasis to a position
      */
@@ -249,33 +157,70 @@ public class DrivetrainReal extends Drivetrain {
         return new InstantCommand(this::resetGyro).ignoringDisable(true);
     }
 
+    /**
+     * @return A command which puts the swerve in defense mode
+     */
+    public Command defenseModeCommand(){
+        return Commands.run(this::defenseMode, this);
+    }
+
+    /**
+     * Put the swerve modules in an X configuration in order to resist movement.
+     */
+    private void defenseMode(){
+        for (int i = 0; i < 4; i++){
+            io[i].setTargetState(DrivetrainConstants.defenseModeStates[i]);
+        }
+
+        goalSpeeds = null;
+        previousSetpoint = DrivetrainConstants.defenseModeSetpoint;
+    }
+
+    /**
+     * Command a new goal speed for the Swerve
+     * @param goalSpeeds the speeds that the drivetrain needs to follow
+     */
+    public void setGoalSpeeds(DriveSpeeds goalSpeeds){
+        this.goalSpeeds = goalSpeeds;
+    }
+
+    /**
+     * Make the swerve move accordingly to the goal speeds.
+     */
+    private void drive(){
+        if (goalSpeeds == null){
+            Logger.recordOutput("drivetrain/requested speeds", new ChassisSpeeds());
+            Logger.recordOutput("drivetrain/target speeds", previousSetpoint.robotRelativeSpeeds());
+            Logger.recordOutput("drivetrain/target states", previousSetpoint.moduleStates());
+            return;
+        }
+
+        boolean hasBalls = GeneralRobotState.getInstance().hasBalls();
+
+        ChassisSpeeds speeds = goalSpeeds.targetSpeeds();
+
+        if (goalSpeeds.isFieldRelative()){
+            speeds = ChassisSpeeds.fromFieldRelativeSpeeds(speeds, getGyroAngle());
+        }
+
+        previousSetpoint = setpointGenerator.generateSetpoint(
+            previousSetpoint, speeds, null,
+                ChassisConstants.LOOP_TIME_SECONDS, batteryVoltageSupplier.get());
+
+        for (int i = 0; i < 4; i++){
+            var targetSpeed = previousSetpoint.moduleStates()[i];
+            if (hasBalls) io[i].setTargetStateWithBalls(targetSpeed); 
+            else io[i].setTargetState(targetSpeed);
+        }
+        Logger.recordOutput("drivetrain/requested speeds", speeds);
+        Logger.recordOutput("drivetrain/target speeds", previousSetpoint.robotRelativeSpeeds());
+        Logger.recordOutput("drivetrain/target states", previousSetpoint.moduleStates());
+
+    }
 
     @Override
     public void periodic() {
-        this.gyro.updateInputs(gyroInputs);
-
-        for (int i = 0; i < 4; i++){
-            io[i].update();
-            this.inputs.moduleStates[i] = io[i].getState();
-            modulePositions[i] = io[i].getPosition();
-        }
-
-        inputs.speeds = kinematics.toChassisSpeeds(this.inputs.moduleStates);
-
-        GeneralRobotState.getInstance().update(getGyroAngle(), modulePositions);
-
-        // this.gyro.getEstimatedPosition().ifPresent((
-        //         pose -> poseEstimator.addVisionMeasurement(pose.pose(), Timer.getTimestamp(), pose.stdDevs())));
-
-        Logger.processInputs("drivetrain", inputs);
-        Logger.processInputs("drivetrain/gyro", gyroInputs);
-        // Logger.recordOutput("drivetrain/estimated pose", 
-        //     GeneralRobotState.getInstance().getEstimatedPosition());
-
-        String currentCommand = getCurrentCommand() == null ? "None" : getCurrentCommand().getName();
-
-        Logger.recordOutput("drivetrain/current command", currentCommand);
+        super.periodic();
+        drive();
     }
-
 }
-

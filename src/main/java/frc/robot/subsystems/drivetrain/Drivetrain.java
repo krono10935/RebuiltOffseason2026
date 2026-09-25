@@ -6,10 +6,14 @@ package frc.robot.subsystems.drivetrain;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.field.AllianceFlipUtil;
 import frc.robot.GeneralRobotState;
 import frc.robot.subsystems.drivetrain.configsStructure.ChassisConstants;
 import frc.robot.subsystems.drivetrain.gyro.GyroIO;
@@ -49,6 +53,10 @@ public abstract class Drivetrain extends SubsystemBase {
     }
 
     kinematics = new SwerveDriveKinematics(constants.ROBOT_CONFIG.moduleLocations);
+
+    GeneralRobotState.getInstance().setChassisSpeedsSupplier(
+      () -> kinematics.toChassisSpeeds(inputs.moduleStates)
+    );
   }
 
   @Override
@@ -63,24 +71,53 @@ public abstract class Drivetrain extends SubsystemBase {
 
     inputs.speeds = kinematics.toChassisSpeeds(this.inputs.moduleStates);
 
-    // poseEstimator.update(getGyroAngle(), modulePositions);
-
-    // this.gyro.getEstimatedPosition().ifPresent((
-    //         pose -> poseEstimator.addVisionMeasurement(pose.pose(), Timer.getTimestamp(), pose.stdDevs())));
-
     Logger.processInputs(getName(), inputs);
     Logger.processInputs(getName() + "/gyro", gyroInputs);
 
-    // Logger.recordOutput("drivetrain/estimated pose", getEstimatedPosition());
 
+    // TODO make a custom periodic which does this in the GeneralRobotState
+    // Logger.recordOutput("drivetrain/estimated pose", getEstimatedPosition())
     // field.setRobotPose(getEstimatedPosition());
 
     String currentCommand = getCurrentCommand() == null ? "None" : getCurrentCommand().getName();
 
     Logger.recordOutput(getName() + "/current command", currentCommand);
+
+
+    GeneralRobotState.getInstance().updatePoseEstimator(getGyroAngle(), modulePositions);
   }
 
-  public SwerveDriveKinematics getKinematics(){
-    return kinematics;
+  /**
+   * Resets the gyro
+   */
+  public void resetGyro(){
+      gyro.reset(new Pose2d(new Translation2d(), AllianceFlipUtil.apply(new Rotation2d())));
+  }
+
+  /**
+   * @return the constants the driveTrain was created with
+   */
+  public ChassisConstants getConstants() {
+      return constants;
+  }
+
+  /**
+   * Return the latest gyro angle
+   * (counterclockwise positive)
+   *
+   * @return the gyro angle
+   */
+  public Rotation2d getGyroAngle() {
+      return gyroInputs.pose.getRotation();
+  }
+
+  /**
+   * Set if the module is Brake or Coast
+   * @param isBrake whether the module motor should resist outside change in disable
+   */
+  public void setBrakeMode(boolean isBrake){
+      for (SwerveModuleIO module : io){
+          module.setBrakeMode(isBrake);
+      }
   }
 }
