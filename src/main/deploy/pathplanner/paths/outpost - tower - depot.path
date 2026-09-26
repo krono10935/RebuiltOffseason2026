@@ -1,0 +1,122 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 0.8490909090909087,
+        "y": 0.5822159090909098
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.0449204545454542,
+        "y": 1.4995227272727276
+      },
+      "isLocked": false,
+      "linkedName": "outpost"
+    },
+    {
+      "anchor": {
+        "x": 0.49,
+        "y": 3.3135227272727277
+      },
+      "prevControl": {
+        "x": 0.49000000000000005,
+        "y": 2.2273409090909095
+      },
+      "nextControl": {
+        "x": 0.4899999999999998,
+        "y": 4.399704545454548
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 0.49,
+        "y": 6.281886363636363
+      },
+      "prevControl": {
+        "x": 0.48999999999999977,
+        "y": 4.918886363636363
+      },
+      "nextControl": {
+        "x": 0.4900000000000001,
+        "y": 7.644886363636368
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.178670454545454,
+        "y": 5.519181818181819
+      },
+      "prevControl": {
+        "x": 1.5293409090909087,
+        "y": 6.721176136363637
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.7452830188679245,
+      "rotationDegrees": -90.0
+    },
+    {
+      "waypointRelativePos": 1.9150943396226405,
+      "rotationDegrees": -90.0
+    }
+  ],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 1.6588868940754038,
+      "maxWaypointRelativePos": 1.9712746858168773,
+      "constraints": {
+        "maxVelocity": 1.5,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "Intake",
+      "waypointRelativePos": 1.66,
+      "endWaypointRelativePos": 1.97,
+      "command": null
+    },
+    {
+      "name": "Close roller",
+      "waypointRelativePos": 1.97,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -29.61670303311869
+  },
+  "reversed": false,
+  "folder": "depot - outpost",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": true
+}

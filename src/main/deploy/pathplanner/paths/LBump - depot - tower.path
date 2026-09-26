@@ -1,0 +1,167 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.6525454545454545,
+        "y": 5.900534090909091
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.7455454545454545,
+        "y": 6.405568181818182
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 0.5089659090909089,
+        "y": 6.704465909090909
+      },
+      "prevControl": {
+        "x": 0.4471249999999999,
+        "y": 7.72484090909091
+      },
+      "nextControl": {
+        "x": 0.5411538456202494,
+        "y": 6.173364956356791
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.0036931818181816,
+        "y": 5.199670454545456
+      },
+      "prevControl": {
+        "x": 0.29077313770860935,
+        "y": 5.312832366308881
+      },
+      "nextControl": {
+        "x": 1.653022727272727,
+        "y": 5.096602272727273
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.4775681818181816,
+        "y": 4.014386363636364
+      },
+      "prevControl": {
+        "x": 2.4775681818181816,
+        "y": 4.678196666573223
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "near tower shoot"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.8726415094339623,
+      "rotationDegrees": 90.0
+    },
+    {
+      "waypointRelativePos": 1.6132075471698153,
+      "rotationDegrees": 90.0
+    }
+  ],
+  "constraintZones": [
+    {
+      "name": "Intake",
+      "minWaypointRelativePos": 0.8402154398563739,
+      "maxWaypointRelativePos": 1.65,
+      "constraints": {
+        "maxVelocity": 1.5,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    },
+    {
+      "name": "Shoot",
+      "minWaypointRelativePos": 2.5,
+      "maxWaypointRelativePos": 3.0,
+      "constraints": {
+        "maxVelocity": 1.0,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [
+    {
+      "fieldPosition": {
+        "x": 4.625,
+        "y": 4.03
+      },
+      "rotationOffset": 0.0,
+      "minWaypointRelativePos": 2.5,
+      "maxWaypointRelativePos": 3.0,
+      "name": "Point Towards Zone"
+    }
+  ],
+  "eventMarkers": [
+    {
+      "name": "Intake",
+      "waypointRelativePos": 0.82,
+      "endWaypointRelativePos": 1.65,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "deployIntake"
+        }
+      }
+    },
+    {
+      "name": "Close roller",
+      "waypointRelativePos": 1.65,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "openPivotOffRoller"
+        }
+      }
+    },
+    {
+      "name": "Shooter",
+      "waypointRelativePos": 2.5,
+      "endWaypointRelativePos": 3.0,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "ShootAndAim"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 1.0,
+    "rotation": 0.0
+  },
+  "reversed": false,
+  "folder": "depot - outpost",
+  "idealStartingState": {
+    "velocity": 0.0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": true
+}

@@ -1,0 +1,112 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 0.519,
+        "y": 4.838931818181818
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 0.5190000000000001,
+        "y": 6.094376736857058
+      },
+      "isLocked": false,
+      "linkedName": "depot pickup(tower)"
+    },
+    {
+      "anchor": {
+        "x": 0.519,
+        "y": 6.652931818181819
+      },
+      "prevControl": {
+        "x": 0.5188206854559775,
+        "y": 6.015931843420207
+      },
+      "nextControl": {
+        "x": 0.5192727272727271,
+        "y": 7.621772727272727
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.230204545454545,
+        "y": 5.879920454545454
+      },
+      "prevControl": {
+        "x": 1.6633295454545454,
+        "y": 6.797227272727273
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1,
+      "rotationDegrees": -90.0
+    }
+  ],
+  "constraintZones": [
+    {
+      "name": "Intake",
+      "minWaypointRelativePos": 0.0,
+      "maxWaypointRelativePos": 0.3734290843806101,
+      "constraints": {
+        "maxVelocity": 1.5,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "Intake",
+      "waypointRelativePos": 0,
+      "endWaypointRelativePos": 0.37,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "deployIntake"
+        }
+      }
+    },
+    {
+      "name": "Close roller",
+      "waypointRelativePos": 0.37,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Close roller"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -36.90922212801038
+  },
+  "reversed": false,
+  "folder": "depot - outpost",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -90.0
+  },
+  "useDefaultConstraints": true
+}
