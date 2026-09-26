@@ -164,7 +164,7 @@
       }
     },
     {
-      "name": "Close Intake",
+      "name": "Close roller",
       "waypointRelativePos": 1.8,
       "endWaypointRelativePos": null,
       "command": {

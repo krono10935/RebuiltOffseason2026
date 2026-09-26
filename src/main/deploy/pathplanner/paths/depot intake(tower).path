@@ -79,13 +79,13 @@
       }
     },
     {
-      "name": "Close Intake",
+      "name": "Close roller",
       "waypointRelativePos": 0.37,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "openPivotOffRoller"
+          "name": "Close roller"
         }
       }
     }
