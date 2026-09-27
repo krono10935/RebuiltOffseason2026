@@ -99,7 +99,7 @@ s    */
      * @return A command that opens the pivot
      */
     public Command openPivot(){
-        return Commands.runOnce(
+        return Commands.run(
             () -> setRotation(PivotConstants.PIVOT_OPEN_ANGLE),
             this
         );
@@ -110,7 +110,7 @@ s    */
      * @return A command that opens the pivot slowly, using a trapezoid profile.
      */
     public Command openPivotSlow(){
-        return Commands.runOnce(
+        return Commands.run(
             () -> setRotationSlow(PivotConstants.PIVOT_OPEN_ANGLE),
             this
         );
@@ -121,7 +121,7 @@ s    */
      * @return A command that closes the pivot
      */
     public Command closePivot(){
-        return Commands.runOnce(
+        return Commands.run(
             () -> setRotation(PivotConstants.PIVOT_CLOSE_ANGLE),
             this
         );
@@ -132,7 +132,7 @@ s    */
      * @return A command that opens the pivot slowly, using a trapezoid profile.
      */
     public Command closePivotSlow(){
-        return Commands.runOnce(
+        return Commands.run(
             () -> setRotationSlow(PivotConstants.PIVOT_CLOSE_ANGLE),
             this
         );
