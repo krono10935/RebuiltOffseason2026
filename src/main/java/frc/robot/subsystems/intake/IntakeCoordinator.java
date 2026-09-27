@@ -27,8 +27,8 @@ public class IntakeCoordinator {
      */
     public Command deployIntake() {
         StateMachine deployIntakeStateMachine= new StateMachine("deployIntake_StateMachine");
-        Command onRoller = roller.onRoller();
-        Command openPivot = pivot.openPivot();
+        Command onRoller = roller.onRoller().withName("deployIntake");
+        Command openPivot = pivot.openPivot().withName("deployIntake");
 
         State onRollerState = deployIntakeStateMachine.addState(onRoller, RollerConstants.ON_ROLLER_STATE_NAME);
         State openPivotState = deployIntakeStateMachine.addState(openPivot, PivotConstants.OPEN_PIVOT_STATE_NAME);
@@ -44,8 +44,8 @@ public class IntakeCoordinator {
      */
     public Command openPivotOffRoller() {
         StateMachine openPivotOffRollerStateMachine= new StateMachine("openPivotOffRoller_StateMachine");
-        Command offRoller = roller.offRoller();
-        Command openPivot = pivot.openPivot();
+        Command offRoller = roller.offRoller().withName("openPivotOffRoller");
+        Command openPivot = pivot.openPivot().withName("openPivotOffRoller");
 
         State offRollerState = openPivotOffRollerStateMachine.addState(offRoller, RollerConstants.OFF_ROLLER_STATE_NAME);
         State openPivotState = openPivotOffRollerStateMachine.addState(openPivot, PivotConstants.OPEN_PIVOT_STATE_NAME);
@@ -61,8 +61,8 @@ public class IntakeCoordinator {
      */
     public Command closePivotOnRoller() {
         StateMachine closePivotOnRollerStateMachine= new StateMachine("closePivotOnRoller_StateMachine");
-        Command onRoller = roller.onRoller();
-        Command closePivot = pivot.closePivotSlow();
+        Command onRoller = roller.onRoller().withName("closePivotOnRoller");
+        Command closePivot = pivot.closePivotSlow().withName("closePivotOnRoller");
 
         State onRollerState = closePivotOnRollerStateMachine.addState(onRoller, RollerConstants.ON_ROLLER_STATE_NAME);
         State closePivotState = closePivotOnRollerStateMachine.addState(closePivot, PivotConstants.CLOSE_PIVOT_STATE_NAME);
@@ -78,8 +78,8 @@ public class IntakeCoordinator {
      */
     public Command disableIntake() {
         StateMachine disableIntakeStateMachine= new StateMachine("disableIntake_StateMachine");
-        Command offRoller = roller.offRoller();
-        Command closePivot = pivot.closePivotSlow();
+        Command offRoller = roller.offRoller().withName("disableIntake");
+        Command closePivot = pivot.closePivotSlow().withName("disableIntake");
 
         State offRollerState = disableIntakeStateMachine.addState(offRoller, RollerConstants.OFF_ROLLER_STATE_NAME);
         State closePivotState = disableIntakeStateMachine.addState(closePivot, PivotConstants.CLOSE_PIVOT_STATE_NAME);
@@ -95,8 +95,8 @@ public class IntakeCoordinator {
      */
     public Command deployIntakeReverse() {
         StateMachine deployIntakeReverseStateMachine = new StateMachine("deployIntakeReverse_StateMachine");
-        Command reverseRoller = roller.reverseRoller();
-        Command openPivot = pivot.openPivot();
+        Command reverseRoller = roller.reverseRoller().withName("deployIntakeReverse");
+        Command openPivot = pivot.openPivot().withName("deployIntakeReverse");
 
         State reverseRollerState = deployIntakeReverseStateMachine.addState(reverseRoller, RollerConstants.REVERSE_ROLLER_STATE_NAME);
         State openPivotState = deployIntakeReverseStateMachine.addState(openPivot, PivotConstants.OPEN_PIVOT_STATE_NAME);
@@ -112,8 +112,8 @@ public class IntakeCoordinator {
      */
     public Command closePivotReverseRoller() {
         StateMachine closePivotReverseRollerStateMachine = new StateMachine("closePivotReverseRoller_StateMachine");
-        Command reverseRoller = roller.reverseRoller();
-        Command closePivot = pivot.closePivotSlow();
+        Command reverseRoller = roller.reverseRoller().withName("closePivotReverseRoller");
+        Command closePivot = pivot.closePivotSlow().withName("closePivotReverseRoller");
 
         State reverseRollerState = closePivotReverseRollerStateMachine.addState(reverseRoller, RollerConstants.REVERSE_ROLLER_STATE_NAME);
         State closePivotState = closePivotReverseRollerStateMachine.addState(closePivot, PivotConstants.CLOSE_PIVOT_STATE_NAME);

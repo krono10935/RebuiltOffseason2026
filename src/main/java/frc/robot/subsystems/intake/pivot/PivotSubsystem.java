@@ -12,6 +12,8 @@ import frc.lib.math.IsNear;
 public class PivotSubsystem extends SubsystemBase {
     private final PivotInputsAutoLogged inputs;
     private final PivotIO io;
+
+    public Rotation2d targetRotationTEMP = Rotation2d.kZero;
     //Create a new PivotSubsystem
     public PivotSubsystem(){
         inputs = new PivotInputsAutoLogged();
@@ -22,6 +24,17 @@ public class PivotSubsystem extends SubsystemBase {
     public void periodic(){
         updateInputs();
         Logger.processInputs(getName(), inputs);
+        
+        if (getCurrentCommand() == null){
+            Logger.recordOutput("current command: ", "null");
+        }
+        
+        else {
+            Logger.recordOutput("current command: ", getCurrentCommand().getName());
+        }
+        
+
+
     }
 
     /**
@@ -54,6 +67,7 @@ public class PivotSubsystem extends SubsystemBase {
      */
 
     public void setRotation(Rotation2d rotation){
+        targetRotationTEMP = rotation;
         io.setRotation(rotation);
     }
 
@@ -62,6 +76,7 @@ public class PivotSubsystem extends SubsystemBase {
      * @param rotation The wanted rotation
 s    */
     public void setRotationSlow(Rotation2d rotation){
+        targetRotationTEMP = rotation;
         io.setRotationSlow(rotation);
     }
 
@@ -77,6 +92,17 @@ s    */
      */
     private void updateInputs(){
         io.updateInputs(inputs);
+
+        if(targetRotationTEMP != null){
+            System.out.println("target " + targetRotationTEMP.getDegrees());
+            Logger.recordOutput("target rotation degrees", targetRotationTEMP.getDegrees());
+
+            Logger.recordOutput("target rotation degrees", targetRotationTEMP.getDegrees() + 5);
+        }
+        else{
+            System.out.println("target -10");
+            Logger.recordOutput("target rotation degrees", -10);
+        }
     }
 
     /**

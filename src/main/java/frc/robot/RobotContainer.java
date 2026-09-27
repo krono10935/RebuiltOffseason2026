@@ -18,12 +18,19 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.RobotState;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-
+import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 import frc.robot.subsystems.drivetrain.configsStructure.ChassisConstants;
+import frc.robot.subsystems.intake.IntakeCoordinator;
+import frc.robot.subsystems.intake.pivot.PivotSubsystem;
+import frc.robot.subsystems.intake.roller.RollerSubsystem;
 
 public class RobotContainer {
 
@@ -32,6 +39,16 @@ public class RobotContainer {
   public final Drivetrain drivetrain;
 
   private final LoggedDashboardChooser<Command> autoChooser;
+  /**The pivot object we will be using */
+  private final PivotSubsystem pivot=new PivotSubsystem();
+  /**The roller object we will be using */
+  private final RollerSubsystem roller=new RollerSubsystem();
+
+  IntakeCoordinator intakeControlsCoordinator = new IntakeCoordinator(pivot, roller);
+
+  CommandXboxController driverController = new CommandXboxController(0);
+
+  
 
   public static RobotContainer getInstance(){
     if (instance == null){
@@ -45,6 +62,7 @@ public class RobotContainer {
     drivetrain = new Drivetrain(ConduitApi.getInstance()::getPDPVoltage, Constants.CHASSIS_TYPE.constants);
 
     autoChooser = registerNamedCommand();
+    controllerBindings();
   }
 
   public Drivetrain getDrivetrain(){
@@ -105,5 +123,21 @@ public class RobotContainer {
       autoChooser.onChange(this::displayChosenAuto);
       autoChooser.addDefaultOption("idle", drivetrain.idle());
       return autoChooser;
+  }
+
+  public void controllerBindings(){
+    driverController.b().onTrue(intakeControlsCoordinator.disableIntake().withName("disableIntake"));
+
+    driverController.leftBumper().whileTrue(intakeControlsCoordinator.deployIntakeReverse().withName("deployIntakeReverse"));
+
+    driverController.leftTrigger(0.5).whileTrue(intakeControlsCoordinator.deployIntake().withName("deployIntake"));
+
+    driverController.leftBumper().onFalse(intakeControlsCoordinator.openPivotOffRoller().withName("openPivotOffRoller"));
+
+    driverController.leftTrigger(0.5).onFalse(intakeControlsCoordinator.openPivotOffRoller().withName("openPivotOffRoller"));
+
+    driverController.a().whileTrue(pivot.openPivot().withName("Open pivot"));
+    
+    driverController.x().whileTrue(pivot.closePivot().withName("Close pivot"));
   }
 }

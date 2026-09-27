@@ -1,5 +1,7 @@
 package frc.robot.subsystems.intake.pivot;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -19,11 +21,14 @@ public class PivotIOSim implements PivotIO {
     public PivotIOSim(){
         motor = new TalonFX(PivotConstants.MOTOR_CANID);
         
+        motor.getConfigurator().apply(PivotConstants.getMotorConfig());
+
         pivotSim = PivotConstants.getSim();
+
     }
     @Override
     public void setRotation(Rotation2d rotation) {
-        motor.setControl(new PositionVoltage(rotation.getRotations()));
+        motor.setControl(new PositionVoltage(rotation.getRotations()).withSlot(0));
     }
 
     @Override
@@ -54,15 +59,24 @@ public class PivotIOSim implements PivotIO {
         
         motorSim.setRotorVelocity(
             UnitConversions.radiansPerSecondToRotationsPerSecond(pivotSim.getVelocityRadPerSec() * PivotConstants.GEAR_RATIO)
-        ); 
+        );
+
+
     }
 
     @Override
     public void updateInputs(PivotInputs inputs) {
         simulateStep();
-        
-        inputs.angle = Rotation2d.fromRotations(motor.getPosition().getValueAsDouble());
+
+        inputs.angle = Rotation2d.fromRadians(pivotSim.getAngleRads());
         inputs.motorTemperatureC = motor.getDeviceTemp().getValueAsDouble();
         inputs.angularVelocityRPS = motor.getVelocity().getValueAsDouble();
+
+        Logger.recordOutput("p", motor.getClosedLoopProportionalOutput().getValueAsDouble());
+        Logger.recordOutput("i", motor.getClosedLoopIntegratedOutput().getValueAsDouble());
+        Logger.recordOutput("d", motor.getClosedLoopDerivativeOutput().getValueAsDouble());
+
+        Logger.recordOutput("error", motor.getClosedLoopError().getValueAsDouble());
+        Logger.recordOutput("output", motor.getClosedLoopOutput().getValueAsDouble());
     }
 }

@@ -2,6 +2,8 @@ package frc.robot.subsystems.intake.pivot;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.GravityTypeValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N2;
@@ -18,16 +20,16 @@ public class PivotConstants {
     /**The motors that are spinning the pivot*/
     public final static DCMotor GEAR_BOX = DCMotor.getKrakenX60(1);
     private static final double MOMENT_OF_INERTIA = 0.001; // TODO: get value from CAD
-    private static final double PIVOT_LENGTH_METERS = 0.3; // TODO: get value from CAD
+    private static final double PIVOT_LENGTH_METERS = 0.366; // TODO: get value from CAD
     
     /** The angle where the pivot is closed */
-    public static final Rotation2d PIVOT_CLOSE_ANGLE = Rotation2d.fromDegrees(67); // TODO: get value from CAD
+    public static final Rotation2d PIVOT_CLOSE_ANGLE = Rotation2d.fromDegrees(291); // TODO: get value from CAD
     /** The angle where the pivot is opened */
-    public static final Rotation2d PIVOT_OPEN_ANGLE = Rotation2d.fromDegrees(0);// TODO: get value from CAD
+    public static final Rotation2d PIVOT_OPEN_ANGLE = Rotation2d.fromDegrees(180);// TODO: get value from CAD
     /**whether we are accounting for gravity in the simulation */
     private static final boolean SIMULATE_GRAVITY = true;                              // TODO: change to wanted mode
-    /** The gear ratio between the motor and the pivot arm (a single roation of the arm is equal to GEAR_RATIO roations of the motor).*/
-    public static final double GEAR_RATIO = 45;  // TODO: get value from CAD
+    /** The gear ratio between the pivot arm and the motor (a single roation of the motor is equal to GEAR_RATIO roations of the pivot).*/
+    public static final double GEAR_RATIO = 0.02;  // TODO: get value from CAD
     public static final Rotation2d TOLERANCE = Rotation2d.fromDegrees(5);
 
     /**The state name of opening the pivot for state machines */
@@ -71,15 +73,15 @@ public class PivotConstants {
     public static TalonFXConfiguration getMotorConfig(){
         TalonFXConfiguration config = new TalonFXConfiguration();
         //TODO: Tweak the PID values
-        config.Slot0.kP = 0;
-        config.Slot0.kD = 0;
-        config.Slot0.kI = 0;
-        config.Slot0.kG = 0;
+        config.Slot0.kP = 1;
+        config.Slot0.kD = 1;
+        config.Slot0.kI = 1;
+        config.Slot0.kG = 1;
         config.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
 
         //TODO: Tweak the PID values for setRotationSlow()
-        config.Slot1.kP = 0;
-        config.Slot1.kG = 0;
+        config.Slot1.kP = 1;
+        config.Slot1.kG = 1;
         config.Slot1.GravityType = GravityTypeValue.Arm_Cosine;
         //The trapezoid profile for setRotationSlow()
         config.MotionMagic.MotionMagicAcceleration = 1;
@@ -90,6 +92,8 @@ public class PivotConstants {
 
         config.CurrentLimits.StatorCurrentLimitEnable = true;
         config.CurrentLimits.SupplyCurrentLimitEnable = true;
+
+        config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
         return config;        
     }
