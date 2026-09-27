@@ -53,8 +53,8 @@
   "constraintZones": [
     {
       "name": "Intake",
-      "minWaypointRelativePos": 0.0,
-      "maxWaypointRelativePos": 0.3734290843806101,
+      "minWaypointRelativePos": 0.12567324955116688,
+      "maxWaypointRelativePos": 0.7396768402154402,
       "constraints": {
         "maxVelocity": 1.5,
         "maxAcceleration": 3.0,
@@ -69,8 +69,8 @@
   "eventMarkers": [
     {
       "name": "Intake",
-      "waypointRelativePos": 0,
-      "endWaypointRelativePos": 0.37,
+      "waypointRelativePos": 0.13,
+      "endWaypointRelativePos": 0.74,
       "command": {
         "type": "named",
         "data": {
@@ -80,12 +80,12 @@
     },
     {
       "name": "Close roller",
-      "waypointRelativePos": 0.37,
+      "waypointRelativePos": 0.74,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "Close roller"
+          "name": "openPivotOffRoller"
         }
       }
     }

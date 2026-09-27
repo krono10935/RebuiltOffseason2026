@@ -114,8 +114,8 @@
     },
     {
       "name": "Bumper",
-      "minWaypointRelativePos": 2.204667863554759,
-      "maxWaypointRelativePos": 2.5493716337522447,
+      "minWaypointRelativePos": 2.1328545780969472,
+      "maxWaypointRelativePos": 2.477558348294435,
       "constraints": {
         "maxVelocity": 2.0,
         "maxAcceleration": 3.0,

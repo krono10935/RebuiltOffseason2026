@@ -73,7 +73,7 @@
   "constraintZones": [
     {
       "name": "Intake",
-      "minWaypointRelativePos": 1.05,
+      "minWaypointRelativePos": 1.2,
       "maxWaypointRelativePos": 1.79,
       "constraints": {
         "maxVelocity": 1.5,
@@ -83,38 +83,14 @@
         "nominalVoltage": 12.0,
         "unlimited": false
       }
-    },
-    {
-      "name": "Shooter",
-      "minWaypointRelativePos": 2.25,
-      "maxWaypointRelativePos": 3.0,
-      "constraints": {
-        "maxVelocity": 1.0,
-        "maxAcceleration": 3.0,
-        "maxAngularVelocity": 540.0,
-        "maxAngularAcceleration": 720.0,
-        "nominalVoltage": 12.0,
-        "unlimited": false
-      }
     }
   ],
-  "pointTowardsZones": [
-    {
-      "fieldPosition": {
-        "x": 4.625,
-        "y": 4.03
-      },
-      "rotationOffset": 0.0,
-      "minWaypointRelativePos": 2.25,
-      "maxWaypointRelativePos": 3.0,
-      "name": "Point Towards Zone"
-    }
-  ],
+  "pointTowardsZones": [],
   "eventMarkers": [
     {
       "name": "Intake",
       "waypointRelativePos": 1.05,
-      "endWaypointRelativePos": 1.05,
+      "endWaypointRelativePos": 1.79,
       "command": {
         "type": "named",
         "data": {
@@ -132,17 +108,6 @@
           "name": "openPivotOffRoller"
         }
       }
-    },
-    {
-      "name": "Shooter",
-      "waypointRelativePos": 2.25,
-      "endWaypointRelativePos": 3.0,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "ShootAndAim"
-        }
-      }
     }
   ],
   "globalConstraints": {
@@ -154,7 +119,7 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 1.0,
+    "velocity": 0.0,
     "rotation": 0.0
   },
   "reversed": false,

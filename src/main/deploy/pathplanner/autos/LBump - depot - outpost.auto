@@ -27,7 +27,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 2.0
+                        "waitTime": 5.0
                       }
                     }
                   ]
@@ -59,16 +59,9 @@
           "data": {
             "commands": [
               {
-                "type": "race",
+                "type": "named",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "WaitUntilNoBalls"
-                      }
-                    }
-                  ]
+                  "name": "WaitUntilNoBalls"
                 }
               },
               {

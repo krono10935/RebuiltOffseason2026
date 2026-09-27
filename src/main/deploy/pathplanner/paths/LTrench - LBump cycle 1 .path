@@ -79,7 +79,7 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 0.0518867924528302,
-      "rotationDegrees": 180.0
+      "rotationDegrees": 90.0
     },
     {
       "waypointRelativePos": 0.9009433962264151,
@@ -114,8 +114,8 @@
     },
     {
       "name": "Bumper",
-      "minWaypointRelativePos": 2.341113105924593,
-      "maxWaypointRelativePos": 2.649910233393176,
+      "minWaypointRelativePos": 2.262118491921006,
+      "maxWaypointRelativePos": 2.5421903052064616,
       "constraints": {
         "maxVelocity": 2.0,
         "maxAcceleration": 3.0,
@@ -154,7 +154,7 @@
   "eventMarkers": [
     {
       "name": "intake",
-      "waypointRelativePos": 0.3375224416517057,
+      "waypointRelativePos": 0.26570915619389596,
       "endWaypointRelativePos": 1.45,
       "command": {
         "type": "named",
@@ -202,7 +202,7 @@
   "folder": "2 cycle",
   "idealStartingState": {
     "velocity": 0.0,
-    "rotation": 180.0
+    "rotation": 90.0
   },
   "useDefaultConstraints": true
 }
