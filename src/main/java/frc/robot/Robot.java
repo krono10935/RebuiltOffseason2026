@@ -5,6 +5,7 @@
 package frc.robot;
 
 import java.io.File;
+import java.lang.ModuleLayer.Controller;
 
 import org.littletonrobotics.conduit.ConduitApi;
 import org.littletonrobotics.junction.LogFileUtil;
@@ -21,9 +22,11 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.lib.dashboard.Elastic;
 import frc.lib.subsystem.VirtualSubSystem;
+import frc.robot.subsystems.indexer.IndexerSubsystem;
 
 public class Robot extends LoggedRobot {
 
@@ -31,8 +34,16 @@ public class Robot extends LoggedRobot {
 
   private Command m_teleopSuperStructre;
 
-  public Robot() {
+  private CommandXboxController xboxController;
 
+  public Robot() {
+    xboxController = new CommandXboxController(0);
+    IndexerSubsystem indexersub = new IndexerSubsystem();
+
+    xboxController.x().whileTrue(indexersub.turnOffIndexer());
+    xboxController.y().whileTrue(indexersub.reverseIndexer());
+    xboxController.b().whileTrue(indexersub.turnOnIndexer());
+  
     initializeLogging();
 
     new Trigger(()-> DriverStation.isDSAttached()).onTrue(new InstantCommand(() -> Elastic.selectTab("Autonomous")));
