@@ -75,7 +75,7 @@ public class IndexerSubsystem extends SubsystemBase {
    * @return A command that turns off the indexer
    */
   public Command turnOffIndexer(){
-    return Commands.runOnce(
+    return Commands.run(
       this::stop,
       this
     );
@@ -83,11 +83,11 @@ public class IndexerSubsystem extends SubsystemBase {
 
 
   /**
-   * A command that spin backwards the indexer
-   * @return A command that spin backwards the indexer
+   * A command that spins backwards the indexer
+   * @return A command that spins backwards the indexer
    */
   public Command reverseIndexer(){
-    return Commands.runOnce(
+    return Commands.run(
       this::spinBackward,
       this
     );
@@ -95,11 +95,11 @@ public class IndexerSubsystem extends SubsystemBase {
 
 
   /**
-   * A command that spin forwards the indexer
-   * @return A command that spin forwards the indexer
+   * A command that spins forwards the indexer
+   * @return A command that spins forwards the indexer
    */
   public Command turnOnIndexer(){
-    return Commands.runOnce(
+    return Commands.run(
       this::spinForward,
       this
     );
