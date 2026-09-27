@@ -4,6 +4,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.system.LinearSystem;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -35,6 +36,8 @@ public class FlywheelConstants {
 
     /** gear box of all 4 motors (MOTOR_IDS.length=4) */
     private static final DCMotor GEAR_BOX = DCMotor.getKrakenX60(MOTOR_IDS.length);
+
+    public static final Transform3d ROBOT_TO_FLYWHEEL = Transform3d.kZero; // TODO: get the real value from cad
         
     /**
      * @param isInverted should the motor's output be inverted
