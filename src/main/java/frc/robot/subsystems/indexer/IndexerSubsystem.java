@@ -7,6 +7,8 @@ package frc.robot.subsystems.indexer;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IndexerSubsystem extends SubsystemBase {
@@ -63,5 +65,47 @@ public class IndexerSubsystem extends SubsystemBase {
   public double[] getTempCel(){
     return inputs.tempCel.clone();
   }
+
+
+
+
+
+   /**
+   * A command that turns off the indexer
+   * @return A command that turns off the indexer
+   */
+  public Command turnOffIndexer(){
+    return Commands.run(
+      this::stop,
+      this
+    );
+  }
+
+
+  /**
+   * A command that spins backwards the indexer
+   * @return A command that spins backwards the indexer
+   */
+  public Command reverseIndexer(){
+    return Commands.run(
+      this::spinBackward,
+      this
+    );
+  }
+
+
+  /**
+   * A command that spins forwards the indexer
+   * @return A command that spins forwards the indexer
+   */
+  public Command turnOnIndexer(){
+    return Commands.run(
+      this::spinForward,
+      this
+    );
+  }
+
+
+
 
 }
