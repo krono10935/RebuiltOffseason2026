@@ -94,11 +94,11 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.14465408805031446,
-      "rotationDegrees": 0.0
+      "waypointRelativePos": 0.07075471698113207,
+      "rotationDegrees": 180.0
     },
     {
-      "waypointRelativePos": 0.4968553459119497,
+      "waypointRelativePos": 0.6132075471698113,
       "rotationDegrees": 90.0
     },
     {
@@ -110,7 +110,7 @@
       "rotationDegrees": 0.0
     },
     {
-      "waypointRelativePos": 2.7,
+      "waypointRelativePos": 3.270440251572339,
       "rotationDegrees": -46.26901264064364
     },
     {
@@ -147,7 +147,7 @@
     },
     {
       "name": "Shooter",
-      "minWaypointRelativePos": 3.482944344703769,
+      "minWaypointRelativePos": 3.55,
       "maxWaypointRelativePos": 4.254937163375226,
       "constraints": {
         "maxVelocity": 0.4,
@@ -162,11 +162,11 @@
   "pointTowardsZones": [
     {
       "fieldPosition": {
-        "x": 4.5,
-        "y": 4.0
+        "x": 4.625,
+        "y": 4.03
       },
       "rotationOffset": 0.0,
-      "minWaypointRelativePos": 3.3,
+      "minWaypointRelativePos": 3.55,
       "maxWaypointRelativePos": 4.195691202872533,
       "name": "Point Towards Zone"
     }
@@ -196,7 +196,7 @@
     },
     {
       "name": "ShootAndAim",
-      "waypointRelativePos": 3.48,
+      "waypointRelativePos": 3.55,
       "endWaypointRelativePos": 4.25,
       "command": {
         "type": "named",
@@ -222,7 +222,7 @@
   "folder": "2 cycle left",
   "idealStartingState": {
     "velocity": 2.0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

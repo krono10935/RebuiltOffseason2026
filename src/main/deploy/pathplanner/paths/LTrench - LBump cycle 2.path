@@ -78,11 +78,11 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.14465408805031446,
+      "waypointRelativePos": 0.08805031446540881,
       "rotationDegrees": 180.0
     },
     {
-      "waypointRelativePos": 0.4968553459119497,
+      "waypointRelativePos": 0.5534591194968553,
       "rotationDegrees": 90.0
     },
     {
@@ -90,7 +90,7 @@
       "rotationDegrees": 90.0
     },
     {
-      "waypointRelativePos": 2.352941176470588,
+      "waypointRelativePos": 2.371069182389939,
       "rotationDegrees": -46.26901264064364
     },
     {
@@ -142,8 +142,8 @@
   "pointTowardsZones": [
     {
       "fieldPosition": {
-        "x": 4.5,
-        "y": 4.0
+        "x": 4.625,
+        "y": 4.03
       },
       "rotationOffset": 0.0,
       "minWaypointRelativePos": 2.65,

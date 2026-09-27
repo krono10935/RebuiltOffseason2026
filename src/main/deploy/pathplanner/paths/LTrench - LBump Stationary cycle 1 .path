@@ -94,8 +94,8 @@
     },
     {
       "name": "Bumper",
-      "minWaypointRelativePos": 2.31,
-      "maxWaypointRelativePos": 2.5852782764811506,
+      "minWaypointRelativePos": 2.229802513464991,
+      "maxWaypointRelativePos": 2.5583482944344706,
       "constraints": {
         "maxVelocity": 2.0,
         "maxAcceleration": 3.0,
@@ -140,7 +140,7 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 2.0,
+    "velocity": 0.0,
     "rotation": -48.71107455495569
   },
   "reversed": false,

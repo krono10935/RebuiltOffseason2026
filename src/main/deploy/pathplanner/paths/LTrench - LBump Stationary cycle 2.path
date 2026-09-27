@@ -90,7 +90,7 @@
       "rotationDegrees": 90.0
     },
     {
-      "waypointRelativePos": 3.2,
+      "waypointRelativePos": 3.4213836477987423,
       "rotationDegrees": -46.26901264064364
     }
   ],
@@ -110,8 +110,8 @@
     },
     {
       "name": "Bumper",
-      "minWaypointRelativePos": 3.1,
-      "maxWaypointRelativePos": 3.25,
+      "minWaypointRelativePos": 3.166965888689409,
+      "maxWaypointRelativePos": 3.518850987432674,
       "constraints": {
         "maxVelocity": 1.5,
         "maxAcceleration": 3.0,
