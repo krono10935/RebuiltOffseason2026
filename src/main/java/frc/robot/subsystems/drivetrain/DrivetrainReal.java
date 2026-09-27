@@ -10,12 +10,15 @@ import com.pathplanner.lib.util.swerve.SwerveSetpoint;
 import com.pathplanner.lib.util.swerve.SwerveSetpointGenerator;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.GeneralRobotState;
+import frc.robot.subsystems.drivetrain.chassisSpeedsCalculator.ControllerChassisSpeedsCalculator;
+import frc.robot.subsystems.drivetrain.chassisSpeedsCalculator.HomeToSupplierChassisSpeedsCalculator;
 import frc.robot.subsystems.drivetrain.configsStructure.ChassisConstants;
 import frc.robot.subsystems.drivetrain.constants.DrivetrainConstants;
 
@@ -140,6 +143,10 @@ public class DrivetrainReal extends Drivetrain {
         Logger.recordOutput("drivetrain/target states", previousSetpoint.moduleStates());
     }
 
+    public Command stopCommand(){
+        return Commands.run(this::stop, this);
+    }
+
     /**
      * Drives to a pose on the field
      * @param goalPose goal position to drive to
@@ -223,4 +230,61 @@ public class DrivetrainReal extends Drivetrain {
         super.periodic();
         drive();
     }
+
+    /**
+     * Build a command that drives the robot field relative
+     * @return A command that when run drives the robot field relative
+     */
+    public Command driveCommand(){
+        ControllerChassisSpeedsCalculator chassisSpeedsCalculator =
+            new ControllerChassisSpeedsCalculator(
+                constants.SPEED_CONFIG, 
+                constants.MODULE_CONSTANTS[0].TRANSLATION().getNorm()
+            );
+        
+        Command updateSpeedsRepeatedly = Commands.run(() -> setGoalSpeeds(
+            new DriveSpeeds(chassisSpeedsCalculator.getControllerInputs())), this);
+
+        return updateSpeedsRepeatedly.andThen(stopCommand());
+    }
+
+    /**
+     * Build a command that drives robot relative
+     * @return A command that when runs drives robot relative.
+     */
+    public Command driveRobotRelativeCommand(){
+        final double moduleDistanceFromCenterMeters = constants.MODULE_CONSTANTS[0].TRANSLATION().getNorm();
+
+        ControllerChassisSpeedsCalculator chassisSpeedsCalculator =
+            new ControllerChassisSpeedsCalculator(
+                constants.SPEED_CONFIG, 
+                moduleDistanceFromCenterMeters
+            );
+        
+        Command updateSpeedsRepeatedly = Commands.run(() -> setGoalSpeeds(
+            new DriveSpeeds(chassisSpeedsCalculator.getControllerInputs(), false)), this);
+
+        return updateSpeedsRepeatedly.andThen(stopCommand());
+    }
+
+    /**
+     * Build a command that makes the drivetrain home to an angle
+     * @param angularSupplier the supplier of angles that the robot should follow
+     * @return A command that makes the drivetrain home to an angle
+     */
+    public Command driveAndHomeToAngleSupplier(Supplier<Rotation2d> angularSupplier){
+        final double moduleDistanceFromCenterMeters = constants.MODULE_CONSTANTS[0].TRANSLATION().getNorm();
+        HomeToSupplierChassisSpeedsCalculator homeToSupplierChassisSpeedsCalculator = 
+            new HomeToSupplierChassisSpeedsCalculator(
+                constants.SPEED_CONFIG, 
+                moduleDistanceFromCenterMeters, 
+                angularSupplier,
+                "DriveAndHomeToAngleSupplier");
+
+        Command updateSpeedsRepeatedly = Commands.run(() -> setGoalSpeeds(
+            new DriveSpeeds(homeToSupplierChassisSpeedsCalculator.getControllerInputs(), false)), this);
+
+        return updateSpeedsRepeatedly.andThen(stopCommand());
+    }
+
 }

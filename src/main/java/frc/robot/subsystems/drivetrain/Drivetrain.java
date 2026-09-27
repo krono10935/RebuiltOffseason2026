@@ -74,11 +74,6 @@ public abstract class Drivetrain extends SubsystemBase {
     Logger.processInputs(getName(), inputs);
     Logger.processInputs(getName() + "/gyro", gyroInputs);
 
-
-    // TODO make a custom periodic which does this in the GeneralRobotState
-    // Logger.recordOutput("drivetrain/estimated pose", getEstimatedPosition())
-    // field.setRobotPose(getEstimatedPosition());
-
     String currentCommand = getCurrentCommand() == null ? "None" : getCurrentCommand().getName();
 
     Logger.recordOutput(getName() + "/current command", currentCommand);
@@ -120,4 +115,6 @@ public abstract class Drivetrain extends SubsystemBase {
           module.setBrakeMode(isBrake);
       }
   }
+
+
 }
