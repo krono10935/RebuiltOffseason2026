@@ -20,7 +20,7 @@ public record CommonModuleConstants(BasicTalonFXConfig DRIVE_CONFIG, BasicTalonF
      * @return max speed of the steer motor in radians per second
      */
     public double maxSteerSpeed(){
-        return STEER_CONFIG.motorConfig.motorType.freeSpeedRadPerSec/
+        return STEER_CONFIG.motorConfig.motorType.freeSpeedRadPerSec /
                 STEER_CONFIG.motorConfig.gearRatio * STEER_SPEED_REDUCTION;
     }
 

@@ -114,6 +114,9 @@ public class Robot extends LoggedRobot {
         Logger.recordOutput("PDH/ChannelPower/" + i, conduit.getPDPChannelCurrent(i) * voltage);
     }
     Logger.recordOutput("PDH/Total Power", conduit.getPDPTotalCurrent() * voltage);
+
+    Logger.recordOutput("drivetrain/estimated pose", GeneralRobotState.getInstance().getEstimatedPose());
+    GeneralRobotState.getInstance().getField().setRobotPose(GeneralRobotState.getInstance().getEstimatedPose());
   }
 
   @Override

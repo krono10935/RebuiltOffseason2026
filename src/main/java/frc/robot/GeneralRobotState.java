@@ -14,7 +14,9 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -37,16 +39,19 @@ public class GeneralRobotState {
   private Supplier<ChassisSpeeds> speedsSupplier;
   private final Field2d field;
   private boolean hasBalls;
+  private Alert allianceAbsentAlert;
 
   private GeneralRobotState(){
     Optional<Alliance> allianceMaybe = DriverStation.getAlliance();
 
-    // TODO add an alert when the alliance isnt present
+    allianceAbsentAlert = new Alert("Could not get alliance from FMS", AlertType.kWarning);
+
     if (allianceMaybe.isPresent()){
         alliance = allianceMaybe.get();
     }
     else {
         alliance = Constants.DEFAULT_ALLIANCE;
+        allianceAbsentAlert.set(true);
         Logger.recordOutput("DriverStation/Found alliance", false);
     }
 

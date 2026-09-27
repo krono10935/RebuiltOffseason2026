@@ -42,10 +42,6 @@ public class ChassisConstants {
 
     public final CommonModuleConstants COMMON_MODULE_CONSTANTS;
 
-    public final double MAX_ANGULAR_SPEED; //rad/s
-
-    public final double MIN_ANGULAR_SPEED; //rad/s
-
     public final int GYRO_PORT;
 
     public final PathConstraints PATH_FINDING_CONSTRAINTS;
@@ -58,17 +54,17 @@ public class ChassisConstants {
      * @param SPEED_CONFIG  chassis-level speed limits and tuning parameters
      * @param COMMON_MODULE_CONSTANTS      generic module configuration for all the modules
      * @param PP_CONFIG     chassis parameters for PathPlanner (mass, MOI, etc.)
-     * @param GYRO_PORT port/canID number of the gyro.
+     * @param GYRO_CAN_ID port/canID number of the gyro.
      */
     public ChassisConstants(ModuleConstants[] MODULE_CONSTANTS,
                             ChassisSpeedConfig SPEED_CONFIG, CommonModuleConstants COMMON_MODULE_CONSTANTS,
-                            PPChassisConfig PP_CONFIG, int GYRO_PORT, PathConstraints pathFindingConstraints) {
+                            PPChassisConfig PP_CONFIG, int GYRO_CAN_ID, PathConstraints PATH_FINDING_CONSTRAINTS) {
         this.MODULE_CONSTANTS = MODULE_CONSTANTS;
         this.SPEED_CONFIG = SPEED_CONFIG;
         this.PP_CONFIG = PP_CONFIG;
         this.COMMON_MODULE_CONSTANTS = COMMON_MODULE_CONSTANTS;
-        this.GYRO_PORT = GYRO_PORT;
-        this.PATH_FINDING_CONSTRAINTS = pathFindingConstraints;
+        this.GYRO_PORT = GYRO_CAN_ID;
+        this.PATH_FINDING_CONSTRAINTS = PATH_FINDING_CONSTRAINTS;
 
         try{
            ROBOT_CONFIG = RobotConfig.fromGUISettings();
@@ -76,10 +72,6 @@ public class ChassisConstants {
            throw new IllegalArgumentException("PP GUI settings not configured");
 
        }
-
-        MAX_ANGULAR_SPEED = SPEED_CONFIG.maxLinearSpeed() / MODULE_CONSTANTS[0].TRANSLATION().getNorm();
-
-        MIN_ANGULAR_SPEED = SPEED_CONFIG.minLinearSpeed() / MODULE_CONSTANTS[0].TRANSLATION().getNorm();
     }
 
     /**
@@ -108,7 +100,7 @@ public class ChassisConstants {
      * @param maxLinearSpeed maximum commanded linear speed in m/s
      */
     public record ChassisSpeedConfig(double minLinearSpeed, double maxLinearSpeed) {
-
+        
     }
 
 
