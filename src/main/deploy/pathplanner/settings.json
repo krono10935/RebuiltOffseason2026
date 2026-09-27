@@ -5,11 +5,13 @@
   "pathFolders": [
     "2 cycle",
     "Hub",
+    "2 cycle left",
     "depot - outpost"
   ],
   "autoFolders": [
     "2 cycle",
     "Hub",
+    "2 cycle left",
     "depot - outpost"
   ],
   "defaultMaxVel": 3.0,

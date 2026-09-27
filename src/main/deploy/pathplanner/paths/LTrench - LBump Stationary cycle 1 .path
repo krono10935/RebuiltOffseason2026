@@ -32,48 +32,32 @@
     },
     {
       "anchor": {
-        "x": 6.9094999999999995,
-        "y": 5.034761363636364
+        "x": 6.796125,
+        "y": 5.003840909090909
       },
       "prevControl": {
-        "x": 7.562922972658839,
-        "y": 4.781079503662933
+        "x": 7.492690168854557,
+        "y": 4.925655022790909
       },
       "nextControl": {
-        "x": 6.033420454545454,
-        "y": 5.374886363636364
+        "x": 5.786056818181818,
+        "y": 5.117215909090907
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.4672613636363634,
-        "y": 6.374647727272727
+        "x": 2.5497159090909087,
+        "y": 6.1788181818181815
       },
       "prevControl": {
-        "x": 2.9310681818181816,
-        "y": 5.075988636363635
-      },
-      "nextControl": {
-        "x": 2.1847634644401355,
-        "y": 7.165641845022165
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 4.466784090910639,
-        "y": 7.529011363634966
-      },
-      "prevControl": {
-        "x": 3.9252671295820947,
-        "y": 7.557391065022296
+        "x": 3.2343226388826207,
+        "y": 5.382632215832334
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Left 2 cycle shoot"
     }
   ],
   "rotationTargets": [
@@ -90,12 +74,8 @@
       "rotationDegrees": 90.0
     },
     {
-      "waypointRelativePos": 2.4465408805031434,
+      "waypointRelativePos": 2.5,
       "rotationDegrees": -46.269
-    },
-    {
-      "waypointRelativePos": 3.7672955974842863,
-      "rotationDegrees": 0.0
     }
   ],
   "constraintZones": [
@@ -114,8 +94,8 @@
     },
     {
       "name": "Bumper",
-      "minWaypointRelativePos": 2.262118491921006,
-      "maxWaypointRelativePos": 2.5421903052064616,
+      "minWaypointRelativePos": 2.31,
+      "maxWaypointRelativePos": 2.5852782764811506,
       "constraints": {
         "maxVelocity": 2.0,
         "maxAcceleration": 3.0,
@@ -124,33 +104,9 @@
         "nominalVoltage": 12.0,
         "unlimited": false
       }
-    },
-    {
-      "name": "Shooter",
-      "minWaypointRelativePos": 2.65,
-      "maxWaypointRelativePos": 3.2,
-      "constraints": {
-        "maxVelocity": 0.4,
-        "maxAcceleration": 3.0,
-        "maxAngularVelocity": 540.0,
-        "maxAngularAcceleration": 720.0,
-        "nominalVoltage": 12.0,
-        "unlimited": false
-      }
     }
   ],
-  "pointTowardsZones": [
-    {
-      "fieldPosition": {
-        "x": 4.625,
-        "y": 4.03
-      },
-      "rotationOffset": 0.0,
-      "minWaypointRelativePos": 2.65,
-      "maxWaypointRelativePos": 3.2,
-      "name": "Shoot"
-    }
-  ],
+  "pointTowardsZones": [],
   "eventMarkers": [
     {
       "name": "intake",
@@ -173,17 +129,6 @@
           "name": "openPivotOffRoller"
         }
       }
-    },
-    {
-      "name": "ShootAndAim",
-      "waypointRelativePos": 2.65,
-      "endWaypointRelativePos": 3.2,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "ShootAndAim"
-        }
-      }
     }
   ],
   "globalConstraints": {
@@ -196,7 +141,7 @@
   },
   "goalEndState": {
     "velocity": 2.0,
-    "rotation": 0.0
+    "rotation": -48.71107455495569
   },
   "reversed": false,
   "folder": "2 cycle left",
