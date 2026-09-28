@@ -23,31 +23,49 @@ import frc.robot.subsystems.shooter.flywheel.FlywheelConstants;
 import frc.lib.field.AllianceFlipUtil;
 
 public class ShotCalculator {
+    /** singleton instance */
     private static ShotCalculator instance;
 
+    /** the robot angle offset to add the the estimated robot angle */
     private static Rotation2d robotAngleOffset = Rotation2d.kZero;
+    /** the hood angle offset to add the the estimated hood angle */
     private static Rotation2d hoodOffset = Rotation2d.kZero;
+    /** the flywheel speed offset to add to the estimated flywheel offset */
     private static double flyWheelOffset = 0;
 
+    /**
+     * add to the robot angle offset
+     * @param offset the offset to add
+     */
     public void addRobotAngleOffset(Rotation2d offset){
         robotAngleOffset = robotAngleOffset.plus(offset);
     }
 
+    /**
+     * add to the hood angle offset
+     * @param offset the offset to add
+     */
     public void addHoodAngleOffset(Rotation2d offset){
 
         hoodOffset = hoodOffset.plus(offset);
     }
 
+    /**
+     * add to the flywheel offset
+     * @param offset the offset to add
+     */
     public void addflyWheelOffset(double offset){
         flyWheelOffset += offset;
     }
 
+    /** set the offset from incorrect values to correct values to 0 */
     public void resetOffsets(){
         robotAngleOffset = Rotation2d.kZero;
         hoodOffset = Rotation2d.kZero;
         flyWheelOffset = 0;
     }
 
+    /** the state of the shooting parameters (whether the shoot is possible) */
     public enum ValidityState{
         VALID("Valid", AlertType.kInfo),
         OUT_OF_RANGE("Out of shooting range", AlertType.kWarning),
@@ -66,58 +84,74 @@ public class ShotCalculator {
         }
     }
 
-
+    /** singleton getter */
     public static ShotCalculator getInstance() {
         if (instance == null) instance = new ShotCalculator();
         return instance;
     }
 
+    /** shooting parameters for the shooter to recieve and shoot */
     public record ShootingParameters(
+        /** validity state of the parameters */
         ValidityState validityState,
+        /** the robot's angle to face when shooting */
         Rotation2d robotAngle,
+        /** the hood angle to aim before shooting */
         Rotation2d hoodAngle,
+        /** the flywheel speed to spin to before shooting */
         double flywheelSpeed,
+        /** the offset from current robot angle to correct robot angle */
         Rotation2d robotAngleOffset,
+        /** the offset from the current hood angle to correct hood angle */
         Rotation2d hoodAngleOffset,
-        double flyWheelOffset) {
-            public ShootingParameters(ValidityState validityState,
-                Rotation2d robotAngle,
-                Rotation2d hoodAngle,
-                double flywheelSpeed){
-                
-                this(
-                    validityState,
-                    robotAngle.plus(ShotCalculator.robotAngleOffset),
-                    hoodAngle.plus(ShotCalculator.hoodOffset),
-                    flywheelSpeed + ShotCalculator.flyWheelOffset,
-                    ShotCalculator.robotAngleOffset,
-                    ShotCalculator.hoodOffset,
-                    ShotCalculator.flyWheelOffset
-                );
+        /** the offset from current flywheel speed to correct flywheel speed */
+        double flyWheelOffset
+    ) {
+        public ShootingParameters(ValidityState validityState,
+            Rotation2d robotAngle,
+            Rotation2d hoodAngle,
+            double flywheelSpeed){
+                                
+            this(
+                validityState,
+                robotAngle.plus(ShotCalculator.robotAngleOffset),
+                hoodAngle.plus(ShotCalculator.hoodOffset),
+                flywheelSpeed + ShotCalculator.flyWheelOffset,
+                ShotCalculator.robotAngleOffset,
+                ShotCalculator.hoodOffset,
+                ShotCalculator.flyWheelOffset
+            );
         }
-        }
+    }
         
+    /** most recent shooter parameters */
     private ShootingParameters latestParameters = null;
 
+    /** min distance from shooter to hub */
     private static final double minDistance;
+    /** max distance from shooter to hub */
     private static final double maxDistance;
+    /** delay from: request shootingparams -> get shootingparams */
     private static final double phaseDelay;
 
+    /** map hub->robot distance to hood angle */
     private static final InterpolatingTreeMap<Double, Rotation2d> shotHoodAngleMap = 
         new InterpolatingTreeMap<>(InverseInterpolator.forDouble(), Rotation2d::interpolate);
-    
+
+    /** map hub->robot distance to flywheel speed */
     private static final InterpolatingDoubleTreeMap shotFlywheelSpeedMap = 
         new InterpolatingDoubleTreeMap();
     
+    /** map hub->robot distance to time of flight */
     private static final InterpolatingDoubleTreeMap timeOfFlightMap = 
         new InterpolatingDoubleTreeMap();
 
     /**
-     *
-     * @param distance
-     * @param angleDegrees
-     * @param shotSpeed
-     * @param timeOfFlight
+     * wrapper for putting data to the interpolation maps
+     * @param distance the distance from shooter to hub
+     * @param angleDegrees the hood angle
+     * @param shotSpeed the flywheel speed
+     * @param timeOfFlight the time of flight 
      */
     private static void putToMaps(double distance, double angleDegrees, double shotSpeed, double timeOfFlight){
         distance = distance - FlywheelConstants.ROBOT_TO_FLYWHEEL.getX();
@@ -336,20 +370,24 @@ public class ShotCalculator {
         Pose2d lookaheadPose = shootWithMovementParams.lookaheadPose();
         double lookaheadShooterToTargetDistance = shootWithMovementParams.lookaheadShooterToTargetDistance();
 
-            // Find the robot angle to shoot at
+        // Find the robot angle to shoot at
         Rotation2d robotAngle = hub.minus(lookaheadPose.getTranslation()).getAngle();
 
         // Calculate the optimal hood angle
         var hoodAngle = shotHoodAngleMap.get(lookaheadShooterToTargetDistance);
 
+        // Calculate flywheel speed
+        var flywheelSpeed = shotFlywheelSpeedMap.get(lookaheadShooterToTargetDistance);
+
         ValidityState state = findValidityState(robotRelativeVelocity, shooterFieldRelativeSpeeds, lookaheadShooterToTargetDistance);
 
         // Build new shooting params record
         latestParameters = 
-            new ShootingParameters(state,
+            new ShootingParameters(
+            state,
             robotAngle,
             hoodAngle,
-            shotFlywheelSpeedMap.get(lookaheadShooterToTargetDistance));
+            flywheelSpeed);
 
         Logger.recordOutput("ShotCalculator/LookaheadPose", lookaheadPose);
         Logger.recordOutput("ShotCalculator/ShooterToTargetDistance", lookaheadShooterToTargetDistance);
