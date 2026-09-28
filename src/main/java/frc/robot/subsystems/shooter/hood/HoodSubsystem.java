@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.statemachine.StateMachine;
 import frc.lib.statemachine.StateMachine.State;
-import frc.lib.statemachine.StateMachine.StateName;
 
 public class HoodSubsystem extends SubsystemBase {
 
@@ -59,18 +58,24 @@ public class HoodSubsystem extends SubsystemBase {
       return inputs.isAtGoal;
     }
 
+  int i = 0;
+
   @Override
   public void periodic() {
     io.updateInputs(inputs);
-    Logger.processInputs(getName(), inputs); 
+    Logger.processInputs(getName(), inputs);
+    
+    String commandName = getCurrentCommand() == null ? "None" : getCurrentCommand().getName();
+    Logger.recordOutput("Hood/Command", commandName);
   }
 
-    /**
-   * @param angleSupplier the wanted angle
-   * @return the command the set the hood's angle
-   */
+  /**
+  * @param angleSupplier the wanted angle
+  * @return the command the set the hood's angle
+  */
   public Command setAngleCommand(Supplier<Rotation2d> angleSupplier){
-    return Commands.run(() -> this.setAngle(angleSupplier.get()), this).withName("setHoodAngle");
+    i++;
+    return Commands.run(() -> this.setAngle(angleSupplier.get()), this).withName("setHoodAngle" + i);
   }
 
   /**
@@ -84,7 +89,7 @@ public class HoodSubsystem extends SubsystemBase {
   /**
   * @return the command to stop the flywheel
   */
-  public Command stopCommand(){
+  public Command stopCommand() {
     return Commands.run(this::stop, this).withName("stopHood");
   }
 

@@ -1,23 +1,11 @@
 package frc.robot.subsystems.shooter;
 
 import org.littletonrobotics.junction.Logger;
-import org.littletonrobotics.junction.networktables.LoggedNetworkNumber;
-import org.photonvision.EstimatedRobotPose;
-
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.statemachine.StateMachine;
 import frc.lib.statemachine.StateMachine.State;
-import frc.robot.RobotContainer;
 import frc.robot.subsystems.shooter.ShotCalculator.ShootingParameters;
 import frc.robot.subsystems.shooter.flywheel.FlywheelSubsystem;
 import frc.robot.subsystems.shooter.hood.HoodSubsystem;
@@ -40,10 +28,14 @@ public class ShooterSubsystem extends SubsystemBase {
      * @return the command to stop the flywheel and hood (sets the hood angle to zero)
      */
     public Command disableShooterCommand() {
-        return Commands.parallel(
-            flywheel.stopCommand(),
+        Command disableShooter = Commands.parallel(
+            flywheel.stopCommand().asProxy(), // copies the command as a proxy so the "disableShooter" commands doesn't inherit it's requirements
             hood.disableHoodCommand()
-        ).withName("DisableShootCommand");
+        ).withName("DisableShooterCommand").repeatedly();
+
+        disableShooter.addRequirements(this);
+
+        return disableShooter;
     }
 
     /**
@@ -71,7 +63,6 @@ public class ShooterSubsystem extends SubsystemBase {
         // set the state to the hold angle state (slower, more accurate PID) when the hood is close enough to the goal
         setAngleState.switchTo(holdAngleState).when(hood::isAtGoal); 
 
-
         // State Machine for setting the flywheel speed
 
         StateMachine setFlywheelSpeedStateMachine = new StateMachine("SetFlywheelSpeed_StateMachine");
@@ -91,29 +82,22 @@ public class ShooterSubsystem extends SubsystemBase {
         setSpeedState.switchTo(holdSpeedState).when(flywheel::isAtGoal); 
 
         // create a custom command that runs both the flywheel speed's command and the hood angle's command
-        Command setHoodAndFlywheelCommand = Commands.parallel(setHoodAngleStateMachine, setFlywheelSpeedStateMachine).withName("SetHoodAndFlywheelCommand").repeatedly();
+        Command setHoodAndFlywheelCommand = Commands.parallel(
+            setHoodAngleStateMachine,
+            setFlywheelSpeedStateMachine
+            ).withName("SetHoodAndFlywheelCommand").repeatedly();
 
         setHoodAndFlywheelCommand.addRequirements(this);
 
         return setHoodAndFlywheelCommand;
     }
 
-    int i = 0;
-
     @Override
     public void periodic() {
-        Pose2d positionReconstructed = new Pose2d(RobotContainer.robotX.get(), RobotContainer.robotY.get(), Rotation2d.fromDegrees(RobotContainer.robotTheta.get()));
-        params = ShotCalculator.getInstance().getParameters(positionReconstructed, new ChassisSpeeds()); // TODO: use RobotState class to get these params after it is implemented.
+        params = ShotCalculator.getInstance().getParameters(null, null); // TODO: use RobotState class to get these params after it is implemented.
 
-        Logger.recordOutput("shooter/params", params);
-
-        Logger.recordOutput("shooter/requested speed", params.flywheelSpeed());
-        Logger.recordOutput("shooter/requested angle", params.hoodAngle());
-        Logger.recordOutput("shooter/robot angle", params.robotAngle());
-
-        Logger.recordOutput("shooter/reconstructed position", positionReconstructed);
-
-        Logger.recordOutput("shooter/current command", this.getCurrentCommand() == null ? "None" : this.getCurrentCommand().getName());
+        Logger.recordOutput("Shooter/Command", this.getCurrentCommand() == null ? "None" : this.getCurrentCommand().getName());
+        Logger.recordOutput("Shooter/shot parameters", params);
 
         ShotCalculator.getInstance().clearShootingParameters();
     }

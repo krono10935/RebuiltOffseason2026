@@ -70,7 +70,7 @@ public class FlywheelSubsystem extends SubsystemBase {
 
     String commandName = getCurrentCommand() == null ? "None" : getCurrentCommand().getName();
 
-    Logger.recordOutput("FlyWheel/Command", commandName);
+    Logger.recordOutput("Flywheel/Command", commandName);
   }
 
   /**
