@@ -22,7 +22,7 @@ public class HoodConstants {
     public static final Rotation2d DEGREE_TOLERANCE = Rotation2d.fromDegrees(0.25); // TODO: tweak
 
     /** gear ratio between hood motor and the hood */
-    public static final double GEAR_RATIO = 6.7; // TODO: get the real value from cad
+    public static final double GEAR_RATIO = 3.0/20.0; // TODO: get the real value from cad
 
     /** gear box of the 1 NEO2 motor (currently unavailable but close enough to .getNEO()) */
     public static final DCMotor GEAR_BOX = DCMotor.getNEO(1); // TODO: change to NEO 2 when available
@@ -31,13 +31,13 @@ public class HoodConstants {
     private static final double MOMENT_OF_INERTIA = 0.001; // TODO: get the real value from cad
 
     /** length of the hood in meters */
-    private static final double HOOD_LENGTH_METERS = 0.3; // TODO: get the real value from cad
+    private static final double HOOD_LENGTH_METERS = 0.21; // TODO: get the real value from cad
 
     /** the angle where is hood is closed (0) */
     public static final Rotation2d HOOD_CLOSE_ANGLE = Rotation2d.fromDegrees(0); // TODO: get the real value from cad 
 
     /** the max angle the hood can reach */
-    public static final Rotation2d HOOD_MAX_ANGLE = Rotation2d.fromDegrees(45); // TODO: get the real value from cad
+    public static final Rotation2d HOOD_MAX_ANGLE = Rotation2d.fromDegrees(43); // TODO: get the real value from cad
 
     /** whether the simulation should apply gravity forces */
     private static final boolean SIMULATE_GRAVITY = false; // TODO: change to wanted mode
@@ -46,7 +46,7 @@ public class HoodConstants {
     public static final StateName STOP_HOOD_STATE_NAME = new StateName("stop hood");
 
     /** the state name of the disable hood state machine command */
-    public static final StateName ZERO_HOOD_STATE_NAME = new StateName("set hood close angle");
+    public static final StateName ZERO_HOOD_STATE_NAME = new StateName("close hood");
 
     /**
      * @return the hood motor's configuration

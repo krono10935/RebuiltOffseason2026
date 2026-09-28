@@ -70,7 +70,7 @@ public class HoodSubsystem extends SubsystemBase {
    * @return the command the set the hood's angle
    */
   public Command setAngleCommand(Supplier<Rotation2d> angleSupplier){
-    return Commands.run(() -> this.setAngle(angleSupplier.get()), this).repeatedly().withName("setHoodAngle");
+    return Commands.run(() -> this.setAngle(angleSupplier.get()), this).withName("setHoodAngle");
   }
 
   /**
@@ -78,7 +78,7 @@ public class HoodSubsystem extends SubsystemBase {
    * @return the command the hold the hood's angle
    */
   public Command holdAngleCommand(Supplier<Rotation2d> angleSupplier){
-    return Commands.run(() -> this.holdAngle(angleSupplier.get()), this).repeatedly().withName("holdHoodAngle");
+    return Commands.run(() -> this.holdAngle(angleSupplier.get()), this).withName("holdHoodAngle");
   }
 
   /**
@@ -90,16 +90,16 @@ public class HoodSubsystem extends SubsystemBase {
 
   public Command disableHoodCommand()
   {
-    StateMachine stateMachine = new StateMachine("DisableHood_StateMachine");
+    StateMachine disableHoodStateMachine = new StateMachine("DisableHood_StateMachine");
 
-    State zeroHoodState = stateMachine.addState(setAngleCommand(() -> HoodConstants.HOOD_CLOSE_ANGLE), HoodConstants.ZERO_HOOD_STATE_NAME);
+    State zeroHoodState = disableHoodStateMachine.addState(setAngleCommand(() -> HoodConstants.HOOD_CLOSE_ANGLE), HoodConstants.ZERO_HOOD_STATE_NAME);
 
-    State stopHoodState = stateMachine.addState(stopCommand(), HoodConstants.STOP_HOOD_STATE_NAME);
+    State stopHoodState = disableHoodStateMachine.addState(stopCommand(), HoodConstants.STOP_HOOD_STATE_NAME);
 
-    stateMachine.setInitialState(zeroHoodState);
+    disableHoodStateMachine.setInitialState(zeroHoodState);
 
     zeroHoodState.switchTo(stopHoodState).when(this::isAtGoal);
 
-    return stateMachine;
+    return disableHoodStateMachine;
   }
 }
