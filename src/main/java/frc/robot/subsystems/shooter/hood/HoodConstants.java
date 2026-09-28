@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import frc.lib.statemachine.StateMachine.StateName;
 
 public class HoodConstants {
-    // most beautiful TODOs ever
     /** CANID of the hood's motor */
     public static final int HOOD_MOTOR_CANID = 0; // TODO: change to correct CANID
 
@@ -22,25 +21,25 @@ public class HoodConstants {
     public static final Rotation2d DEGREE_TOLERANCE = Rotation2d.fromDegrees(0.25); // TODO: tweak
 
     /** gear ratio between hood motor and the hood */
-    public static final double GEAR_RATIO = 3.0/20.0; // TODO: get the real value from cad
+    public static final double GEAR_RATIO = 20.0/3.0;
 
     /** gear box of the 1 NEO2 motor (currently unavailable but close enough to .getNEO()) */
     public static final DCMotor GEAR_BOX = DCMotor.getNEO(1); // TODO: change to NEO 2 when available
 
     /** moment of inertia of the hood */
-    private static final double MOMENT_OF_INERTIA = 0.001; // TODO: get the real value from cad
+    private static final double MOMENT_OF_INERTIA = 0.00324; // TODO: get the real value from cad
 
     /** length of the hood in meters */
-    private static final double HOOD_LENGTH_METERS = 0.21; // TODO: get the real value from cad
+    private static final double HOOD_LENGTH_METERS = 0.21; // TODO: make sure it's real value
 
     /** the angle where is hood is closed (0) */
-    public static final Rotation2d HOOD_CLOSE_ANGLE = Rotation2d.fromDegrees(0); // TODO: get the real value from cad 
+    public static final Rotation2d HOOD_CLOSE_ANGLE = Rotation2d.fromDegrees(0);
 
     /** the max angle the hood can reach */
-    public static final Rotation2d HOOD_MAX_ANGLE = Rotation2d.fromDegrees(43); // TODO: get the real value from cad
+    public static final Rotation2d HOOD_MAX_ANGLE = Rotation2d.fromDegrees(43);
 
     /** whether the simulation should apply gravity forces */
-    private static final boolean SIMULATE_GRAVITY = false; // TODO: change to wanted mode
+    private static final boolean SIMULATE_GRAVITY = true;
 
     /** the state name of the stop hood state machine command */
     public static final StateName STOP_HOOD_STATE_NAME = new StateName("stop hood");
@@ -58,15 +57,21 @@ public class HoodConstants {
 
         config.idleMode(IdleMode.kBrake);
 
-        // configure PIDs
+        // unit conversion
+        config.encoder.positionConversionFactor(1.0 / GEAR_RATIO);
+        config.encoder.velocityConversionFactor(1.0 / GEAR_RATIO);
 
-        config.closedLoop.pid(1, 1, 1); // TODO: tweak
-        config.closedLoop.pid(1, 1, 1, ClosedLoopSlot.kSlot1);
+        // configure PIDs
+        config.closedLoop.pid(2, 1, 0); // TODO: tweak
+        config.closedLoop.pid(2, 1, 0.05, ClosedLoopSlot.kSlot1);
+
+        config.closedLoop.iZone(0.05);
+        config.closedLoop.iZone(0.05, ClosedLoopSlot.kSlot1);
 
         // configure feedForwards
 
-        config.closedLoop.feedForward.kCos(0.67); // TODO: tweak
-        config.closedLoop.feedForward.kCos(0.6942041, ClosedLoopSlot.kSlot1); // TODO: tweak
+        config.closedLoop.feedForward.kCos(0.005); // TODO: tweak
+        config.closedLoop.feedForward.kCos(0.005, ClosedLoopSlot.kSlot1); // TODO: tweak
 
         // current limits
 

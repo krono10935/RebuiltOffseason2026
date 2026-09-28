@@ -67,5 +67,4 @@ public class HoodIOSim implements HoodIO {
 
         inputs.isAtGoal = IsNear.isNear(inputs.currentAngle, Rotation2d.fromRotations(hoodMotor.getClosedLoopController().getSetpoint()), HoodConstants.DEGREE_TOLERANCE);
     }
-
 }
