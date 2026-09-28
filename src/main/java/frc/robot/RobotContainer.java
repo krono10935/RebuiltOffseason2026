@@ -12,6 +12,7 @@ import java.util.List;
 import org.littletonrobotics.conduit.ConduitApi;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
+import org.littletonrobotics.junction.networktables.LoggedNetworkNumber;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -21,15 +22,27 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-
+import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 import frc.robot.subsystems.drivetrain.configsStructure.ChassisConstants;
+import frc.robot.subsystems.shooter.ShooterSubsystem;
+import frc.robot.subsystems.shooter.flywheel.FlywheelSubsystem;
+import frc.robot.subsystems.shooter.hood.HoodSubsystem;
 
 public class RobotContainer {
 
   private static RobotContainer instance = null;
 
   public final Drivetrain drivetrain;
+
+  private final CommandPS4Controller controller;
+
+  private final ShooterSubsystem shooter;
+
+  public static LoggedNetworkNumber robotX = new LoggedNetworkNumber("robotX", 0);
+  public static LoggedNetworkNumber robotY = new LoggedNetworkNumber("robotY", 0);
+  public static LoggedNetworkNumber robotTheta = new LoggedNetworkNumber("robotTheta", 0);
 
   private final LoggedDashboardChooser<Command> autoChooser;
 
@@ -44,7 +57,20 @@ public class RobotContainer {
   private RobotContainer() {
     drivetrain = new Drivetrain(ConduitApi.getInstance()::getPDPVoltage, Constants.CHASSIS_TYPE.constants);
 
+    controller = new CommandPS4Controller(0);
+
+    shooter = new ShooterSubsystem(new FlywheelSubsystem(), new HoodSubsystem());
+
     autoChooser = registerNamedCommand();
+
+    configureBindings();
+
+  }
+
+  private void configureBindings() {
+    controller.square().whileTrue(shooter.shootCommand());
+
+    controller.square().onFalse(shooter.disableShooterCommand());
   }
 
   public Drivetrain getDrivetrain(){
