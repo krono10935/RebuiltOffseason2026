@@ -22,7 +22,7 @@ public class HoodConstants {
     public static final Rotation2d DEGREE_TOLERANCE = Rotation2d.fromDegrees(0.75); // TODO: tweak
 
     /** gear ratio between encoder and the hood */
-    public static final double ENCODER_TO_HOOD_RATIO = 8.0/1.0; // TODO: change to correct value from cad
+    public static final double ENCODER_TO_HOOD_RATIO = 8.0/1.0;
 
     /** gear ratio between motor and hood */
     public static final double TOTAL_GEAR_RATIO = 160.0/1.0;

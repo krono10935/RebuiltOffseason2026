@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 import frc.robot.subsystems.drivetrain.configsStructure.ChassisConstants;
 
+
 public class RobotContainer {
 
   private static RobotContainer instance = null;
@@ -45,7 +46,6 @@ public class RobotContainer {
     drivetrain = new Drivetrain(ConduitApi.getInstance()::getPDPVoltage, Constants.CHASSIS_TYPE.constants);
 
     autoChooser = registerNamedCommand();
-
   }
 
   public Drivetrain getDrivetrain(){

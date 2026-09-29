@@ -262,7 +262,6 @@ public class ShotCalculator {
      * @param lookaheadShooterToTargetDistance The shoot with movement params
      * @return the validity state of the calculation
      */
-    @SuppressWarnings("unused")
     private ValidityState findValidityState(ChassisSpeeds robotRelativeVelocity, Translation2d shooterFieldRelativeSpeeds,
      double lookaheadShooterToTargetDistance){
 
