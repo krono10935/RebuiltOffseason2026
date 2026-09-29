@@ -1,5 +1,7 @@
 package frc.robot.subsystems.shooter.hood;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.revrobotics.PersistMode;
 import com.revrobotics.ResetMode;
 import com.revrobotics.sim.SparkMaxSim;
@@ -18,6 +20,14 @@ import frc.robot.Constants;
 
 public class HoodIOSim implements HoodIO {
 
+    public enum HoodState {
+        SETTING_ANGLE,
+        HOLDING_ANGLE,
+        DISABLED,
+    }
+
+    private HoodState state = HoodState.DISABLED;
+
     private final SparkMax hoodMotor;
     private final SingleJointedArmSim hoodSim;
     private final SparkMaxSim sparkMaxSim;
@@ -33,12 +43,24 @@ public class HoodIOSim implements HoodIO {
 
     @Override
     public void setAngle(Rotation2d angle) {
+        if (state != HoodState.SETTING_ANGLE)
+            resetPIDController();
+
+        state = HoodState.SETTING_ANGLE;
         hoodMotor.getClosedLoopController().setSetpoint(angle.getRotations(), ControlType.kPosition, ClosedLoopSlot.kSlot0);
     }
 
     @Override
     public void holdAngle(Rotation2d angle) {
+        if (state != HoodState.HOLDING_ANGLE)
+            resetPIDController();
+        state = HoodState.HOLDING_ANGLE;
         hoodMotor.getClosedLoopController().setSetpoint(angle.getRotations(), ControlType.kPosition, ClosedLoopSlot.kSlot1);
+    }
+    
+    @Override
+    public void resetPIDController() {
+        hoodMotor.getClosedLoopController().setIAccum(0.0);
     }
 
     @Override
@@ -48,23 +70,36 @@ public class HoodIOSim implements HoodIO {
 
     @Override
     public void updateInputs(HoodInputs inputs) {
-        hoodSim.setInput(sparkMaxSim.getAppliedOutput() * RoboRioSim.getVInVoltage());
+        double vbus = RoboRioSim.getVInVoltage(); // get roborio voltage
 
-        // Next, we update it. The standard loop time is 20ms.
+        // update voltage and loop period
+        hoodSim.setInput(sparkMaxSim.getAppliedOutput() * vbus);
         hoodSim.update(Constants.LOOP_PERIOD_SECONDS);
 
-        // Now, we update the Spark Flex
-        sparkMaxSim.iterate(
-            Units.radiansPerSecondToRotationsPerMinute( // motor velocity, in RPM
-                hoodSim.getVelocityRadPerSec()),
-            RoboRioSim.getVInVoltage(), // Simulated battery voltage, in Volts
-            Constants.LOOP_PERIOD_SECONDS); // Time interval, in Seconds
+        // calculate rotations in hood rotations (auto converted by the config)
+        double hoodRotations = hoodSim.getAngleRads() / (2.0 * Math.PI);
+        double hoodRPM = Units.radiansPerSecondToRotationsPerMinute(hoodSim.getVelocityRadPerSec());
 
+        // update the spark max sim
+        sparkMaxSim.iterate(hoodRPM, vbus, Constants.LOOP_PERIOD_SECONDS);
+
+        // update encoders (no need for conversion because of the config handling it for us)
+        sparkMaxSim.setPosition(hoodRotations);
+        sparkMaxSim.getAbsoluteEncoderSim().setPosition(hoodRotations);
+
+        // set the voltage input for the roborio sim
         RoboRioSim.setVInVoltage(
             BatterySim.calculateDefaultBatteryLoadedVoltage(hoodSim.getCurrentDrawAmps()));
 
-        inputs.currentAngle = Rotation2d.fromRotations(hoodMotor.getEncoder().getPosition());
+        // update inputs
+        inputs.currentAngle = Rotation2d.fromRotations(hoodRotations);
+        inputs.isAtGoal = IsNear.isNear(
+            inputs.currentAngle,
+            Rotation2d.fromRotations(hoodMotor.getClosedLoopController().getSetpoint()),
+            HoodConstants.DEGREE_TOLERANCE
+        );
 
-        inputs.isAtGoal = IsNear.isNear(inputs.currentAngle, Rotation2d.fromRotations(hoodMotor.getClosedLoopController().getSetpoint()), HoodConstants.DEGREE_TOLERANCE);
+        // logging
+        Logger.recordOutput("Hood/current state", state);
     }
 }

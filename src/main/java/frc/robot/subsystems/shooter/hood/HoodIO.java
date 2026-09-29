@@ -25,6 +25,11 @@ public interface HoodIO {
     void holdAngle(Rotation2d angle);
 
     /**
+     * resets the pid controller so that different calls to holdAngle or setAngle don't use previous calls' kI etc
+     */
+    void resetPIDController();
+
+    /**
      * stops the hood
      */
     void stop();
