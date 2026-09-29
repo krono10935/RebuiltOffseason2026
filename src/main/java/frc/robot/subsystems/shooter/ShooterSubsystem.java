@@ -1,9 +1,11 @@
 package frc.robot.subsystems.shooter;
 
 import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import frc.lib.statemachine.StateMachine;
 import frc.lib.statemachine.StateMachine.State;
 import frc.robot.subsystems.shooter.ShotCalculator.ShootingParameters;
@@ -31,7 +33,7 @@ public class ShooterSubsystem extends SubsystemBase {
         Command disableShooter = Commands.parallel(
             flywheel.stopCommand().asProxy(), // copies the command as a proxy so the "disableShooter" commands doesn't inherit it's requirements
             hood.disableHoodCommand()
-        ).withName("DisableShooterCommand").repeatedly();
+        ).withName("DisableShooterCommand");
 
         disableShooter.addRequirements(this);
 
@@ -46,7 +48,6 @@ public class ShooterSubsystem extends SubsystemBase {
         // TODO: integrate other parts of the robot like the kicker, indexer, and intake.
 
         // State Machine for setting the hood angle
-
         StateMachine setHoodAngleStateMachine = new StateMachine("SetHoodAngle_StateMachine");
 
         // create the custom commands for the custom parameters
@@ -64,7 +65,6 @@ public class ShooterSubsystem extends SubsystemBase {
         setAngleState.switchTo(holdAngleState).when(hood::isAtGoal); 
 
         // State Machine for setting the flywheel speed
-
         StateMachine setFlywheelSpeedStateMachine = new StateMachine("SetFlywheelSpeed_StateMachine");
         
         // create the custom commands for the custom parameters
@@ -85,7 +85,7 @@ public class ShooterSubsystem extends SubsystemBase {
         Command setHoodAndFlywheelCommand = Commands.parallel(
             setHoodAngleStateMachine,
             setFlywheelSpeedStateMachine
-            ).withName("SetHoodAndFlywheelCommand").repeatedly();
+            ).withName("SetHoodAndFlywheelCommand");
 
         setHoodAndFlywheelCommand.addRequirements(this);
 
@@ -98,6 +98,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
         Logger.recordOutput("Shooter/Command", this.getCurrentCommand() == null ? "None" : this.getCurrentCommand().getName());
         Logger.recordOutput("Shooter/shot parameters", params);
+
 
         ShotCalculator.getInstance().clearShootingParameters();
     }

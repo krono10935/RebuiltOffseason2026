@@ -39,12 +39,12 @@ public class FlywheelIOReal implements FlywheelIO {
 
     @Override
     public void spinUp(double mps) {
-        getLeadMotor().setControl(new VelocityVoltage(mps).withSlot(0));
+        getLeadMotor().setControl(new VelocityVoltage(mps / FlywheelConstants.FLYWHEEL_CIRCUMFERENCE).withSlot(0));
     }
 
     @Override
     public void holdSpeed(double mps) {
-        getLeadMotor().setControl(new VelocityVoltage(mps).withSlot(1));
+        getLeadMotor().setControl(new VelocityVoltage(mps / FlywheelConstants.FLYWHEEL_CIRCUMFERENCE).withSlot(1));
     }
 
     @Override
@@ -54,9 +54,10 @@ public class FlywheelIOReal implements FlywheelIO {
 
     @Override
     public void updateInputs(FlywheelInputs inputs) {
-        inputs.speedMPS = getLeadMotor().getVelocity().getValueAsDouble();
 
-        inputs.isAtGoal = IsNear.isNear(inputs.speedMPS, getLeadMotor().getClosedLoopReference().getValueAsDouble(), FlywheelConstants.MPS_TOLERANCE);
+        inputs.speedMPS = getLeadMotor().getVelocity().getValueAsDouble() * FlywheelConstants.FLYWHEEL_CIRCUMFERENCE;
+
+        inputs.isAtGoal = IsNear.isNear(inputs.speedMPS, getLeadMotor().getClosedLoopReference().getValueAsDouble() * FlywheelConstants.FLYWHEEL_CIRCUMFERENCE, FlywheelConstants.MPS_TOLERANCE);
     }
 
 }
