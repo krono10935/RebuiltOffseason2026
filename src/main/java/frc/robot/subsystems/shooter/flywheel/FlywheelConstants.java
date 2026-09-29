@@ -21,7 +21,7 @@ public class FlywheelConstants {
     private static final double FLYWHEEL_RADIUS = UnitConversions.inchesToMeters(4);
 
     /** flywheel circumference */
-    private static final double FLYWHEEL_CIRCUMFERENCE =  FLYWHEEL_RADIUS * 2 * Math.PI;
+    public static final double FLYWHEEL_CIRCUMFERENCE =  FLYWHEEL_RADIUS * 2 * Math.PI;
 
     /** whether the lead motor is inverted */
     public static final boolean LEAD_INVERTED = false; // TODO: get the real value from cad
@@ -58,19 +58,21 @@ public class FlywheelConstants {
 
         // spinup gains
 
-        config.Slot0.kP = 0.5;
-        config.Slot0.kI = 0.1;
+        config.Slot0.kP = 0.1;
+        config.Slot0.kI = 0.0;
         config.Slot0.kD = 0.0;
-        config.Slot0.kV = 0.12;
-        config.Slot0.kG = 0.35;
+
+        config.Slot0.kV = 0.171;
+        config.Slot0.kS = 0.25;
 
         // hold gains
 
-        config.Slot1.kP = 0.3;
-        config.Slot1.kI = 0.1;
-        config.Slot1.kD = 0.001;
-        config.Slot1.kV = 0.12;
-        config.Slot1.kG = 0.35;
+        config.Slot1.kP = 0.0;
+        config.Slot1.kI = 0.0;
+        config.Slot1.kD = 0.0;
+
+        config.Slot1.kV = 0.171;
+        config.Slot1.kS = 0.25;
         
         // current limits
 
