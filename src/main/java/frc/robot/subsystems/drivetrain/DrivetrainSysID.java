@@ -15,7 +15,7 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.GeneralRobotState;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.drivetrain.configsStructure.ChassisConstants;
 import frc.robot.subsystems.drivetrain.constants.SysIDConstants;
 import frc.robot.subsystems.drivetrain.module.SwerveModuleIO;
@@ -100,7 +100,7 @@ public class DrivetrainSysID extends Drivetrain {
    *  doesn't ram into a wall or person.
    */
   public void setDriveVoltageAndSteerController(double voltage) {
-    CommandXboxController controller = GeneralRobotState.getInstance().getController();
+    CommandXboxController controller = RobotContainer.getInstance().getController();
     
     Translation2d leftJoystickPosition = 
       new Translation2d(-controller.getLeftX(), -controller.getLeftY());

@@ -4,7 +4,7 @@ import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.GeneralRobotState;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.drivetrain.configsStructure.ChassisConstants.ChassisSpeedConfig;
 
 public class ControllerChassisSpeedsCalculator {
@@ -87,7 +87,7 @@ public class ControllerChassisSpeedsCalculator {
      * Converts controller input into chassis speeds.
      */
     public ChassisSpeeds getControllerInputs() {
-        CommandXboxController controller = GeneralRobotState.getInstance().getController();
+        CommandXboxController controller = RobotContainer.getInstance().getController();
 
         double triggerValue = CONTROLLER_MODE.calculateTrigger(1 - controller.getRightTriggerAxis());
 

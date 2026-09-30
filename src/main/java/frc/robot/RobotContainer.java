@@ -21,7 +21,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.drivetrain.DrivetrainReal;
 import frc.robot.subsystems.drivetrain.configsStructure.ChassisConstants;
 
@@ -29,7 +29,9 @@ public class RobotContainer {
 
   private static RobotContainer instance = null;
 
-  public final DrivetrainReal drivetrain;
+  private final DrivetrainReal drivetrain;
+
+  private final CommandXboxController controller;
 
   private final LoggedDashboardChooser<Command> autoChooser;
 
@@ -44,11 +46,24 @@ public class RobotContainer {
   private RobotContainer() {
     drivetrain = new DrivetrainReal(ConduitApi.getInstance()::getPDPVoltage, Constants.CHASSIS_TYPE.constants);
 
+    controller = new CommandXboxController(0);
+
+
     autoChooser = registerNamedCommand();
   }
 
+  /**
+   * @return The drivetrain subsystem
+   */
   public DrivetrainReal getDrivetrain(){
     return drivetrain;
+  }
+
+  /**
+   * @return The used controller
+   */
+  public CommandXboxController getController(){
+    return controller;
   }
 
   /**

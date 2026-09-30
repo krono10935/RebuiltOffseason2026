@@ -127,7 +127,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void disabledExit() {
-    RobotContainer.getInstance().drivetrain.setBrakeMode(true);
+    RobotContainer.getInstance().getDrivetrain().setBrakeMode(true);
   }
 
   @Override
@@ -163,7 +163,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void teleopExit() {
-    RobotContainer.getInstance().drivetrain.setBrakeMode(false);
+    RobotContainer.getInstance().getDrivetrain().setBrakeMode(false);
   }
 
   @Override

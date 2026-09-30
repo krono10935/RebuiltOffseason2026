@@ -20,7 +20,6 @@ import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class GeneralRobotState {
 
@@ -34,7 +33,6 @@ public class GeneralRobotState {
   }
 
   private final Alliance alliance;
-  private final CommandXboxController controller;
   private SwerveDrivePoseEstimator poseEstimator;
   private Supplier<ChassisSpeeds> speedsSupplier;
   private final Field2d field;
@@ -54,8 +52,6 @@ public class GeneralRobotState {
         allianceAbsentAlert.set(true);
         Logger.recordOutput("DriverStation/Found alliance", false);
     }
-
-    controller = new CommandXboxController(0);
 
     hasBalls = false;
 
@@ -134,14 +130,6 @@ public class GeneralRobotState {
    */
   public Alliance getAlliance(){
     return alliance;
-  }
-
-  /**
-   * Get the controller for the robot
-   * @return the controller which commands the robot
-   */
-  public CommandXboxController getController(){
-    return controller;
   }
 
   /**
