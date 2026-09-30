@@ -22,10 +22,10 @@ public class HoodConstants {
     public static final Rotation2d DEGREE_TOLERANCE = Rotation2d.fromDegrees(0.75); // TODO: tweak
 
     /** gear ratio between encoder and the hood */
-    public static final double ENCODER_TO_HOOD_RATIO = 8.0/1.0;
+    public static final double ENCODER_TO_HOOD_RATIO = 3.0;
 
     /** gear ratio between motor and hood */
-    public static final double TOTAL_GEAR_RATIO = 160.0/1.0;
+    public static final double TOTAL_GEAR_RATIO = 22.5;
 
     /** gear box of the 1 NEO2 motor (currently unavailable but close enough to .getNEO()) */
     public static final DCMotor GEAR_BOX = DCMotor.getNEO(1); // TODO: change to NEO 2 when available
