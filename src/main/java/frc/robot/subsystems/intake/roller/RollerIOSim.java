@@ -12,6 +12,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
+import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import frc.lib.math.UnitConversions;
 import frc.robot.Constants;
 
@@ -20,7 +21,8 @@ public class RollerIOSim implements RollerIO{
     private final SparkMax motorTwo; 
     private final FlywheelSim rollerSim;
     private final SparkMaxSim simState;
-
+    
+    private double dutyCycleTemp = 0;
     public RollerIOSim(){
         rollerSim = RollerConstants.getSim();
 
@@ -39,6 +41,7 @@ public class RollerIOSim implements RollerIO{
      */
     @Override
     public void setDutyCycle(double dutyCycle) {
+        dutyCycleTemp = dutyCycle;
         motorOne.getClosedLoopController().setSetpoint(dutyCycle, ControlType.kDutyCycle);
     }
 
@@ -47,6 +50,7 @@ public class RollerIOSim implements RollerIO{
      */
     @Override
     public void stop() {
+        dutyCycleTemp = 0;
         motorOne.stopMotor();
     }
 
@@ -54,7 +58,7 @@ public class RollerIOSim implements RollerIO{
      * Steps the sim by Constants.LOOP_PERIOD_SECONDS (20ms)
      */
     private void simulationStep(){
-        simState.setBusVoltage(12);
+        simState.setBusVoltage(simState.getAppliedOutput() * RoboRioSim.getVInVoltage());
 
         double motorVoltage = simState.getBusVoltage();
 
@@ -70,13 +74,17 @@ public class RollerIOSim implements RollerIO{
         simState.setVelocity(
             rollerSim.getAngularVelocityRPM() * RollerConstants.GEAR_RATIO
         );
+
+        simState.getRelativeEncoderSim().setVelocity(
+            rollerSim.getAngularVelocityRPM() * RollerConstants.GEAR_RATIO
+        );
+
         motorOne.getEncoder().setPosition(
             UnitConversions.RPMtoRotationsPerCycle(
                 rollerSim.getAngularVelocityRPM(), 
                 Constants.LOOP_PERIOD_SECONDS)
-                * RollerConstants.GEAR_RATIO + simState.getAbsoluteEncoderSim().getPosition());
-
-        
+                * RollerConstants.GEAR_RATIO + simState.getAbsoluteEncoderSim().getPosition()
+        );
     }
 
     /**
@@ -91,12 +99,10 @@ public class RollerIOSim implements RollerIO{
         inputs.motorTwoTemperatureC = motorTwo.getMotorTemperature();
         inputs.speedMPS = motorOne.getEncoder().getVelocity();
 
-        Logger.recordOutput("rollerSim/applied voltage", RobotController.getBatteryVoltage());
-        simState.setVelocity(
-            10
-        );
+        //Logger.recordOutput("rollerSim/", null);
+        Logger.recordOutput("rollerSim/applied voltage", simState.getAppliedOutput() * RoboRioSim.getVInVoltage());
         Logger.recordOutput("rollerSim/motor MPS", motorOne.getEncoder().getVelocity());
-
+        Logger.recordOutput("rollerSim/dutyCycle", dutyCycleTemp);
         Logger.recordOutput("rollerSim/roller RPM", rollerSim.getAngularVelocityRPM());
         Logger.recordOutput("rollerSim/motor position", motorOne.getEncoder().getPosition());
     }

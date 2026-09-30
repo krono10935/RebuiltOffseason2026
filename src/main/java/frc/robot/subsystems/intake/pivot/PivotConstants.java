@@ -75,8 +75,8 @@ public class PivotConstants {
     public static TalonFXConfiguration getMotorConfig(){
         TalonFXConfiguration config = new TalonFXConfiguration();
         //TODO: Tweak the PID values
-        config.Slot0.kP = 60;
-        config.Slot0.kD = 0.0;
+        config.Slot0.kP = 100;
+        config.Slot0.kD = 0;
         config.Slot0.kI = 4.0;
         config.Slot0.kG = 0;
         config.Slot0.GravityType = GravityTypeValue.Arm_Cosine;

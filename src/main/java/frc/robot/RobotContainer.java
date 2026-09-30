@@ -136,8 +136,8 @@ public class RobotContainer {
 
     driverController.leftTrigger(0.5).onFalse(intakeControlsCoordinator.openPivotOffRoller().withName("openPivotOffRoller"));
 
-    driverController.a().whileTrue(pivot.openPivot().withName("Open pivot"));
-    
-    driverController.x().whileTrue(pivot.closePivot().withName("Close pivot"));
+    driverController.a().whileTrue(roller.onRoller().withName("Open pivot"));
+    driverController.x().whileTrue(roller.offRoller().withName("Close pivot"));
+    driverController.x().whileTrue(roller.reverseRoller().withName("Reverse"));
   }
 }

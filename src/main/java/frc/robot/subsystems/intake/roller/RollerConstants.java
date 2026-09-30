@@ -31,7 +31,7 @@ public class RollerConstants {
     public static final double ON_DUTY_CYCLE = 1; //TODO - tweak
 
     /**The duty cycle value the roller is considered reversed */
-    public static final double REVERSED_DUTY_CYCLE = 1; //TODO - tweak
+    public static final double REVERSED_DUTY_CYCLE = -1; //TODO - tweak
     /**The state name of turning on the roller for state machines */
     public static final StateName ON_ROLLER_STATE_NAME = new StateName("onRollerState");
     /**The state name of turning reverse the roller for state machine */
