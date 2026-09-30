@@ -2,10 +2,7 @@ package frc.robot.subsystems.drivetrain.gyro;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 
-import edu.wpi.first.math.MatBuilder;
-import edu.wpi.first.math.Nat;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.subsystems.drivetrain.configsStructure.ChassisConstants;
 
 public final class GyroIOPigeon implements GyroIO{
@@ -19,13 +16,12 @@ public final class GyroIOPigeon implements GyroIO{
     
 
     @Override
-    public void reset(Pose2d pose) {
-        gyro.setYaw(pose.getRotation().getDegrees());
+    public void reset(Rotation2d rotation) {
+        gyro.setYaw(rotation.getDegrees());
     }
 
     @Override
     public void updateInputs(GyroInputs inputs) {
-        inputs.pose = new Pose2d(new Translation2d(), gyro.getRotation2d());
-        inputs.stdDevs = MatBuilder.fill(Nat.N3(), Nat.N1(), 1,1,1);
+        inputs.rotation = gyro.getRotation2d();
     }
 }

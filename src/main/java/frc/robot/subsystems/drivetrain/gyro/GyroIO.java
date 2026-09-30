@@ -4,10 +4,7 @@
 
 package frc.robot.subsystems.drivetrain.gyro;
 
-import edu.wpi.first.math.Matrix;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.numbers.N1;
-import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.geometry.Rotation2d;
 
 import org.littletonrobotics.junction.AutoLog;
 
@@ -15,17 +12,18 @@ public interface GyroIO {
 
     @AutoLog
     public class GyroInputs {
-        public Pose2d pose; 
-        public Matrix<N3, N1> stdDevs;
+        public Rotation2d rotation = new Rotation2d(); 
     }
 
     /**
-     * Reset the gyro angle to another angle
+     * Reset the rotation of the gyro to a different angle
+     * @param rotation the new angle of the gyro
      */
-    void reset(Pose2d pose);
+    void reset(Rotation2d rotation);
 
     /**
-     * Update gyroInputs
+     * Update the inputs object
+     * @param inputs the inputs object to update
      */
     void updateInputs(GyroInputs inputs);    
 }
