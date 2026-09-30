@@ -28,12 +28,20 @@ public class PivotSubsystem extends SubsystemBase {
         if (getCurrentCommand() == null){
             Logger.recordOutput("current command: ", "null");
         }
-        
         else {
             Logger.recordOutput("current command: ", getCurrentCommand().getName());
         }
         
-
+        if(targetRotationTEMP != null){
+            //.println("target " + targetRotationTEMP.getDegrees());
+            Logger.recordOutput("target rotation degrees", targetRotationTEMP.getDegrees());
+        }
+        else{
+            //.println("target -10");   
+            Logger.recordOutput("target rotation degrees", -10);
+        }
+        Logger.recordOutput("Arm angle", inputs.angle.getDegrees());
+        
 
     }
 
@@ -92,17 +100,6 @@ s    */
      */
     private void updateInputs(){
         io.updateInputs(inputs);
-
-        if(targetRotationTEMP != null){
-            System.out.println("target " + targetRotationTEMP.getDegrees());
-            Logger.recordOutput("target rotation degrees", targetRotationTEMP.getDegrees());
-
-            Logger.recordOutput("target rotation degrees", targetRotationTEMP.getDegrees() + 5);
-        }
-        else{
-            System.out.println("target -10");
-            Logger.recordOutput("target rotation degrees", -10);
-        }
     }
 
     /**

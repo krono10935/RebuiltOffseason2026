@@ -47,7 +47,7 @@ public class RollerSubsystem extends SubsystemBase {
     public double getMotorSpeedMPS(){
         return inputs.speedMPS;
     }
-
+    
     /**
      * sets the Duty cycle 
      * @param dutyCycle effort of the motors 

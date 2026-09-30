@@ -1,6 +1,9 @@
 package frc.robot.subsystems.intake.roller;
 
 import com.revrobotics.spark.SparkMax;
+
+import org.littletonrobotics.junction.Logger;
+
 import com.revrobotics.PersistMode;
 import com.revrobotics.ResetMode;
 import com.revrobotics.sim.SparkMaxSim;
@@ -50,8 +53,8 @@ public class RollerIOSim implements RollerIO{
     /**
      * Steps the sim by Constants.LOOP_PERIOD_SECONDS (20ms)
      */
-    private void stepSimulation(){
-        simState.setBusVoltage(RobotController.getBatteryVoltage());
+    private void simulationStep(){
+        simState.setBusVoltage(12);
 
         double motorVoltage = simState.getBusVoltage();
 
@@ -67,6 +70,13 @@ public class RollerIOSim implements RollerIO{
         simState.setVelocity(
             rollerSim.getAngularVelocityRPM() * RollerConstants.GEAR_RATIO
         );
+        motorOne.getEncoder().setPosition(
+            UnitConversions.RPMtoRotationsPerCycle(
+                rollerSim.getAngularVelocityRPM(), 
+                Constants.LOOP_PERIOD_SECONDS)
+                * RollerConstants.GEAR_RATIO + simState.getAbsoluteEncoderSim().getPosition());
+
+        
     }
 
     /**
@@ -75,10 +85,19 @@ public class RollerIOSim implements RollerIO{
      */
     @Override
     public void updateInputs(RollerInputs inputs) {
-        stepSimulation();
+        simulationStep();
         
         inputs.motorOneTemperatureC = motorOne.getMotorTemperature();
         inputs.motorTwoTemperatureC = motorTwo.getMotorTemperature();
         inputs.speedMPS = motorOne.getEncoder().getVelocity();
+
+        Logger.recordOutput("rollerSim/applied voltage", RobotController.getBatteryVoltage());
+        simState.setVelocity(
+            10
+        );
+        Logger.recordOutput("rollerSim/motor MPS", motorOne.getEncoder().getVelocity());
+
+        Logger.recordOutput("rollerSim/roller RPM", rollerSim.getAngularVelocityRPM());
+        Logger.recordOutput("rollerSim/motor position", motorOne.getEncoder().getPosition());
     }
 }
