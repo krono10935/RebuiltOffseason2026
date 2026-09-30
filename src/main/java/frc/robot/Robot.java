@@ -127,7 +127,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void disabledExit() {
-    // RobotContainer.getInstance().drivetrain.setBrakeMode(true);
+    RobotContainer.getInstance().drivetrain.setBrakeMode(true);
   }
 
   @Override
@@ -156,8 +156,6 @@ public class Robot extends LoggedRobot {
     if (m_teleopSuperStructre != null) {
       CommandScheduler.getInstance().schedule(m_teleopSuperStructre);
     }
-
-    // RobotContainer.getInstance().drivetrain.reset(RobotContainer.getInstance().drivetrain.getEstimatedPosition());
   }
 
   @Override
@@ -165,7 +163,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void teleopExit() {
-    // RobotContainer.getInstance().drivetrain.setBrakeMode(false);
+    RobotContainer.getInstance().drivetrain.setBrakeMode(false);
   }
 
   @Override

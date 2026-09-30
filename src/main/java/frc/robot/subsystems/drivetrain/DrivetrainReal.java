@@ -68,7 +68,7 @@ public class DrivetrainReal extends Drivetrain {
 
         setpointGenerator = new SwerveSetpointGenerator(
                 constants.ROBOT_CONFIG,
-                constants.COMMON_MODULE_CONSTANTS.maxSteerSpeed()
+                constants.GENERIC_MODULE_CONFIG.getMaxSteerSpeed()
 
         );
 
@@ -176,11 +176,11 @@ public class DrivetrainReal extends Drivetrain {
      */
     private void defenseMode(){
         for (int i = 0; i < 4; i++){
-            io[i].setTargetState(DrivetrainConstants.defenseModeStates[i]);
+            io[i].setTargetState(DrivetrainConstants.DEFENSE_MODE_STATES[i]);
         }
 
         goalSpeeds = null;
-        previousSetpoint = DrivetrainConstants.defenseModeSetpoint;
+        previousSetpoint = DrivetrainConstants.DEFENSE_MODE_SETPOINT;
     }
 
     /**
@@ -245,7 +245,7 @@ public class DrivetrainReal extends Drivetrain {
         Command updateSpeedsRepeatedly = Commands.run(() -> setGoalSpeeds(
             new DriveSpeeds(chassisSpeedsCalculator.getControllerInputs())), this);
 
-        return updateSpeedsRepeatedly.andThen(stopCommand());
+        return updateSpeedsRepeatedly.andThen(stopCommand()).withName("DriveCommand");
     }
 
     /**
@@ -264,7 +264,7 @@ public class DrivetrainReal extends Drivetrain {
         Command updateSpeedsRepeatedly = Commands.run(() -> setGoalSpeeds(
             new DriveSpeeds(chassisSpeedsCalculator.getControllerInputs(), false)), this);
 
-        return updateSpeedsRepeatedly.andThen(stopCommand());
+        return updateSpeedsRepeatedly.andThen(stopCommand()).withName("DriveRobotRelative");
     }
 
     /**
@@ -284,7 +284,7 @@ public class DrivetrainReal extends Drivetrain {
         Command updateSpeedsRepeatedly = Commands.run(() -> setGoalSpeeds(
             new DriveSpeeds(homeToSupplierChassisSpeedsCalculator.getControllerInputs(), false)), this);
 
-        return updateSpeedsRepeatedly.andThen(stopCommand());
+        return updateSpeedsRepeatedly.andThen(stopCommand()).withName("DriveAndHomeTeAngle");
     }
 
 }

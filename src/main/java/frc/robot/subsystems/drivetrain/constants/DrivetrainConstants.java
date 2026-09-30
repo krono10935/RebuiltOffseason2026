@@ -9,10 +9,10 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 
 public class DrivetrainConstants {
-    public static final SwerveModuleState[] defenseModeStates = getDefenseModeStates();
+    public static final SwerveModuleState[] DEFENSE_MODE_STATES = getDefenseModeStates();
 
-    public static final SwerveSetpoint defenseModeSetpoint = new SwerveSetpoint(
-        new ChassisSpeeds(), defenseModeStates, DriveFeedforwards.zeros(4)
+    public static final SwerveSetpoint DEFENSE_MODE_SETPOINT = new SwerveSetpoint(
+        new ChassisSpeeds(), DEFENSE_MODE_STATES, DriveFeedforwards.zeros(4)
     );
 
     /** Angular PID Controller */

@@ -6,9 +6,7 @@ package frc.robot.subsystems.drivetrain;
 
 import org.littletonrobotics.junction.Logger;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -20,7 +18,8 @@ import frc.robot.subsystems.drivetrain.gyro.GyroIO;
 import frc.robot.subsystems.drivetrain.gyro.GyroIOPigeon;
 import frc.robot.subsystems.drivetrain.gyro.GyroIOSim;
 import frc.robot.subsystems.drivetrain.gyro.GyroInputsAutoLogged;
-import frc.robot.subsystems.drivetrain.module.SwerveModuleBasic;
+import frc.robot.subsystems.drivetrain.module.SwerveModuleReal;
+import frc.robot.subsystems.drivetrain.module.SwerveModuleSim;
 import frc.robot.subsystems.drivetrain.module.SwerveModuleIO;
 
 public abstract class Drivetrain extends SubsystemBase {
@@ -41,22 +40,24 @@ public abstract class Drivetrain extends SubsystemBase {
   public Drivetrain(ChassisConstants constants) {
     this.constants = constants;
 
+    kinematics = new SwerveDriveKinematics(constants.ROBOT_CONFIG.moduleLocations);
+
+    GeneralRobotState.getInstance().setChassisSpeedsSupplier(
+      () -> kinematics.toChassisSpeeds(inputs.moduleStates)
+    );
+
     this.gyro = RobotBase.isReal() ? new GyroIOPigeon(constants.GYRO_PORT)
         : new GyroIOSim(GeneralRobotState.getInstance().getChassisSpeedsSupplier());
 
     this.gyroInputs = new GyroInputsAutoLogged();
 
     for(int i = 0; i < 4; i++){
-      io[i] = new SwerveModuleBasic(constants.MODULE_CONSTANTS[i]);
+      io[i] = RobotBase.isReal() ? 
+        new SwerveModuleReal(constants.MODULE_CONSTANTS[i]) :
+        new SwerveModuleSim(constants.MODULE_CONSTANTS[i]);
       inputs.moduleStates[i] = io[i].getState();
       modulePositions[i] = io[i].getPosition();
     }
-
-    kinematics = new SwerveDriveKinematics(constants.ROBOT_CONFIG.moduleLocations);
-
-    GeneralRobotState.getInstance().setChassisSpeedsSupplier(
-      () -> kinematics.toChassisSpeeds(inputs.moduleStates)
-    );
   }
 
   @Override
@@ -86,7 +87,7 @@ public abstract class Drivetrain extends SubsystemBase {
    * Resets the gyro
    */
   public void resetGyro(){
-      gyro.reset(new Pose2d(new Translation2d(), AllianceFlipUtil.apply(new Rotation2d())));
+      gyro.reset(AllianceFlipUtil.apply(new Rotation2d()));
   }
 
   /**
@@ -103,7 +104,7 @@ public abstract class Drivetrain extends SubsystemBase {
    * @return the gyro angle
    */
   public Rotation2d getGyroAngle() {
-      return gyroInputs.pose.getRotation();
+      return gyroInputs.rotation;
   }
 
   /**
@@ -115,6 +116,6 @@ public abstract class Drivetrain extends SubsystemBase {
           module.setBrakeMode(isBrake);
       }
   }
-
-
 }
+
+// Drivetrain is skebob

@@ -109,7 +109,7 @@ public class DrivetrainSysID extends Drivetrain {
 
     for (int i = 0; i < 4; i++){
         io[i].setDriveVoltageAndSteerAngle(voltage, 
-          goalAngle.minus(gyroInputs.pose.getRotation()));
+          goalAngle.minus(gyroInputs.rotation));
     }
   }
 
