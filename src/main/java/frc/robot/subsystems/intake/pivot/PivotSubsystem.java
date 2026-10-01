@@ -26,10 +26,9 @@ public class PivotSubsystem extends SubsystemBase {
         Logger.processInputs(getName(), inputs);
         
         if (getCurrentCommand() == null){
-            Logger.recordOutput("current command: ", "null");
-        }
-        else {
-            Logger.recordOutput("current command: ", getCurrentCommand().getName());
+            Logger.recordOutput("Pivot command", "null!");
+        }else {
+            Logger.recordOutput("Pivot command", getCurrentCommand().getName());
         }
         
         if(targetRotationTEMP != null){

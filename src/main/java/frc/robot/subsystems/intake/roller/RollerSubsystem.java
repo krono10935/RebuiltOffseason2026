@@ -21,7 +21,15 @@ public class RollerSubsystem extends SubsystemBase {
     @Override
     public void periodic(){
         updateInputs();
+        
         Logger.processInputs(getName(), inputs);
+
+        if (getCurrentCommand() == null){
+            Logger.recordOutput("Roller command", "null!");
+        }else {
+            Logger.recordOutput("Roller command", getCurrentCommand().getName());
+        }
+
     }
 
     /**

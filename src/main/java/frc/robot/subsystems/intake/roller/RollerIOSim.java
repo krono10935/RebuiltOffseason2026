@@ -11,6 +11,7 @@ import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.simulation.BatterySim;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import frc.lib.math.UnitConversions;
@@ -23,7 +24,6 @@ public class RollerIOSim implements RollerIO{
     private final FlywheelSim rollerSim;
     private final SparkMaxSim simState;
     
-    private double dutyCycleTemp = 0;
     public RollerIOSim(){
         rollerSim = RollerConstants.getSim();
 
@@ -42,8 +42,6 @@ public class RollerIOSim implements RollerIO{
      */
     @Override
     public void setDutyCycle(double dutyCycle) {
-        System.out.println(dutyCycle);
-        dutyCycleTemp = dutyCycle;
         motorOne.getClosedLoopController().setSetpoint(dutyCycle, ControlType.kDutyCycle);
     }
 
@@ -52,7 +50,6 @@ public class RollerIOSim implements RollerIO{
      */
     @Override
     public void stop() {
-        dutyCycleTemp = 0;
         motorOne.stopMotor();
     }
 
@@ -60,33 +57,24 @@ public class RollerIOSim implements RollerIO{
      * Steps the sim by Constants.LOOP_PERIOD_SECONDS (20ms)
      */
     private void simulationStep(){
-        simState.setBusVoltage(simState.getAppliedOutput() * RoboRioSim.getVInVoltage());
 
-        double motorVoltage = simState.getBusVoltage();
+        // In this method, we update our simulation of what our arm is doing
+        // First, we set our "inputs" (voltages)
+        rollerSim.setInput(simState.getAppliedOutput() * RoboRioSim.getVInVoltage());
 
-        rollerSim.setInputVoltage(motorVoltage);
+        // Next, we update it. The standard loop time is 20ms.
         rollerSim.update(Constants.LOOP_PERIOD_SECONDS);
-        
-        simState.setPosition(
-            UnitConversions.RPMtoRotationsPerCycle(
-                rollerSim.getAngularVelocityRPM(), 
-                Constants.LOOP_PERIOD_SECONDS)
-                * RollerConstants.GEAR_RATIO + simState.getAbsoluteEncoderSim().getPosition());
-        
-        simState.setVelocity(
-            rollerSim.getAngularVelocityRPM() * RollerConstants.GEAR_RATIO
-        );
 
-        simState.getRelativeEncoderSim().setVelocity(
-            rollerSim.getAngularVelocityRPM() * RollerConstants.GEAR_RATIO
-        );
+        // Now, we update the simState
+        simState.iterate( // motor velocity, in RPM
+            rollerSim.getAngularVelocityRPM() * RollerConstants.GEAR_RATIO,
+            RoboRioSim.getVInVoltage(), // Simulated battery voltage, in Volts
+            Constants.LOOP_PERIOD_SECONDS); // Time interval, in Seconds
 
-        motorOne.getEncoder().setPosition(
-            UnitConversions.RPMtoRotationsPerCycle(
-                rollerSim.getAngularVelocityRPM(), 
-                Constants.LOOP_PERIOD_SECONDS)
-                * RollerConstants.GEAR_RATIO + simState.getAbsoluteEncoderSim().getPosition()
-        );
+        // SimBattery estimates loaded battery voltages
+        // This should include all motors being simulated
+        RoboRioSim.setVInVoltage(
+            BatterySim.calculateDefaultBatteryLoadedVoltage(rollerSim.getCurrentDrawAmps()));
     }
 
     /**
@@ -97,6 +85,9 @@ public class RollerIOSim implements RollerIO{
     public void updateInputs(RollerInputs inputs) {
         simulationStep();
         
+        Logger.recordOutput("rollerSim/Apllied outpus sim motor", simState.getAppliedOutput());
+        Logger.recordOutput("rollerSim/Applied output", motorOne.getAppliedOutput());
+
         inputs.motorOneTemperatureC = motorOne.getMotorTemperature();
         inputs.motorTwoTemperatureC = motorTwo.getMotorTemperature();
         inputs.speedMPS = motorOne.getEncoder().getVelocity();
@@ -104,11 +95,9 @@ public class RollerIOSim implements RollerIO{
         //Logger.recordOutput("rollerSim/", null);
         Logger.recordOutput("rollerSim/full applied voltage", simState.getAppliedOutput() * RoboRioSim.getVInVoltage());
         Logger.recordOutput("rollerSim/motor MPS", motorOne.getEncoder().getVelocity());
-        Logger.recordOutput("rollerSim/dutyCycle", dutyCycleTemp);
         Logger.recordOutput("rollerSim/roller RPM", rollerSim.getAngularVelocityRPM());
         Logger.recordOutput("rollerSim/motor position", motorOne.getEncoder().getPosition());
 
-        Logger.recordOutput("rollerSim/Applied output", simState.getAppliedOutput());
         Logger.recordOutput("rollerSim/VIN voltage",  RoboRioSim.getVInVoltage());
     }
 }

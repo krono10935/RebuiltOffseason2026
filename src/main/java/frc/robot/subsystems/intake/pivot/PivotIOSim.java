@@ -45,7 +45,7 @@ public class PivotIOSim implements PivotIO {
     private void simulationStep(){
         TalonFXSimState motorSim = motor.getSimState();
 
-        pivotSim.setInputVoltage(motor.getClosedLoopError().getValueAsDouble());
+        pivotSim.setInputVoltage(motor.getClosedLoopOutput().getValueAsDouble());
 
         // Next, we update it. The standard loop time is 20ms.
         pivotSim.update(Constants.LOOP_PERIOD_SECONDS);
@@ -70,7 +70,7 @@ public class PivotIOSim implements PivotIO {
 
         Logger.recordOutput("pivotSim/arm and motor/Encoder mesurments", UnitConversions.rotationsToDegrees(motor.getRotorPosition().getValueAsDouble()));
         Logger.recordOutput("pivotSim/arm and motor/arm speed: RPS", UnitConversions.radiansPerSecondToRotationsPerSecond(pivotSim.getVelocityRadPerSec()));
-        Logger.recordOutput("pivotSim/arm and motor/Motor speed RPS", UnitConversions.radiansPerSecondToRotationsPerSecond(motor.getVelocity().getValueAsDouble()));
+        Logger.recordOutput("pivotSim/arm and motor/Motor speed RPS", motor.getVelocity().getValueAsDouble());
         Logger.recordOutput("pivotSim/arm and motor/Motor pos", UnitConversions.radiansToRotations(pivotSim.getAngleRads() * PivotConstants.GEAR_RATIO));
         
         double error = UnitConversions.rotationsToDegrees(motor.getClosedLoopReference().getValueAsDouble()) - UnitConversions.radiansToDegrees(pivotSim.getAngleRads());

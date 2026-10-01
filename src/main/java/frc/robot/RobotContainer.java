@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.drivetrain.Drivetrain;
@@ -39,6 +40,7 @@ public class RobotContainer {
   public final Drivetrain drivetrain;
 
   private final LoggedDashboardChooser<Command> autoChooser;
+
   /**The pivot object we will be using */
   private final PivotSubsystem pivot=new PivotSubsystem();
   /**The roller object we will be using */
@@ -128,16 +130,10 @@ public class RobotContainer {
   public void controllerBindings(){
     driverController.b().onTrue(intakeControlsCoordinator.disableIntake().withName("disableIntake"));
 
+    driverController.leftTrigger(0.5).or(driverController.leftBumper()).onFalse(intakeControlsCoordinator.openPivotOffRoller().withName("openPivotOffRoller"));
+
     driverController.leftBumper().whileTrue(intakeControlsCoordinator.deployIntakeReverse().withName("deployIntakeReverse"));
 
-    driverController.leftTrigger(0.5).whileTrue(intakeControlsCoordinator.deployIntake().withName("deployIntake"));
-
-    driverController.leftBumper().onFalse(intakeControlsCoordinator.openPivotOffRoller().withName("openPivotOffRoller"));
-
-    driverController.leftTrigger(0.5).onFalse(intakeControlsCoordinator.openPivotOffRoller().withName("openPivotOffRoller"));
-
-    driverController.a().whileTrue(roller.onRoller().withName("Open pivot"));
-    driverController.x().whileTrue(roller.offRoller().withName("Close pivot"));
-    driverController.x().whileTrue(roller.reverseRoller().withName("Reverse"));
+    driverController.leftTrigger().whileTrue(intakeControlsCoordinator.deployIntake().withName("deployIntake"));
   }
 }

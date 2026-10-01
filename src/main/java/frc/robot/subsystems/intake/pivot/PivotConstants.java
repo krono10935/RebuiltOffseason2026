@@ -32,7 +32,7 @@ public class PivotConstants {
     /** The gear ratio between the motor and the pivot arm (a single roation of the pivot is equal to GEAR_RATIO roations of the motor).*/
     public static final double GEAR_RATIO = 50;  // TODO: get value from CAD
     
-    public static final Rotation2d TOLERANCE = Rotation2d.fromDegrees(5);
+    public static final Rotation2d TOLERANCE = Rotation2d.fromDegrees(50);
 
     /**The state name of opening the pivot for state machines */
     public static final StateName OPEN_PIVOT_STATE_NAME = new StateName("openPivotState");
@@ -75,19 +75,19 @@ public class PivotConstants {
     public static TalonFXConfiguration getMotorConfig(){
         TalonFXConfiguration config = new TalonFXConfiguration();
         //TODO: Tweak the PID values
-        config.Slot0.kP = 100;
+        config.Slot0.kP = 5;
         config.Slot0.kD = 0;
         config.Slot0.kI = 4.0;
         config.Slot0.kG = 0;
         config.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
 
         //TODO: Tweak the PID values for setRotationSlow()
-        config.Slot1.kP = 1;
-        config.Slot1.kG = 1;
+        config.Slot1.kP = 5;
+        config.Slot1.kG = 0;
         config.Slot1.GravityType = GravityTypeValue.Arm_Cosine;
         //The trapezoid profile for setRotationSlow()
-        config.MotionMagic.MotionMagicAcceleration = 1;
-        config.MotionMagic.MotionMagicCruiseVelocity = 1;
+        config.MotionMagic.MotionMagicAcceleration = 100;
+        config.MotionMagic.MotionMagicCruiseVelocity = 100;
         
         config.CurrentLimits.StatorCurrentLimit = 120;
         config.CurrentLimits.SupplyCurrentLimit = 90;
