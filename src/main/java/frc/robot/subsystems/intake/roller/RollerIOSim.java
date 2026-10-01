@@ -18,7 +18,8 @@ import frc.robot.Constants;
 
 public class RollerIOSim implements RollerIO{
     private final SparkMax motorOne;
-    private final SparkMax motorTwo; 
+    private final SparkMax motorTwo;
+
     private final FlywheelSim rollerSim;
     private final SparkMaxSim simState;
     
@@ -41,6 +42,7 @@ public class RollerIOSim implements RollerIO{
      */
     @Override
     public void setDutyCycle(double dutyCycle) {
+        System.out.println(dutyCycle);
         dutyCycleTemp = dutyCycle;
         motorOne.getClosedLoopController().setSetpoint(dutyCycle, ControlType.kDutyCycle);
     }
@@ -64,7 +66,7 @@ public class RollerIOSim implements RollerIO{
 
         rollerSim.setInputVoltage(motorVoltage);
         rollerSim.update(Constants.LOOP_PERIOD_SECONDS);
-
+        
         simState.setPosition(
             UnitConversions.RPMtoRotationsPerCycle(
                 rollerSim.getAngularVelocityRPM(), 
@@ -100,10 +102,13 @@ public class RollerIOSim implements RollerIO{
         inputs.speedMPS = motorOne.getEncoder().getVelocity();
 
         //Logger.recordOutput("rollerSim/", null);
-        Logger.recordOutput("rollerSim/applied voltage", simState.getAppliedOutput() * RoboRioSim.getVInVoltage());
+        Logger.recordOutput("rollerSim/full applied voltage", simState.getAppliedOutput() * RoboRioSim.getVInVoltage());
         Logger.recordOutput("rollerSim/motor MPS", motorOne.getEncoder().getVelocity());
         Logger.recordOutput("rollerSim/dutyCycle", dutyCycleTemp);
         Logger.recordOutput("rollerSim/roller RPM", rollerSim.getAngularVelocityRPM());
         Logger.recordOutput("rollerSim/motor position", motorOne.getEncoder().getPosition());
+
+        Logger.recordOutput("rollerSim/Applied output", simState.getAppliedOutput());
+        Logger.recordOutput("rollerSim/VIN voltage",  RoboRioSim.getVInVoltage());
     }
 }
