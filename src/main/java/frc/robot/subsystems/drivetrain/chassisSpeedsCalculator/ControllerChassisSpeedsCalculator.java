@@ -9,17 +9,31 @@ import frc.robot.subsystems.drivetrain.configsStructure.ChassisConstants.Chassis
 
 public class ControllerChassisSpeedsCalculator {
         public enum ControllerMode {
+        
+        /** No exponent used */
         NONE(1),
+
+        /** Exponent only on the brake. */
         BRAKE_EXPONENTIAL(0.5),
+
+        /** Exponent only on the drive sticks */
         STICKS_EXPONENTIAL(0.5),
+
+        /** Exponent on both the sticks and the brakes. */
         BOTH_EXPONENTIAL(0.5);
 
+        /** The exponent to apply */
         public final double exponent;
 
         ControllerMode(double exponent) {
             this.exponent = exponent;
         }
 
+        /**
+         * Calculate based on exponent for the trigger 
+         * @param value the raw trigger value
+         * @return the exponentiated trigger value
+         */
         public double calculateTrigger(double value){
             if(this == STICKS_EXPONENTIAL) return value;
 
@@ -28,12 +42,23 @@ public class ControllerChassisSpeedsCalculator {
             return calculateExponential(value, exponent);
         }
 
+        /**
+         * Calculate based on exponent for the trigger 
+         * @param value the raw stick value
+         * @return the exponentiated stick value
+         */
         public double calculateStick(double value){
             if(this == BRAKE_EXPONENTIAL) return value;
 
             return  calculateExponential(value, exponent);
         }
 
+        /**
+         * Exponentiate an input from the controller
+         * @param value the raw value
+         * @param exponential the exponent to apply to it
+         * @return the exponentiated value
+         */
         private static double calculateExponential(double value, double exponential) {
             return Math.copySign(Math.pow(Math.abs(value), exponential), value);
         }

@@ -14,11 +14,22 @@ import frc.robot.subsystems.drivetrain.constants.DrivetrainConstants;
 
 public class HomeToSupplierChassisSpeedsCalculator extends ControllerChassisSpeedsCalculator {
 
+    /** Profiled PID for the angle */
     private final ProfiledPIDController angularController;
+
+    /** Supplier for a dynamically changing angle to aim for */
     private final Supplier<Rotation2d> angularSupplier;
 
+    /** The name of thid instance of the HomeToSupplierChassisCalculator */
     private final String name;
 
+    /**
+     * Create a new HomeToSupplierChassisSpeedsCalculator instance
+     * @param speedsConfig the drivetrain's speeds config
+     * @param moduleDistanceFromCenterMeters the radius of the center of the module from the center of the robot
+     * @param angularSupplier the supplier for the dynamically changing angle setpoint
+     * @param name the name of the current instance of the calculator
+     */
     public HomeToSupplierChassisSpeedsCalculator(ChassisSpeedConfig speedsConfig, 
             double moduleDistanceFromCenterMeters, 
             Supplier<Rotation2d> angularSupplier,
@@ -75,6 +86,11 @@ public class HomeToSupplierChassisSpeedsCalculator extends ControllerChassisSpee
         return controllerSpeeds;
     }
 
+    /**
+     * Apply a deadband to an angular output
+     * @param angularOutput the raw angular output
+     * @return 0 if the angular output is less than the deadband, otherwise the angular output itself
+     */
     public double angularDeadband(double angularOutput){
         return angularOutput < DrivetrainConstants.ANGULAR_DEADBAND ? 0 : angularOutput;
     }
