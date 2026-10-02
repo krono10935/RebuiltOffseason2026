@@ -57,7 +57,6 @@ public class RollerIOSim implements RollerIO{
      * Steps the sim by Constants.LOOP_PERIOD_SECONDS (20ms)
      */
     private void simulationStep(){
-
         // In this method, we update our simulation of what our arm is doing
         // First, we set our "inputs" (voltages)
         rollerSim.setInput(simState.getAppliedOutput() * RoboRioSim.getVInVoltage());

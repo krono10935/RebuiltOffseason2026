@@ -29,15 +29,17 @@ public class RollerConstants {
 
     /**The duty cycle value the roller is considered on */
     public static final double ON_DUTY_CYCLE = 1; //TODO - tweak
-
     /**The duty cycle value the roller is considered reversed */
     public static final double REVERSED_DUTY_CYCLE = -1; //TODO - tweak
+    /**The duty cycle value the roller is considered off */
+    public static final double OFF_DUTY_CYCLE = 0;
+
     /**The state name of turning on the roller for state machines */
-    public static final StateName ON_ROLLER_STATE_NAME = new StateName("onRollerState");
+    public static final StateName ON_ROLLER_STATE_NAME = new StateName("OnRollerState");
     /**The state name of turning reverse the roller for state machine */
-    public static final StateName REVERSE_ROLLER_STATE_NAME = new StateName("reverseRollerState");
+    public static final StateName REVERSE_ROLLER_STATE_NAME = new StateName("ReverseRollerState");
     /**The state name of turning off the roller for state machines */
-    public static final StateName OFF_ROLLER_STATE_NAME = new StateName("offRollerState");
+    public static final StateName OFF_ROLLER_STATE_NAME = new StateName("OffRollerState");
 
     /**
      * Get the motor config of the lead motor

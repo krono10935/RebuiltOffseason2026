@@ -3,14 +3,64 @@ package frc.robot.subsystems.intake.roller;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.wpilibj.DutyCycle;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.statemachine.StateMachine.StateName;
+import frc.robot.subsystems.intake.pivot.PivotConstants;
 
 public class RollerSubsystem extends SubsystemBase {
     private final RollerInputsAutoLogged inputs;
     private final RollerIO io;
+
+    /**An enum of the three possible roller states*/
+    public enum RollerState{
+        /**The roller is on and can intake fuel into the hopper */
+        ON(RollerConstants.ON_DUTY_CYCLE, RollerConstants.ON_ROLLER_STATE_NAME),
+        /**The roller is reversed and can outtake fuel from the hopper */
+        REVERSED(RollerConstants.REVERSED_DUTY_CYCLE, RollerConstants.REVERSE_ROLLER_STATE_NAME),
+        /**The roller is off */
+        OFF(RollerConstants.OFF_DUTY_CYCLE, RollerConstants.OFF_ROLLER_STATE_NAME);
+
+        /**Name of the state */
+        private StateName stateName;
+        /**The wanted duty cycle from the roller */
+        private double dutyCycle;
+
+        /**
+         * Create a new RollerState
+         * @param dutyCycle The duty cycle of the state
+         * @param stateName The stateName of the state
+         */
+        private RollerState(double dutyCycle, StateName stateName){
+            this.dutyCycle = dutyCycle;
+            this.stateName = stateName;
+        }
+
+        /**
+         * @return The duty cycle of the enum
+         */
+        public double getDutyCycle(){
+            return dutyCycle;
+        }
+
+
+        /**
+         * @return The stateName as a string.
+         */
+        public String getName(){
+            return stateName.toString();
+        }
+
+        /**
+         * @return The stateName.
+         */
+        public StateName getStateName(){
+            return stateName;
+        }
+    }
 
     //Create a new RollerSubsystem
     public RollerSubsystem(){

@@ -32,12 +32,12 @@ public class PivotConstants {
     /** The gear ratio between the motor and the pivot arm (a single roation of the pivot is equal to GEAR_RATIO roations of the motor).*/
     public static final double GEAR_RATIO = 50;  // TODO: get value from CAD
     
-    public static final Rotation2d TOLERANCE = Rotation2d.fromDegrees(50);
+    public static final Rotation2d TOLERANCE = Rotation2d.fromDegrees(3);
 
     /**The state name of opening the pivot for state machines */
-    public static final StateName OPEN_PIVOT_STATE_NAME = new StateName("openPivotState");
+    public static final StateName OPEN_PIVOT_STATE_NAME = new StateName("OpenPivotState");
     /**The state name of closing the pivot for state machine */
-    public static final StateName CLOSE_PIVOT_STATE_NAME = new StateName("closePivotState");
+    public static final StateName CLOSE_PIVOT_STATE_NAME = new StateName("ClosePivotState");
 
 
     /**

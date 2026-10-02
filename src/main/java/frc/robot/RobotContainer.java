@@ -128,12 +128,12 @@ public class RobotContainer {
   }
 
   public void controllerBindings(){
-    driverController.b().onTrue(intakeControlsCoordinator.disableIntake().withName("disableIntake"));
+    driverController.b().onTrue(intakeControlsCoordinator.getDisableIntake(false).withName("disableIntake"));
 
-    driverController.leftTrigger(0.5).or(driverController.leftBumper()).onFalse(intakeControlsCoordinator.openPivotOffRoller().withName("openPivotOffRoller"));
+    driverController.leftTrigger(0.5).or(driverController.leftBumper()).onFalse(intakeControlsCoordinator.getOpenPivotOffRoller(false).withName("openPivotOffRoller"));
 
-    driverController.leftBumper().whileTrue(intakeControlsCoordinator.deployIntakeReverse().withName("deployIntakeReverse"));
+    driverController.leftBumper().whileTrue(intakeControlsCoordinator.getDeployIntakeReverse(false).withName("deployIntakeReverse"));
 
-    driverController.leftTrigger().whileTrue(intakeControlsCoordinator.deployIntake().withName("deployIntake"));
+    driverController.leftTrigger().whileTrue(intakeControlsCoordinator.getDeployIntake(false).withName("deployIntake"));
   }
 }
