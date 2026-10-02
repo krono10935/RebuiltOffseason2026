@@ -147,7 +147,7 @@
     {
       "name": "intake",
       "waypointRelativePos": 1.6,
-      "endWaypointRelativePos": 1.8,
+      "endWaypointRelativePos": 3.6,
       "command": {
         "type": "named",
         "data": {
@@ -157,7 +157,7 @@
     },
     {
       "name": "Close roller",
-      "waypointRelativePos": 2.8,
+      "waypointRelativePos": 3.6,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",

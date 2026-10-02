@@ -15,22 +15,15 @@
           "data": {
             "commands": [
               {
-                "type": "race",
+                "type": "named",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "WaitUntilNoBalls"
-                      }
-                    }
-                  ]
+                  "name": "ShootAndAim"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "ShootAndAim"
+                  "name": "WaitUntilNoBalls"
                 }
               }
             ]

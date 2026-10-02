@@ -11,11 +11,11 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "deadline",
           "data": {
             "commands": [
               {
-                "type": "deadline",
+                "type": "race",
                 "data": {
                   "commands": [
                     {
@@ -49,11 +49,11 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "deadline",
           "data": {
             "commands": [
               {
-                "type": "deadline",
+                "type": "race",
                 "data": {
                   "commands": [
                     {

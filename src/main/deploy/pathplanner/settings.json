@@ -9,9 +9,9 @@
     "depot - outpost"
   ],
   "autoFolders": [
-    "2 cycle",
-    "Hub",
+    "2 cycle right",
     "2 cycle left",
+    "Hub",
     "depot - outpost"
   ],
   "defaultMaxVel": 3.0,
