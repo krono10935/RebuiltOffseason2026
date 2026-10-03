@@ -15,7 +15,7 @@ public class RollerConstants {
     public final static int MOTOR_TWO_CANID = 2; //TODO: find the correct can id
 
     /**The roller's radius in meters */
-    public final static double ROLLER_RADIUS_METER = 0.0275;    //TODO - Get the real Roller radius in meters
+    public final static double ROLLER_RADIUS_METER = 0.055;
 
     /**The ratio of rotations per second to meters per second based on the roller's radius */
     public final static double RPM_TO_MPS_RATIO = UnitConversions.RPMtoRPS(2 * ROLLER_RADIUS_METER * Math.PI); // RPM to MPS
@@ -23,21 +23,23 @@ public class RollerConstants {
     /**The moment of inertia of the roller flywheel */
     private static final double MOMENT_OF_INERTIA = 0.001;//TODO: find the right value
     /** The gear ratio between the motor and the roller (a single roation of the roller is equal to GEAR_RATIO roations of the motors).*/
-    public static final double GEAR_RATIO = 1; //TODO - Get the real gear ratio
+    public static final double GEAR_RATIO = 27.0/13.0;
     /**The gear box we are using */
     public static final DCMotor GEAR_BOX = DCMotor.getKrakenX60(2);
 
     /**The duty cycle value the roller is considered on */
     public static final double ON_DUTY_CYCLE = 1; //TODO - tweak
-
     /**The duty cycle value the roller is considered reversed */
-    public static final double REVERSED_DUTY_CYCLE = 1; //TODO - tweak
+    public static final double REVERSED_DUTY_CYCLE = -1; //TODO - tweak
+    /**The duty cycle value the roller is considered off */
+    public static final double OFF_DUTY_CYCLE = 0;
+
     /**The state name of turning on the roller for state machines */
-    public static final StateName ON_ROLLER_STATE_NAME = new StateName("onRollerState");
+    public static final StateName ON_ROLLER_STATE_NAME = new StateName("OnRollerState");
     /**The state name of turning reverse the roller for state machine */
-    public static final StateName REVERSE_ROLLER_STATE_NAME = new StateName("reverseRollerState");
+    public static final StateName REVERSE_ROLLER_STATE_NAME = new StateName("ReverseRollerState");
     /**The state name of turning off the roller for state machines */
-    public static final StateName OFF_ROLLER_STATE_NAME = new StateName("offRollerState");
+    public static final StateName OFF_ROLLER_STATE_NAME = new StateName("OffRollerState");
 
     /**
      * Get the motor config of the lead motor
@@ -46,7 +48,7 @@ public class RollerConstants {
     public static SparkMaxConfig getLeadConfig(){
         SparkMaxConfig motorConfig = new SparkMaxConfig();
 
-        motorConfig.encoder.positionConversionFactor(RPM_TO_MPS_RATIO);  
+        motorConfig.encoder.positionConversionFactor(RPM_TO_MPS_RATIO);
         motorConfig.smartCurrentLimit(80,30); 
         return motorConfig;
     }

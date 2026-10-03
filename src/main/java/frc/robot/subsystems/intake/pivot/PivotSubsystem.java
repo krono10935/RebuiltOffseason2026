@@ -8,10 +8,57 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.math.IsNear;
+import frc.lib.statemachine.StateMachine.StateName;
 
 public class PivotSubsystem extends SubsystemBase {
     private final PivotInputsAutoLogged inputs;
     private final PivotIO io;
+
+    /**An enum of the two possible pivot target states: open and close */
+    public enum PivotState{
+        /**The pivot is open and can intake/outtake*/
+        OPEN(PivotConstants.PIVOT_OPEN_ANGLE, PivotConstants.OPEN_PIVOT_STATE_NAME),
+        /**The pivot is closed */
+        CLOSE(PivotConstants.PIVOT_OPEN_ANGLE, PivotConstants.CLOSE_PIVOT_STATE_NAME);
+
+        /**The wanted angle from the pivot */
+        private Rotation2d targetAngle;
+        
+        /**The name of the state */
+        private StateName stateName;
+        
+        /**
+         * Create a new PivotState
+         * @param targetAngle The wanted angle from the pivot
+         * @param stateName The stateName of the state
+         */
+        private PivotState(Rotation2d targetAngle, StateName stateName){
+            this.targetAngle = targetAngle;
+            this.stateName = stateName;
+        }
+
+        /**
+         * @return The target angle of the pivot
+         */
+        public Rotation2d getTargetAngle(){
+            return targetAngle;
+        }
+
+        /**
+         * @return The StateName of the pivot
+         */
+        public StateName getStateName(){
+            return stateName;
+        }
+
+        /**
+         * @return The StateName of the pivot as a string
+         */
+        public String getName(){
+            return stateName.toString();
+        }
+    }
+
     //Create a new PivotSubsystem
     public PivotSubsystem(){
         inputs = new PivotInputsAutoLogged();
@@ -22,6 +69,15 @@ public class PivotSubsystem extends SubsystemBase {
     public void periodic(){
         updateInputs();
         Logger.processInputs(getName(), inputs);
+        
+        if (getCurrentCommand() == null){
+            Logger.recordOutput("Pivot command", "null!");
+        }else {
+            Logger.recordOutput("Pivot command", getCurrentCommand().getName());
+        }
+        Logger.recordOutput("Arm angle", inputs.angle.getDegrees());
+        
+
     }
 
     /**
@@ -31,7 +87,6 @@ public class PivotSubsystem extends SubsystemBase {
     public double getMotorTempC(){
         return inputs.motorTemperatureC;
     }
-
     /**
      * Get the pivot angle
      * @return The angle of the pivot
@@ -88,7 +143,7 @@ s    */
     }
     /**
      * Checks if the pivot is close
-     * @return whether the pivot is close
+     * @return Whether the pivot is closed
      */
     public boolean isPivotClose() {
         return IsNear.isNear(getAngle(), PivotConstants.PIVOT_CLOSE_ANGLE, PivotConstants.TOLERANCE);
@@ -99,8 +154,9 @@ s    */
      * @return A command that opens the pivot
      */
     public Command openPivot(){
-        return Commands.run(
+        return Commands.runEnd(
             () -> setRotation(PivotConstants.PIVOT_OPEN_ANGLE),
+            this::stop,
             this
         );
     }
@@ -110,8 +166,9 @@ s    */
      * @return A command that opens the pivot slowly, using a trapezoid profile.
      */
     public Command openPivotSlow(){
-        return Commands.run(
+        return Commands.runEnd(
             () -> setRotationSlow(PivotConstants.PIVOT_OPEN_ANGLE),
+            this::stop,
             this
         );
     }
@@ -121,19 +178,21 @@ s    */
      * @return A command that closes the pivot
      */
     public Command closePivot(){
-        return Commands.run(
+        return Commands.runEnd(
             () -> setRotation(PivotConstants.PIVOT_CLOSE_ANGLE),
+            this::stop,
             this
         );
     }
 
     /**
      * A command that opens the pivot slowly, using a trapezoid profile.
-     * @return A command that opens the pivot slowly, using a trapezoid profile.
+     * @return A command that closes the pivot slowly, using a trapezoid profile.
      */
     public Command closePivotSlow(){
-        return Commands.run(
+        return Commands.runEnd(
             () -> setRotationSlow(PivotConstants.PIVOT_CLOSE_ANGLE),
+            this::stop,
             this
         );
     }
