@@ -33,6 +33,17 @@ public class Constants {
     public static final double LOOP_PERIOD_SECONDS = 0.02;
     public static final boolean USE_OBJECT_DETECTION = true;
 
+    public static final StateName PIVOT_OPEN_ROLLER_ON_NAME = new StateName("PIVOT_OPEN_ROLLER_ON");
+    public static final StateName PIVOT_OPEN_ROLLER_OFF_NAME = new StateName("PIVOT_OPEN_ROLLER_OFF");
+    public static final StateName PIVOT_CLOSE_ROLLER_OFF_NAME = new StateName("PIVOT_CLOSE_ROLLER_OFF");
+
+    public static final StateName SHOOT = new StateName("SHOOT");
+    public static final StateName DISABLE_SHOOTING = new StateName("DISABLE_SHOOTING");
+
+    public static final StateName OUTTAKE = new StateName("OUTTAKE");
+
+    public static final StateName RESET_GYRO = new StateName("RESET_GYRO");
+
     public static final StateName IDLE_STATE_NAME = new StateName("IDLE");
 
 }

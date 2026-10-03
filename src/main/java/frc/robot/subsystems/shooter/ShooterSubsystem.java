@@ -1,5 +1,7 @@
 package frc.robot.subsystems.shooter;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -94,7 +96,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        params = ShotCalculator.getInstance().getParameters(null, null); // TODO: use RobotState class to get these params after it is implemented.
+        params = ShotCalculator.getInstance().getParameters(new Pose2d(), new ChassisSpeeds()); // TODO: use RobotState class to get these params after it is implemented.
 
         Logger.recordOutput("Shooter/Command", this.getCurrentCommand() == null ? "None" : this.getCurrentCommand().getName());
         Logger.recordOutput("Shooter/shot parameters", params);

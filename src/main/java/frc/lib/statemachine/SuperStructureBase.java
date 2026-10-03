@@ -61,8 +61,36 @@ public abstract class SuperStructureBase extends SubsystemBase {
      * @param to The state to activate on the trigger activation.
      * @param binding The trigger which trigger's the state.
      */
-    protected void configureBinding(State to, Trigger binding){
+    protected void bindOnTrue(State to, Trigger binding){
         switchFromAnyOtherThanMyself(to, binding);
+    }
+
+    protected void bindOnFalse(State to, Trigger binding){
+        switchFromAnyOtherThanMyself(to, binding.negate());
+    }
+
+    protected void bindWhileTrue(State to, Trigger binding){
+        bindOnTrue(to, binding);
+        to.switchTo(getRegisterdState(Constants.IDLE_STATE_NAME)).when(binding.negate());
+    }
+
+    protected void bindWhileFalse(State to, Trigger binding){
+        bindWhileTrue(to, binding.negate());
+    }
+
+    protected void bindToggleTrue(State to, Trigger binding){
+        final boolean[] toggle = { false };
+        final boolean[] risingEdge = { false };
+
+        Trigger toggleTrigger = new Trigger(() -> {
+            if (binding.getAsBoolean() & !risingEdge[0]){
+                toggle[0] = !toggle[0];
+            }
+            risingEdge[0] = binding.getAsBoolean();
+            return toggle[0];
+        });
+
+        bindWhileTrue(to, toggleTrigger);
     }
 
     /**
@@ -71,5 +99,9 @@ public abstract class SuperStructureBase extends SubsystemBase {
      */
     public Command getCommand(){
         return statemachine;
+    }
+
+    protected State getRegisterdState(StateName stateName){
+        return statemachine.getState(stateName);
     }
 }
