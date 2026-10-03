@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.lib.dashboard.Elastic;
 import frc.lib.subsystem.VirtualSubSystem;
+import frc.robot.utils.UpdateWidgets;
 
 public class Robot extends LoggedRobot {
 
@@ -31,7 +32,10 @@ public class Robot extends LoggedRobot {
 
   private Command m_teleopSuperStructre;
 
+  private UpdateWidgets updateWidgets;
+
   public Robot() {
+    updateWidgets = new UpdateWidgets();
 
     initializeLogging();
 
