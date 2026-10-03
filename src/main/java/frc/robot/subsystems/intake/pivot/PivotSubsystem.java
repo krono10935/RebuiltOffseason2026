@@ -143,7 +143,7 @@ s    */
     }
     /**
      * Checks if the pivot is close
-     * @return whether the pivot is close
+     * @return Whether the pivot is closed
      */
     public boolean isPivotClose() {
         return IsNear.isNear(getAngle(), PivotConstants.PIVOT_CLOSE_ANGLE, PivotConstants.TOLERANCE);
@@ -187,7 +187,7 @@ s    */
 
     /**
      * A command that opens the pivot slowly, using a trapezoid profile.
-     * @return A command that opens the pivot slowly, using a trapezoid profile.
+     * @return A command that closes the pivot slowly, using a trapezoid profile.
      */
     public Command closePivotSlow(){
         return Commands.runEnd(

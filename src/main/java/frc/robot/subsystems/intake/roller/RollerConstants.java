@@ -15,7 +15,7 @@ public class RollerConstants {
     public final static int MOTOR_TWO_CANID = 2; //TODO: find the correct can id
 
     /**The roller's radius in meters */
-    public final static double ROLLER_RADIUS_METER = 0.055;  //TODO - Get the real Roller radius in meters
+    public final static double ROLLER_RADIUS_METER = 0.055;
 
     /**The ratio of rotations per second to meters per second based on the roller's radius */
     public final static double RPM_TO_MPS_RATIO = UnitConversions.RPMtoRPS(2 * ROLLER_RADIUS_METER * Math.PI); // RPM to MPS
@@ -23,7 +23,7 @@ public class RollerConstants {
     /**The moment of inertia of the roller flywheel */
     private static final double MOMENT_OF_INERTIA = 0.001;//TODO: find the right value
     /** The gear ratio between the motor and the roller (a single roation of the roller is equal to GEAR_RATIO roations of the motors).*/
-    public static final double GEAR_RATIO = 27/13; //TODO - Get the real gear ratio
+    public static final double GEAR_RATIO = 27.0/13.0;
     /**The gear box we are using */
     public static final DCMotor GEAR_BOX = DCMotor.getKrakenX60(2);
 

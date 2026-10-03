@@ -55,21 +55,15 @@ public class RollerIOSim implements RollerIO{
      * Steps the sim by Constants.LOOP_PERIOD_SECONDS (20ms)
      */
     private void simulationStep(){
-        // In this method, we update our simulation of what our arm is doing
-        // First, we set our "inputs" (voltages)
         rollerSim.setInput(simState.getAppliedOutput() * RoboRioSim.getVInVoltage());
 
-        // Next, we update it. The standard loop time is 20ms.
         rollerSim.update(Constants.LOOP_PERIOD_SECONDS);
 
-        // Now, we update the simState
-        simState.iterate( // motor velocity, in RPM
+        simState.iterate(
             rollerSim.getAngularVelocityRPM() * RollerConstants.GEAR_RATIO,
-            RoboRioSim.getVInVoltage(), // Simulated battery voltage, in Volts
-            Constants.LOOP_PERIOD_SECONDS); // Time interval, in Seconds
+            RoboRioSim.getVInVoltage(),
+            Constants.LOOP_PERIOD_SECONDS);
 
-        // SimBattery estimates loaded battery voltages
-        // This should include all motors being simulated
         RoboRioSim.setVInVoltage(
             BatterySim.calculateDefaultBatteryLoadedVoltage(rollerSim.getCurrentDrawAmps()));
     }

@@ -37,8 +37,8 @@ public class IntakeCoordinator {
         StateMachine intakeStateMachine = new StateMachine(stateMachineName);
 
         Command rollerCommand = switch (rollerTargetState) {
-            case ON: yield roller.onRoller();
-            case OFF: yield roller.offRoller();
+            case ON: yield roller.turnOnRoller();
+            case OFF: yield roller.turnOffRoller();
             case REVERSED: yield roller.reverseRoller();
         };
         rollerCommand = rollerCommand.withName(rollerTargetState.getName());

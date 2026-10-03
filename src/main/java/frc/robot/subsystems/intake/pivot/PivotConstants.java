@@ -15,21 +15,21 @@ import frc.lib.statemachine.StateMachine.StateName;
 
 
 public class PivotConstants {
-    public final static int MOTOR_CANID = 4;
+    public final static int MOTOR_CANID = 4; //TODO: get the real value
 
     /**The motors that are spinning the pivot*/
     public final static DCMotor GEAR_BOX = DCMotor.getKrakenX60(1);
-    private static final double MOMENT_OF_INERTIA = 0.001; // TODO: get value from CAD
-    private static final double PIVOT_LENGTH_METERS = 0.366; // TODO: get value from CAD
+    private static final double MOMENT_OF_INERTIA = 0.088848272;
+    private static final double PIVOT_LENGTH_METERS = 0.366;
     
     /** The angle where the pivot is closed */
-    public static final Rotation2d PIVOT_CLOSE_ANGLE = Rotation2d.fromDegrees(69); // TODO: get value from CAD
+    public static final Rotation2d PIVOT_CLOSE_ANGLE = Rotation2d.fromDegrees(69); // TODO: get real value from encoder measurements
     /** The angle where the pivot is opened */
-    public static final Rotation2d PIVOT_OPEN_ANGLE = Rotation2d.fromDegrees(180);// TODO: get value from CAD
+    public static final Rotation2d PIVOT_OPEN_ANGLE = Rotation2d.fromDegrees(180);// TODO: get value from encoder measurements
     /**whether we are accounting for gravity in the simulation */
     private static final boolean SIMULATE_GRAVITY = false;                              // TODO: change to wanted mode
     /** The gear ratio between the motor and the pivot arm (a single roation of the pivot is equal to GEAR_RATIO roations of the motor).*/
-    public static final double GEAR_RATIO = 50;  // TODO: get value from CAD
+    public static final double GEAR_RATIO = 50;
     
     public static final Rotation2d TOLERANCE = Rotation2d.fromDegrees(3);
 
