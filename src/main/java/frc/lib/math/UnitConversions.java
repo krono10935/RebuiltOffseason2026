@@ -209,4 +209,22 @@ public final class UnitConversions {
   public static double RPMtoRotationsPerCycle(double RPM, double cycleTime){
     return (RPM / kSecondsPerMinute) * cycleTime;
   }
+
+  /**
+   * Converts rotations per minute to rotations per second.
+   * @param rotationsPerMinutes The RPM to convert into RPS;
+   * @return RPS converted from RPM
+   */
+  public static double RPMtoRPS(double rotationsPerMinutes){
+    return rotationsPerMinutes / kSecondsPerMinute;
+  }
+
+    /**
+   * Converts radians per second RPS.
+   * @param radiansPerSecond The radians per second to convert into RPS;
+   * @return RPS converted from radians per second
+   */
+  public static double radiansPerSecondToRotationsPerSecond(double radiansPerSecond){
+    return radiansPerSecond / (2 * Math.PI);
+  }
 }
