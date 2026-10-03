@@ -1,8 +1,11 @@
 package frc.robot.subsystems.shooter;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import frc.lib.statemachine.StateMachine;
 import frc.lib.statemachine.StateMachine.State;
 import frc.robot.subsystems.shooter.ShotCalculator.ShootingParameters;
@@ -27,10 +30,14 @@ public class ShooterSubsystem extends SubsystemBase {
      * @return the command to stop the flywheel and hood (sets the hood angle to zero)
      */
     public Command disableShooterCommand() {
-        return Commands.parallel(
-            flywheel.stopCommand(),
+        Command disableShooter = Commands.parallel(
+            flywheel.stopCommand().asProxy(), // copies the command as a proxy so the "disableShooter" commands doesn't inherit it's requirements
             hood.disableHoodCommand()
-        ).withName("DisableHoodCommand");
+        ).withName("DisableShooterCommand");
+
+        disableShooter.addRequirements(this);
+
+        return disableShooter;
     }
 
     /**
@@ -41,7 +48,6 @@ public class ShooterSubsystem extends SubsystemBase {
         // TODO: integrate other parts of the robot like the kicker, indexer, and intake.
 
         // State Machine for setting the hood angle
-
         StateMachine setHoodAngleStateMachine = new StateMachine("SetHoodAngle_StateMachine");
 
         // create the custom commands for the custom parameters
@@ -58,9 +64,7 @@ public class ShooterSubsystem extends SubsystemBase {
         // set the state to the hold angle state (slower, more accurate PID) when the hood is close enough to the goal
         setAngleState.switchTo(holdAngleState).when(hood::isAtGoal); 
 
-
         // State Machine for setting the flywheel speed
-
         StateMachine setFlywheelSpeedStateMachine = new StateMachine("SetFlywheelSpeed_StateMachine");
         
         // create the custom commands for the custom parameters
@@ -78,7 +82,12 @@ public class ShooterSubsystem extends SubsystemBase {
         setSpeedState.switchTo(holdSpeedState).when(flywheel::isAtGoal); 
 
         // create a custom command that runs both the flywheel speed's command and the hood angle's command
-        Command setHoodAndFlywheelCommand = Commands.parallel(setHoodAngleStateMachine, setFlywheelSpeedStateMachine);
+        Command setHoodAndFlywheelCommand = Commands.parallel(
+            setHoodAngleStateMachine,
+            setFlywheelSpeedStateMachine
+            ).withName("SetHoodAndFlywheelCommand");
+
+        setHoodAndFlywheelCommand.addRequirements(this);
 
         return setHoodAndFlywheelCommand;
     }
@@ -86,6 +95,12 @@ public class ShooterSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         params = ShotCalculator.getInstance().getParameters(null, null); // TODO: use RobotState class to get these params after it is implemented.
+
+        Logger.recordOutput("Shooter/Command", this.getCurrentCommand() == null ? "None" : this.getCurrentCommand().getName());
+        Logger.recordOutput("Shooter/shot parameters", params);
+
+
+        ShotCalculator.getInstance().clearShootingParameters();
     }
 }
 

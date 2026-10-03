@@ -67,6 +67,10 @@ public class FlywheelSubsystem extends SubsystemBase {
   public void periodic() {
     io.updateInputs(inputs);
     Logger.processInputs(getName(), inputs);
+
+    String commandName = getCurrentCommand() == null ? "None" : getCurrentCommand().getName();
+
+    Logger.recordOutput("Flywheel/Command", commandName);
   }
 
   /**
@@ -74,7 +78,7 @@ public class FlywheelSubsystem extends SubsystemBase {
    * @return the command the set the flywheel's speed
    */
   public Command spinUpCommand(Supplier<Double> mpsSupplier){
-    return Commands.run(() -> this.spinUp(mpsSupplier.get()), this).repeatedly().withName("spinUpFlywheel");
+    return Commands.run(() -> this.spinUp(mpsSupplier.get()), this).withName("spinUpFlywheel");
   }
 
   /**
@@ -82,7 +86,7 @@ public class FlywheelSubsystem extends SubsystemBase {
    * @return the command the hold the flywheel's speed
    */
   public Command holdSpeedCommand(Supplier<Double> mpsSupplier){
-    return Commands.run(() -> this.holdSpeed(mpsSupplier.get()), this).repeatedly().withName("holdFlywheelSpeed");
+    return Commands.run(() -> this.holdSpeed(mpsSupplier.get()), this).withName("holdFlywheelSpeed");
   }
 
   /**

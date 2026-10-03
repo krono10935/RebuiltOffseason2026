@@ -6,9 +6,15 @@ import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 
 public class ShootCalculatorWithMovement  {
 
+    /**
+     * record to store the parameters of the shotcalculator with movement
+     */
     public record ShootCalculatorWithMovementParams(
+        /** the time of flight from shoot to hub */
         double timeOfFlight,
+        /** the predicted pose of the robot when the shooter shoots */
         Pose2d lookaheadPose,
+        /** the distance from the predicted pose to the hub */
         double lookaheadShooterToTargetDistance) {
     }
 

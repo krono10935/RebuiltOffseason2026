@@ -1,6 +1,7 @@
 package frc.robot.subsystems.shooter.hood;
 
 import com.revrobotics.spark.ClosedLoopSlot;
+import com.revrobotics.spark.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
@@ -14,39 +15,41 @@ import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import frc.lib.statemachine.StateMachine.StateName;
 
 public class HoodConstants {
-    // most beautiful TODOs ever
     /** CANID of the hood's motor */
     public static final int HOOD_MOTOR_CANID = 0; // TODO: change to correct CANID
 
     /** how much we are willing to tolerate differences between set PID angle the and actual angle */
-    public static final Rotation2d DEGREE_TOLERANCE = Rotation2d.fromDegrees(0.25); // TODO: tweak
+    public static final Rotation2d DEGREE_TOLERANCE = Rotation2d.fromDegrees(0.75); // TODO: tweak
 
-    /** gear ratio between hood motor and the hood */
-    public static final double GEAR_RATIO = 6.7; // TODO: get the real value from cad
+    /** gear ratio between encoder and the hood */
+    public static final double ENCODER_TO_HOOD_RATIO = 3.0;
+
+    /** gear ratio between motor and hood */
+    public static final double TOTAL_GEAR_RATIO = 22.5;
 
     /** gear box of the 1 NEO2 motor (currently unavailable but close enough to .getNEO()) */
     public static final DCMotor GEAR_BOX = DCMotor.getNEO(1); // TODO: change to NEO 2 when available
 
     /** moment of inertia of the hood */
-    private static final double MOMENT_OF_INERTIA = 0.001; // TODO: get the real value from cad
+    private static final double MOMENT_OF_INERTIA = 0.023; // TODO: get the real value from cad
 
     /** length of the hood in meters */
-    private static final double HOOD_LENGTH_METERS = 0.3; // TODO: get the real value from cad
+    private static final double HOOD_LENGTH_METERS = 0.21; // TODO: make sure it's real value
 
     /** the angle where is hood is closed (0) */
-    public static final Rotation2d HOOD_CLOSE_ANGLE = Rotation2d.fromDegrees(0); // TODO: get the real value from cad 
+    public static final Rotation2d HOOD_CLOSE_ANGLE = Rotation2d.fromDegrees(0);
 
     /** the max angle the hood can reach */
-    public static final Rotation2d HOOD_MAX_ANGLE = Rotation2d.fromDegrees(45); // TODO: get the real value from cad
+    public static final Rotation2d HOOD_MAX_ANGLE = Rotation2d.fromDegrees(43);
 
     /** whether the simulation should apply gravity forces */
-    private static final boolean SIMULATE_GRAVITY = false; // TODO: change to wanted mode
+    private static final boolean SIMULATE_GRAVITY = false; // TODO: change when necesarry
 
     /** the state name of the stop hood state machine command */
     public static final StateName STOP_HOOD_STATE_NAME = new StateName("stop hood");
 
     /** the state name of the disable hood state machine command */
-    public static final StateName ZERO_HOOD_STATE_NAME = new StateName("set hood close angle");
+    public static final StateName ZERO_HOOD_STATE_NAME = new StateName("close hood");
 
     /**
      * @return the hood motor's configuration
@@ -57,16 +60,15 @@ public class HoodConstants {
         // general
 
         config.idleMode(IdleMode.kBrake);
+        config.closedLoop.feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
+
+        // unit conversion
+        config.absoluteEncoder.positionConversionFactor(1.0 / ENCODER_TO_HOOD_RATIO);
+        config.encoder        .positionConversionFactor(1.0 / TOTAL_GEAR_RATIO);
 
         // configure PIDs
-
-        config.closedLoop.pid(1, 1, 1); // TODO: tweak
-        config.closedLoop.pid(1, 1, 1, ClosedLoopSlot.kSlot1);
-
-        // configure feedForwards
-
-        config.closedLoop.feedForward.kCos(0.67); // TODO: tweak
-        config.closedLoop.feedForward.kCos(0.6942041, ClosedLoopSlot.kSlot1); // TODO: tweak
+        config.closedLoop.pid(8.0, 0.0, 0.0); // TODO: tweak
+        config.closedLoop.pid(8.0, 1.0, 0.0, ClosedLoopSlot.kSlot1);
 
         // current limits
 
@@ -82,7 +84,7 @@ public class HoodConstants {
         return LinearSystemId.createSingleJointedArmSystem(
             GEAR_BOX,
             MOMENT_OF_INERTIA,
-            GEAR_RATIO
+            TOTAL_GEAR_RATIO
         );
     }
 
@@ -93,7 +95,7 @@ public class HoodConstants {
         return new SingleJointedArmSim(
             getPlant(),
             GEAR_BOX,
-            GEAR_RATIO, 
+            TOTAL_GEAR_RATIO, 
             HOOD_LENGTH_METERS, 
             HOOD_CLOSE_ANGLE.getRadians(), 
             HOOD_MAX_ANGLE.getRadians(), 

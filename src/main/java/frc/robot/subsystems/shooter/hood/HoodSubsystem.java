@@ -13,9 +13,9 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.math.IsNear;
 import frc.lib.statemachine.StateMachine;
 import frc.lib.statemachine.StateMachine.State;
-import frc.lib.statemachine.StateMachine.StateName;
 
 public class HoodSubsystem extends SubsystemBase {
 
@@ -29,77 +29,86 @@ public class HoodSubsystem extends SubsystemBase {
 
   }
 
-    /**
-     * command the io to set the wanted hood angle
-     * @param angle the wanted angle
-     */
-    public void setAngle(Rotation2d angle){
-      io.setAngle(angle);
-    }
+  /**
+   * command the io to set the wanted hood angle
+   * @param angle the wanted angle
+   */
+  public void setAngle(Rotation2d angle){
+    io.setAngle(angle);
+  }
 
-    /**
-     * commands the io to hold the wanted hood angle
-     * @param angle the wanted angle
-     */
-    public void holdAngle(Rotation2d angle){
-      io.holdAngle(angle);
-    }
+  /**
+   * commands the io to hold the wanted hood angle
+   * @param angle the wanted angle
+   */
+  public void holdAngle(Rotation2d angle){
+    io.holdAngle(angle);
+  }
 
-    /**
-     * commands the io to stop the hood
-     */
-    public void stop(){
-      io.stop();
-    }
+  /**
+   * commands the io to stop the hood
+   */
+  public void stop(){
+    io.stop();
+  }
 
-    /**
-     * @return whether the hood is at goal (within tolerance)
-     */
-    public boolean isAtGoal(){
-      return inputs.isAtGoal;
-    }
+  /**
+   * @return whether the hood is at goal (within tolerance)
+   */
+  public boolean isAtGoal(){
+    return inputs.isAtGoal;
+  }
+
+  /**
+   * @return whether the hood is at goal (within tolerance)
+   */
+  public boolean isHoodClosed(){
+    return IsNear.isNear(inputs.currentAngle, HoodConstants.HOOD_CLOSE_ANGLE, HoodConstants.DEGREE_TOLERANCE);
+  }
 
   @Override
   public void periodic() {
     io.updateInputs(inputs);
-    Logger.processInputs(getName(), inputs); 
+    Logger.processInputs(getName(), inputs);
+    
+    String commandName = getCurrentCommand() == null ? "None" : getCurrentCommand().getName();
+    Logger.recordOutput("Hood/Command", commandName);
   }
 
-    /**
-   * @param angleSupplier the wanted angle
-   * @return the command the set the hood's angle
-   */
+  /**
+  * @param angleSupplier the wanted angle
+  * @return the command the set the hood's angle
+  */
   public Command setAngleCommand(Supplier<Rotation2d> angleSupplier){
-    return Commands.run(() -> this.setAngle(angleSupplier.get()), this).repeatedly().withName("setHoodAngle");
+    return Commands.run(() -> this.setAngle(angleSupplier.get()), this).withName("setHoodAngle");
   }
 
   /**
    * @param angleSupplier the wanted angle
    * @return the command the hold the hood's angle
    */
-  public Command holdAngleCommand(Supplier<Rotation2d> angleSupplier){
-    return Commands.run(() -> this.holdAngle(angleSupplier.get()), this).repeatedly().withName("holdHoodAngle");
+  public Command holdAngleCommand(Supplier<Rotation2d> angleSupplier) {
+    return Commands.run(() -> this.holdAngle(angleSupplier.get()), this).withName("holdHoodAngle");
   }
 
   /**
   * @return the command to stop the flywheel
   */
-  public Command stopCommand(){
+  public Command stopCommand() {
     return Commands.run(this::stop, this).withName("stopHood");
   }
 
-  public Command disableHoodCommand()
-  {
-    StateMachine stateMachine = new StateMachine("DisableHood_StateMachine");
+  public Command disableHoodCommand() {
+    StateMachine disableHoodStateMachine = new StateMachine("DisableHood_StateMachine");
 
-    State zeroHoodState = stateMachine.addState(setAngleCommand(() -> HoodConstants.HOOD_CLOSE_ANGLE), HoodConstants.ZERO_HOOD_STATE_NAME);
+    State zeroHoodState = disableHoodStateMachine.addState(setAngleCommand(() -> HoodConstants.HOOD_CLOSE_ANGLE), HoodConstants.ZERO_HOOD_STATE_NAME);
 
-    State stopHoodState = stateMachine.addState(stopCommand(), HoodConstants.STOP_HOOD_STATE_NAME);
+    State stopHoodState = disableHoodStateMachine.addState(stopCommand(), HoodConstants.STOP_HOOD_STATE_NAME);
 
-    stateMachine.setInitialState(zeroHoodState);
+    disableHoodStateMachine.setInitialState(zeroHoodState);
 
-    zeroHoodState.switchTo(stopHoodState).when(this::isAtGoal);
+    zeroHoodState.switchTo(stopHoodState).when(this::isHoodClosed);
 
-    return stateMachine;
+    return disableHoodStateMachine;
   }
 }
