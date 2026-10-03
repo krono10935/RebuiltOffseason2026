@@ -1,14 +1,11 @@
 package frc.robot.subsystems.intake;
 
-import java.security.PrivateKey;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.lib.statemachine.StateMachine;
 import frc.lib.statemachine.StateMachine.State;
-import frc.robot.subsystems.intake.pivot.PivotConstants;
 import frc.robot.subsystems.intake.pivot.PivotSubsystem;
 import frc.robot.subsystems.intake.pivot.PivotSubsystem.PivotState;
-import frc.robot.subsystems.intake.roller.RollerConstants;
 import frc.robot.subsystems.intake.roller.RollerSubsystem;
 import frc.robot.subsystems.intake.roller.RollerSubsystem.RollerState;
 

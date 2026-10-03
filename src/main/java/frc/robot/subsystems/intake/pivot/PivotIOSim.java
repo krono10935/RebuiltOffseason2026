@@ -26,7 +26,7 @@ public class PivotIOSim implements PivotIO {
     }
     @Override
     public void setRotation(Rotation2d rotation) {
-        motor.setControl(new PositionVoltage(rotation.getRotations()).withSlot(0));
+        motor.setControl(new PositionVoltage(rotation.getRotations()));
     }
 
     @Override

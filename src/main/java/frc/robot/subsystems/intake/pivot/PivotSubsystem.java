@@ -8,9 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.math.IsNear;
-import frc.lib.statemachine.StateMachine;
 import frc.lib.statemachine.StateMachine.StateName;
-import frc.robot.subsystems.intake.roller.RollerConstants;
 
 public class PivotSubsystem extends SubsystemBase {
     private final PivotInputsAutoLogged inputs;

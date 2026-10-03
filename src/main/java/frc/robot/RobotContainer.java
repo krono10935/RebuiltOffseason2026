@@ -18,14 +18,9 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.RobotState;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 import frc.robot.subsystems.drivetrain.configsStructure.ChassisConstants;
@@ -64,7 +59,6 @@ public class RobotContainer {
     drivetrain = new Drivetrain(ConduitApi.getInstance()::getPDPVoltage, Constants.CHASSIS_TYPE.constants);
 
     autoChooser = registerNamedCommand();
-    controllerBindings();
   }
 
   public Drivetrain getDrivetrain(){
@@ -125,15 +119,5 @@ public class RobotContainer {
       autoChooser.onChange(this::displayChosenAuto);
       autoChooser.addDefaultOption("idle", drivetrain.idle());
       return autoChooser;
-  }
-
-  public void controllerBindings(){
-    driverController.b().onTrue(intakeControlsCoordinator.getDisableIntake(false).withName("disableIntake"));
-
-    driverController.leftTrigger(0.5).or(driverController.leftBumper()).onFalse(intakeControlsCoordinator.getOpenPivotOffRoller(false).withName("openPivotOffRoller"));
-
-    driverController.leftBumper().whileTrue(intakeControlsCoordinator.getDeployIntakeReverse(false).withName("deployIntakeReverse"));
-
-    driverController.leftTrigger().whileTrue(intakeControlsCoordinator.getDeployIntake(false).withName("deployIntake"));
   }
 }
