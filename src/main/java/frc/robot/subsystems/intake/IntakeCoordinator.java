@@ -50,7 +50,7 @@ public class IntakeCoordinator {
             case OPEN: yield changePivotStateSlow ? pivot.openPivotSlow(): pivot.openPivot();
             case CLOSE: yield changePivotStateSlow ? pivot.closePivotSlow(): pivot.closePivot();
         };
-        pivotCommand = pivotCommand.withName(pivotCommand.getName());
+        pivotCommand = pivotCommand.withName(pivotCommand.getName() + changePivotStateSlow);
 
         State rollerState = intakeStateMachine.addState(rollerCommand, rollerTargetState.getStateName());
         State pivotState = intakeStateMachine.addState(pivotCommand, pivotTargetState.getStateName());
