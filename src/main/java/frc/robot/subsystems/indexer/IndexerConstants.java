@@ -30,7 +30,7 @@ public class IndexerConstants {
     private static final double MOMENT_OF_INERTIA = 0.001; //TODO: get the real value from cad
 
     /** the gear ratio between motors and indexer */
-    public static final double GEAR_RATIO = 2; //TODO: get the real value from cad
+    public static final double GEAR_RATIO = 3.1; 
 
     /** gear box of all three motors */
     private static final DCMotor GEAR_BOX = DCMotor.getKrakenX60(3);
