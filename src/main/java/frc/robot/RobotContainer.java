@@ -24,9 +24,9 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.drivetrain.Drivetrain;
 import frc.robot.subsystems.drivetrain.configsStructure.ChassisConstants;
-import frc.robot.subsystems.intake.IntakeCoordinator;
-import frc.robot.subsystems.intake.pivot.PivotSubsystem;
-import frc.robot.subsystems.intake.roller.RollerSubsystem;
+import frc.robot.subsystems.shooter.ShooterSubsystem;
+import frc.robot.subsystems.shooter.flywheel.FlywheelSubsystem;
+import frc.robot.subsystems.shooter.hood.HoodSubsystem;
 
 
 public class RobotContainer {
@@ -34,6 +34,10 @@ public class RobotContainer {
   private static RobotContainer instance = null;
 
   public final Drivetrain drivetrain;
+
+  private final CommandXboxController controller;
+
+  private final ShooterSubsystem shooter;
 
   private final LoggedDashboardChooser<Command> autoChooser;
 
@@ -58,8 +62,16 @@ public class RobotContainer {
 
   private RobotContainer() {
     drivetrain = new Drivetrain(ConduitApi.getInstance()::getPDPVoltage, Constants.CHASSIS_TYPE.constants);
-    
+
+    shooter = new ShooterSubsystem(new FlywheelSubsystem(), new HoodSubsystem());
+
+    controller = new CommandXboxController(0);
+
     autoChooser = registerNamedCommand();
+
+    controller.rightTrigger(0.2).whileTrue(shooter.shootCommand());
+
+    controller.rightTrigger(0.2).onFalse(shooter.disableShooterCommand());
   }
 
   public Drivetrain getDrivetrain(){

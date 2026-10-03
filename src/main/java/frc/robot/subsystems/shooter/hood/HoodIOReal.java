@@ -12,7 +12,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.lib.math.IsNear;
 
-public class HoodIOReal implements HoodIO{
+public class HoodIOReal implements HoodIO {
 
     public enum HoodState {
         SETTING_ANGLE,

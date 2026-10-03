@@ -60,7 +60,7 @@ public class HoodSubsystem extends SubsystemBase {
   }
 
   /**
-   * @return whether the hood is at goal (within tolerance)
+   * @return whether the hood is closed (within tolerance)
    */
   public boolean isHoodClosed(){
     return IsNear.isNear(inputs.currentAngle, HoodConstants.HOOD_CLOSE_ANGLE, HoodConstants.DEGREE_TOLERANCE);

@@ -46,7 +46,6 @@ public class ShotCalculator {
      * @param offset the offset to add
      */
     public void addHoodAngleOffset(Rotation2d offset){
-
         hoodOffset = hoodOffset.plus(offset);
     }
 
@@ -70,7 +69,7 @@ public class ShotCalculator {
         VALID("Valid", AlertType.kInfo),
         OUT_OF_RANGE("Out of shooting range", AlertType.kWarning),
         TOO_MUCH_OMEGA_SPEED("Stop spinning", AlertType.kWarning),
-        HUB_INACTIVE("Womp womp the hub is inactive", AlertType.kWarning),
+        HUB_INACTIVE("The hub is inactive", AlertType.kWarning),
         SHOULD_NOT_BE_MOVING("Stop moving", AlertType.kWarning);
 
         private final Alert alert;
@@ -79,12 +78,16 @@ public class ShotCalculator {
             alert = new Alert(message, alertType);
         }
 
+        /** toggle whether the alert is shown */
         public void toggleAlert(boolean activate){
             alert.set(activate);
         }
     }
 
-    /** singleton getter */
+    /**
+     * singleton getter
+     * @return the singleton instance
+     */
     public static ShotCalculator getInstance() {
         if (instance == null) instance = new ShotCalculator();
         return instance;
@@ -326,7 +329,6 @@ public class ShotCalculator {
      * @return Translation2d object encompassing the field relative X and Y speeds
      */
     private Translation2d getShooterFieldRelativeSpeeds(ChassisSpeeds robotVelocityFieldRelative, Pose2d estimatedShooterPose){
-        
         Translation2d linearSpeed = new Translation2d(
             robotVelocityFieldRelative.vxMetersPerSecond,
             robotVelocityFieldRelative.vyMetersPerSecond
