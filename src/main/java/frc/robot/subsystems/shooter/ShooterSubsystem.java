@@ -2,6 +2,7 @@ package frc.robot.subsystems.shooter;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -103,6 +104,10 @@ public class ShooterSubsystem extends SubsystemBase {
 
 
         ShotCalculator.getInstance().clearShootingParameters();
+    }
+
+    public Trigger isReadyToShoot(){
+        return new Trigger(()-> true);
     }
 }
 

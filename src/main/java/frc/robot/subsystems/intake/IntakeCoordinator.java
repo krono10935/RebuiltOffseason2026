@@ -9,13 +9,14 @@ import frc.robot.subsystems.intake.pivot.PivotSubsystem.PivotState;
 import frc.robot.subsystems.intake.roller.RollerSubsystem;
 import frc.robot.subsystems.intake.roller.RollerSubsystem.RollerState;
 
+import java.util.function.BooleanSupplier;
+
 /**This class is used to coordinate the roller and pivot commands */
 public class IntakeCoordinator {
     /**The pivot object we will be using */
     private final PivotSubsystem pivot;
     /**The roller object we will be using */
     private final RollerSubsystem roller;
-
     /**Create a new IntakeCoordinator */
     public IntakeCoordinator(PivotSubsystem pivot, RollerSubsystem roller){
         this.pivot = pivot;
@@ -53,11 +54,9 @@ public class IntakeCoordinator {
         State pivotState = intakeStateMachine.addState(pivotCommand, pivotTargetState.getStateName());
 
         intakeStateMachine.setInitialState(pivotState);
+
         pivotState.switchTo(rollerState).when(
-            switch (pivotTargetState) {
-                case OPEN: yield (() -> pivot.isPivotOpen());
-                case CLOSE: yield (() -> pivot.isPivotClose());
-            }
+                pivotTargetState == PivotState.OPEN ? pivot::isPivotOpen : pivot::isPivotClose
         );
 
         return intakeStateMachine;

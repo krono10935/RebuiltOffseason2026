@@ -16,6 +16,12 @@ import frc.robot.Constants;
 
 public abstract class SuperStructureBase extends SubsystemBase {
     
+    public static class SuperMode extends StateName {
+        public SuperMode(String stateName) {
+            super(stateName);
+        }
+    }
+    
     // All registered states of the SuperStructure
     private final List<State> registeredStates;
 
@@ -41,7 +47,7 @@ public abstract class SuperStructureBase extends SubsystemBase {
      * @param stateName The name of the State which you are registering.
      * @return The state that has just been initialized and registered.
      */
-    protected State registerState(Command cmd, StateName stateName){
+    protected State registerState(Command cmd, SuperMode stateName) {
         var state = statemachine.addState(cmd, stateName);
         registeredStates.add(state);
         return state;
@@ -101,7 +107,11 @@ public abstract class SuperStructureBase extends SubsystemBase {
         return statemachine;
     }
 
-    protected State getRegisterdState(StateName stateName){
+    protected State getRegisterdState(SuperMode stateName){
         return statemachine.getState(stateName);
     }
+
+    
 }
+
+
