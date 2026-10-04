@@ -39,7 +39,7 @@ public class FlywheelConstants {
     private static final DCMotor GEAR_BOX = DCMotor.getKrakenX60(MOTOR_IDS.length);
     
     /** the offset from the robot's center to the flywheel's position */
-    public static final Transform3d ROBOT_TO_FLYWHEEL = new Transform3d(0.23, 0.30, 0.20, new Rotation3d(0, 0, 90));
+    public static final Transform3d ROBOT_TO_FLYWHEEL = new Transform3d(0.23, 0.30, 0.20, new Rotation3d(0, 0, UnitConversions.degreesToRadians(90)));
         
     /**
      * @param isInverted should the motor's output be inverted
