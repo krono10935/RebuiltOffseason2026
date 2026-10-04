@@ -291,7 +291,9 @@ public class DrivetrainReal extends Drivetrain {
             () -> new DriveSpeeds(
                 homeToSupplierChassisSpeedsCalculator.getControllerInputs(), 
                 false))
-        .withName("DriveAndHomeToAngle");
+        .beforeStarting(
+            Commands.runOnce(homeToSupplierChassisSpeedsCalculator::resetThetaController, this))
+            .withName("DriveAndHomeToAngle");
     }
 
     public Command driveBySpeedsSupplier(Supplier<DriveSpeeds> speedsSupplier){
