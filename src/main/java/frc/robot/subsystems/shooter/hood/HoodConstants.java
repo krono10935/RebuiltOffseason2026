@@ -11,6 +11,7 @@ import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.system.LinearSystem;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
+import edu.wpi.first.wpilibj.DutyCycle;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import frc.lib.statemachine.StateMachine.StateName;
 
@@ -18,14 +19,20 @@ public class HoodConstants {
     /** CANID of the hood's motor */
     public static final int HOOD_MOTOR_CANID = 0; // TODO: change to correct CANID
 
+    /** roborio port of the absolute encoder */
+    public static final int ABSOLUTE_ENCODER_PORT = 0; // TODO: change to correct roborio port
+
     /** how much we are willing to tolerate differences between set PID angle the and actual angle */
     public static final Rotation2d DEGREE_TOLERANCE = Rotation2d.fromDegrees(0.75); // TODO: tweak
 
-    /** gear ratio between encoder and the hood */
-    public static final double ENCODER_TO_HOOD_RATIO = 3.0;
+    /** gear ratio between absolute encoder and the hood */
+    public static final double ABSOLUTE_ENCODER_TO_HOOD_RATIO = 3.0;
 
     /** gear ratio between motor and hood */
     public static final double TOTAL_GEAR_RATIO = 22.5;
+
+    /** unit conversion between the absolute encoder's position and the encoder's position (same as motor position) */
+    public static final double ABSOLUTE_ENCODER_TO_ENCODER_POS = TOTAL_GEAR_RATIO / ABSOLUTE_ENCODER_TO_HOOD_RATIO;
 
     /** gear box of the 1 NEO2 motor (currently unavailable but close enough to .getNEO()) */
     public static final DCMotor GEAR_BOX = DCMotor.getNEO(1); // TODO: change to NEO 2 when available
@@ -60,10 +67,10 @@ public class HoodConstants {
         // general
 
         config.idleMode(IdleMode.kBrake);
-        config.closedLoop.feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
+        config.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
 
         // unit conversion
-        config.absoluteEncoder.positionConversionFactor(1.0 / ENCODER_TO_HOOD_RATIO);
+        config.absoluteEncoder.positionConversionFactor(1.0 / ABSOLUTE_ENCODER_TO_HOOD_RATIO);
         config.encoder        .positionConversionFactor(1.0 / TOTAL_GEAR_RATIO);
 
         // configure PIDs
