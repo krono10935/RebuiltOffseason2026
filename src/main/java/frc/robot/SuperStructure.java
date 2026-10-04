@@ -69,7 +69,7 @@ public class SuperStructure extends SuperStructureBase{
 //        drivetrain.setDefaultCommand(new );
         bindWhileTrue(getRegisterdState(Constants.SHOOTING_MODE_STATE_NAME), SHOOTING_TRIGGER);
         bindWhileFalse(getRegisterdState(Constants.INTAKING_MODE_STATE_NAME), SHOOTING_TRIGGER);
-        bindOnTrue(getRegisterdState(Constants.RESET_GYRO_NAME), RESET_GYRO_TRIGGER);
+        bindWhileTrue(getRegisterdState(Constants.RESET_GYRO_NAME), RESET_GYRO_TRIGGER);
         driverXboxController.a().onTrue(drivetrain.driveToPose(new Pose2d(14,4,new Rotation2d(180))));
     }
 
@@ -91,7 +91,7 @@ public class SuperStructure extends SuperStructureBase{
 
     private void overrideIdleState(){
         registerState(shooter.disableShooterCommand().
-                alongWith(intake.getDisableIntake(false)).
+                alongWith(intake.disableIntake(false)).
                         alongWith(indexer.turnOffIndexer()),Constants.IDLE_STATE_NAME);
     }
 
@@ -110,8 +110,8 @@ public class SuperStructure extends SuperStructureBase{
         activateShooting.switchTo(disableShooting).when(SHOOTING_TRIGGER.negate());
 
         StateMachine intakeShootingStateMachine = new StateMachine("intakeShooterStateMachine");
-        StateMachine.State pivotOpenRollerOn = intakeShootingStateMachine.addState(intake.getDeployIntake(false), Constants.PIVOT_OPEN_ROLLER_ON_NAME);
-        StateMachine.State pivotCloseRollerOff = intakeShootingStateMachine.addState(intake.getDisableIntake(true), Constants.PIVOT_CLOSE_ROLLER_OFF_NAME);
+        StateMachine.State pivotOpenRollerOn = intakeShootingStateMachine.addState(intake.deployIntake(false), Constants.PIVOT_OPEN_ROLLER_ON_NAME);
+        StateMachine.State pivotCloseRollerOff = intakeShootingStateMachine.addState(intake.disableIntake(true), Constants.PIVOT_CLOSE_ROLLER_OFF_NAME);
         intakeShootingStateMachine.setInitialState(pivotOpenRollerOn);
         pivotOpenRollerOn.switchTo(pivotCloseRollerOff).when(INTAKE_TRIGGER.negate().and(shooter.isReadyToShoot()));
         pivotCloseRollerOff.switchTo(pivotOpenRollerOn).when(INTAKE_TRIGGER);
@@ -129,10 +129,10 @@ public class SuperStructure extends SuperStructureBase{
     private Command getIntakeModeStateCommand(){
 
         StateMachine intakeStateMachine = new StateMachine("intakeStateMachine");
-        StateMachine.State pivotOpenRollerOn = intakeStateMachine.addState(intake.getDeployIntake(false), Constants.PIVOT_OPEN_ROLLER_ON_NAME);
-        StateMachine.State pivotOpenRollerOff = intakeStateMachine.addState(intake.getOpenPivotOffRoller(false), Constants.PIVOT_OPEN_ROLLER_OFF_NAME);
-        StateMachine.State pivotCloseRollerOff = intakeStateMachine.addState(intake.getDisableIntake(false), Constants.PIVOT_CLOSE_ROLLER_OFF_NAME);
-        StateMachine.State pivotOpenRollerReverse = intakeStateMachine.addState(intake.getDeployIntakeReverse(false),Constants.OUTTAKE_NAME);
+        StateMachine.State pivotOpenRollerOn = intakeStateMachine.addState(intake.deployIntake(false), Constants.PIVOT_OPEN_ROLLER_ON_NAME);
+        StateMachine.State pivotOpenRollerOff = intakeStateMachine.addState(intake.openPivotOffRoller(false), Constants.PIVOT_OPEN_ROLLER_OFF_NAME);
+        StateMachine.State pivotCloseRollerOff = intakeStateMachine.addState(intake.disableIntake(false), Constants.PIVOT_CLOSE_ROLLER_OFF_NAME);
+        StateMachine.State pivotOpenRollerReverse = intakeStateMachine.addState(intake.deployIntakeReverse(false),Constants.OUTTAKE_NAME);
 
         intakeStateMachine.setInitialState(pivotCloseRollerOff);
         intakeStateMachine.switchFromAny(pivotOpenRollerOff,pivotCloseRollerOff,pivotOpenRollerReverse).to(pivotOpenRollerOn).when(INTAKE_TRIGGER);

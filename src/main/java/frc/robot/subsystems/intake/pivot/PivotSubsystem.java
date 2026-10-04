@@ -60,7 +60,7 @@ public class PivotSubsystem extends SubsystemBase {
 
     @Override
     public void periodic(){
-        io.resetMotorEncoder();
+        // io.resetMotorEncoder(); TODO make this once on initialization of the subsystem
         updateInputs();
         Logger.processInputs(getName(), inputs);
         

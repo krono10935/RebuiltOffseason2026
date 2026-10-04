@@ -67,21 +67,12 @@ public abstract class SuperStructureBase extends SubsystemBase {
      * @param to The state to activate on the trigger activation.
      * @param binding The trigger which trigger's the state.
      */
-    protected void bindOnTrue(State to, Trigger binding){
+    protected void bindWhileTrue(State to, Trigger binding){
         switchFromAnyOtherThanMyself(to, binding);
     }
 
-    protected void bindOnFalse(State to, Trigger binding){
-        switchFromAnyOtherThanMyself(to, binding.negate());
-    }
-
-    protected void bindWhileTrue(State to, Trigger binding){
-        bindOnTrue(to, binding);
-        to.switchTo(getRegisterdState(Constants.IDLE_STATE_NAME)).when(binding.negate());
-    }
-
     protected void bindWhileFalse(State to, Trigger binding){
-        bindWhileTrue(to, binding.negate());
+        switchFromAnyOtherThanMyself(to, binding.negate());
     }
 
     protected void bindToggleTrue(State to, Trigger binding){

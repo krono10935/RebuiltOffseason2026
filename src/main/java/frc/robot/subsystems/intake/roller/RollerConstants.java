@@ -48,7 +48,7 @@ public class RollerConstants {
     public static SparkMaxConfig getLeadConfig(){
         SparkMaxConfig motorConfig = new SparkMaxConfig();
 
-        motorConfig.encoder.velocityConversionFactor(RPM_TO_MPS_RATIO);
+        motorConfig.encoder.velocityConversionFactor(RPM_TO_MPS_RATIO / GEAR_RATIO);
         motorConfig.smartCurrentLimit(80,30); 
         return motorConfig;
     }

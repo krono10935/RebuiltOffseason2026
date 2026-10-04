@@ -5,13 +5,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.statemachine.StateMachine;
 import frc.lib.statemachine.StateMachine.State;
-import frc.lib.statemachine.StateMachine.StateName;
 import frc.robot.subsystems.intake.pivot.PivotSubsystem;
 import frc.robot.subsystems.intake.pivot.PivotSubsystem.PivotState;
 import frc.robot.subsystems.intake.roller.RollerSubsystem;
 import frc.robot.subsystems.intake.roller.RollerSubsystem.RollerState;
 
-import java.util.function.BooleanSupplier;
 
 /**This class is used to coordinate the roller and pivot commands */
 public class IntakeCoordinator {
