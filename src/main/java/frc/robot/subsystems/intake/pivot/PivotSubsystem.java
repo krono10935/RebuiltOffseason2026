@@ -17,7 +17,6 @@ import frc.lib.statemachine.StateMachine.StateName;
 public class PivotSubsystem extends SubsystemBase {
     private final PivotInputsAutoLogged inputs;
     private final PivotIO io;
-    private final DutyCycleEncoder dutyCycleEncoder;
 
     /**An enum of the two possible pivot target states: open and close */
     public enum PivotState{
@@ -57,12 +56,11 @@ public class PivotSubsystem extends SubsystemBase {
     public PivotSubsystem(){
         inputs = new PivotInputsAutoLogged();
         io = RobotBase.isReal() ? new PivotIOCTRE() : new PivotIOSim(); 
-        dutyCycleEncoder = new DutyCycleEncoder(PivotConstants.DUTY_CYCLE_ENCODER_PORT);
     }
 
     @Override
     public void periodic(){
-        io.resetMotorEncoder(dutyCycleEncoder);
+        io.resetMotorEncoder();
         updateInputs();
         Logger.processInputs(getName(), inputs);
         

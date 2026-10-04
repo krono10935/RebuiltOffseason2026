@@ -9,7 +9,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 
 public interface PivotIO {
-
     @AutoLog
     public class PivotInputs{
         /**The temperature of the motor in celius */
@@ -48,5 +47,5 @@ s     */
      * @param motor The motor whose encoder we are reseting
      * @param referenceEncoder The absoluteEncoder we are reading from.
      */
-    void resetMotorEncoder(DutyCycleEncoder referenceEncoder);
+    void resetMotorEncoder();
 }
