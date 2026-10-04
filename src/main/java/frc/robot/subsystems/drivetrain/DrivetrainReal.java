@@ -134,6 +134,8 @@ public class DrivetrainReal extends Drivetrain {
             ZEROS
         );
 
+        goalSpeeds = null;
+
         for (int i = 0; i < 4; i++){
             io[i].setTargetState(previousSetpoint.moduleStates()[i]);
         }
