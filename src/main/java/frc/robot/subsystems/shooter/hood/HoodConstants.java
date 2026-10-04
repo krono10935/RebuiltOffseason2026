@@ -29,10 +29,10 @@ public class HoodConstants {
     public static final double ABSOLUTE_ENCODER_TO_HOOD_RATIO = 3.0;
 
     /** gear ratio between motor and hood */
-    public static final double TOTAL_GEAR_RATIO = 22.5;
+    public static final double MOTOR_TO_MECHANISM_RATIO = 22.5;
 
     /** unit conversion between the absolute encoder's position and the encoder's position (same as motor position) */
-    public static final double ABSOLUTE_ENCODER_TO_ENCODER_POS = TOTAL_GEAR_RATIO / ABSOLUTE_ENCODER_TO_HOOD_RATIO;
+    public static final double ABSOLUTE_ENCODER_TO_ENCODER_POS = MOTOR_TO_MECHANISM_RATIO / ABSOLUTE_ENCODER_TO_HOOD_RATIO;
 
     /** gear box of the 1 NEO2 motor (currently unavailable but close enough to .getNEO()) */
     public static final DCMotor GEAR_BOX = DCMotor.getNEO(1); // TODO: change to NEO 2 when available
@@ -71,7 +71,7 @@ public class HoodConstants {
 
         // unit conversion
         config.absoluteEncoder.positionConversionFactor(1.0 / ABSOLUTE_ENCODER_TO_HOOD_RATIO);
-        config.encoder        .positionConversionFactor(1.0 / TOTAL_GEAR_RATIO);
+        config.encoder        .positionConversionFactor(1.0 / MOTOR_TO_MECHANISM_RATIO);
 
         // configure PIDs
         config.closedLoop.pid(8.0, 0.0, 0.0); // TODO: tweak
@@ -91,7 +91,7 @@ public class HoodConstants {
         return LinearSystemId.createSingleJointedArmSystem(
             GEAR_BOX,
             MOMENT_OF_INERTIA,
-            TOTAL_GEAR_RATIO
+            MOTOR_TO_MECHANISM_RATIO
         );
     }
 
@@ -102,7 +102,7 @@ public class HoodConstants {
         return new SingleJointedArmSim(
             getPlant(),
             GEAR_BOX,
-            TOTAL_GEAR_RATIO, 
+            MOTOR_TO_MECHANISM_RATIO, 
             HOOD_LENGTH_METERS, 
             HOOD_CLOSE_ANGLE.getRadians(), 
             HOOD_MAX_ANGLE.getRadians(), 

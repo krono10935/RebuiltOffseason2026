@@ -5,12 +5,14 @@ import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 
 public class PivotIOCTRE implements PivotIO {
+    final DutyCycleEncoder dutyCycleEncoder;
     private final TalonFX motor;
     public PivotIOCTRE() {
         motor = new TalonFX(PivotConstants.MOTOR_CANID);
-
+        dutyCycleEncoder = new DutyCycleEncoder(PivotConstants.DUTY_CYCLE_ENCODER_PORT);
         motor.getConfigurator().apply(PivotConstants.getMotorConfig());
     }
 
@@ -27,7 +29,13 @@ public class PivotIOCTRE implements PivotIO {
     @Override
     public void stop() {
         motor.stopMotor();
+    }   
+
+    @Override
+    public void resetMotorEncoder() {
+        motor.setPosition(dutyCycleEncoder.get());
     }
+        
     
     @Override
     public void updateInputs(PivotInputs inputs) {
@@ -35,4 +43,6 @@ public class PivotIOCTRE implements PivotIO {
         inputs.motorTemperatureC = motor.getDeviceTemp().getValueAsDouble();
         inputs.angularVelocityRPS = motor.getVelocity().getValueAsDouble();
     }
+
+
 }
