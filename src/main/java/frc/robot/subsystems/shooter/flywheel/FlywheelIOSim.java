@@ -1,5 +1,7 @@
 package frc.robot.subsystems.shooter.flywheel;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -67,7 +69,11 @@ public class FlywheelIOSim implements FlywheelIO{
     {
         simState.setSupplyVoltage(RobotController.getBatteryVoltage());
 
+        Logger.recordOutput("Flywheel/Battery Voltage", RobotController.getBatteryVoltage());
+
         double motorVoltage = simState.getMotorVoltage();
+
+        Logger.recordOutput("Flywheel/Motor Voltage", motorVoltage);
 
         flywheelSim.setInputVoltage(motorVoltage);
         flywheelSim.update(Constants.LOOP_PERIOD_SECONDS);
@@ -92,6 +98,8 @@ public class FlywheelIOSim implements FlywheelIO{
 
         inputs.speedMPS = getLeadMotor().getVelocity().getValueAsDouble() * FlywheelConstants.FLYWHEEL_CIRCUMFERENCE;
         inputs.isAtGoal = IsNear.isNear(inputs.speedMPS, getLeadMotor().getClosedLoopReference().getValueAsDouble() * FlywheelConstants.FLYWHEEL_CIRCUMFERENCE, FlywheelConstants.MPS_TOLERANCE);
+
+        Logger.recordOutput("Flywheel/Goal", getLeadMotor().getClosedLoopReference().getValueAsDouble() * FlywheelConstants.FLYWHEEL_CIRCUMFERENCE);
     }
 
 }
