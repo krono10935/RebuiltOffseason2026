@@ -79,13 +79,13 @@ public class SuperStructure extends SuperStructureBase{
 
     private void registerShootingState(){
         registerState(
-                getShootingStateCommand(),
+                getShootingModeStateCommand(),
                 Constants.SHOOTING_STATE_NAME);
     }
 
     private void registerIntakingState(){
         registerState(
-                getIntakeStateCommand(),
+                getIntakeModeStateCommand(),
                 Constants.INTAKING_STATE_NAME);
     }
 
@@ -101,7 +101,7 @@ public class SuperStructure extends SuperStructureBase{
                 Constants.RESET_GYRO_NAME);
     }
 
-    private Command getShootingStateCommand(){
+    private Command getShootingModeStateCommand(){
         StateMachine shootingStateMachine = new StateMachine("shootingStateMachine");
         StateMachine.State activateShooting = shootingStateMachine.addState(shooter.shootCommand(), Constants.ACTIVATE_SHOOTING_NAME);
         StateMachine.State disableShooting = shootingStateMachine.addState(shooter.disableShooterCommand(), Constants.DISABLE_SHOOTING_NAME);
@@ -126,7 +126,7 @@ public class SuperStructure extends SuperStructureBase{
         return shootingStateMachine.alongWith(intakeShootingStateMachine.alongWith(indexerStateMachine)).withName("SHOOTING MODE");
     }
 
-    private Command getIntakeStateCommand(){
+    private Command getIntakeModeStateCommand(){
 
         StateMachine intakeStateMachine = new StateMachine("intakeStateMachine");
         StateMachine.State pivotOpenRollerOn = intakeStateMachine.addState(intake.getDeployIntake(false), Constants.PIVOT_OPEN_ROLLER_ON_NAME);
@@ -146,7 +146,7 @@ public class SuperStructure extends SuperStructureBase{
         indexerStateMachine.setInitialState(indexerOff);
         indexerOff.switchTo(indexerReverse).when(OUTTAKE_TRIGGER);
         indexerReverse.switchTo(indexerOff).when(OUTTAKE_TRIGGER.negate());
-        
-        return intakeStateMachine;
+
+        return intakeStateMachine.alongWith(indexerStateMachine);
     }
 }
