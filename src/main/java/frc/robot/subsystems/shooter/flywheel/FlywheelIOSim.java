@@ -73,7 +73,7 @@ public class FlywheelIOSim implements FlywheelIO{
         flywheelSim.update(Constants.LOOP_PERIOD_SECONDS);
 
         simState.addRotorPosition(
-            UnitConversions.RPMtoRotationsPerCycle(
+            UnitConversions.rotationsPerMinutetoRotationsPerCycle(
                 flywheelSim.getAngularVelocityRPM(), 
                 Constants.LOOP_PERIOD_SECONDS)
                 * FlywheelConstants.GEAR_RATIO);
