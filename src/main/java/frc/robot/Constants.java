@@ -44,6 +44,7 @@ public class Constants {
 
     public static final StateName INDEXER_ON_NAME = new StateName("INDEXER_ON");
     public static final StateName INDEXER_OFF_NAME = new StateName("INDEXER_OFF");
+    public static final StateName INDEXER_REVERSED_NAME = new StateName("INDEXER_REVERSED");
 
     public static final SuperStructureBase.SuperMode RESET_GYRO_NAME = new SuperStructureBase.SuperMode("RESET_GYRO");
 

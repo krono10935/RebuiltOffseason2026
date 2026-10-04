@@ -133,12 +133,20 @@ public class SuperStructure extends SuperStructureBase{
         StateMachine.State pivotOpenRollerOff = intakeStateMachine.addState(intake.getOpenPivotOffRoller(false), Constants.PIVOT_OPEN_ROLLER_OFF_NAME);
         StateMachine.State pivotCloseRollerOff = intakeStateMachine.addState(intake.getDisableIntake(false), Constants.PIVOT_CLOSE_ROLLER_OFF_NAME);
         StateMachine.State pivotOpenRollerReverse = intakeStateMachine.addState(intake.getDeployIntakeReverse(false),Constants.OUTTAKE_NAME);
+
         intakeStateMachine.setInitialState(pivotCloseRollerOff);
         intakeStateMachine.switchFromAny(pivotOpenRollerOff,pivotCloseRollerOff,pivotOpenRollerReverse).to(pivotOpenRollerOn).when(INTAKE_TRIGGER);
         intakeStateMachine.switchFromAny(pivotOpenRollerOff,pivotCloseRollerOff,pivotOpenRollerOn).to(pivotOpenRollerReverse).when(OUTTAKE_TRIGGER);
         intakeStateMachine.switchFromAny(pivotOpenRollerOff,pivotOpenRollerReverse,pivotOpenRollerOn).to(pivotCloseRollerOff).when(CLOSE_INTAKE_TRIGGER);
         intakeStateMachine.switchFromAny(pivotOpenRollerReverse,pivotOpenRollerOn).to(pivotOpenRollerOff).when(INTAKE_TRIGGER.negate().and(OUTTAKE_TRIGGER.negate()));
 
+        StateMachine indexerStateMachine = new  StateMachine("indexerStateMachine");
+        StateMachine.State indexerOff = indexerStateMachine.addState(indexer.turnOffIndexer(), Constants.INDEXER_OFF_NAME);
+        StateMachine.State indexerReverse = indexerStateMachine.addState(indexer.reverseIndexer(),Constants.INDEXER_REVERSED_NAME);
+        indexerStateMachine.setInitialState(indexerOff);
+        indexerOff.switchTo(indexerReverse).when(OUTTAKE_TRIGGER);
+        indexerReverse.switchTo(indexerOff).when(OUTTAKE_TRIGGER.negate());
+        
         return intakeStateMachine;
     }
 }
