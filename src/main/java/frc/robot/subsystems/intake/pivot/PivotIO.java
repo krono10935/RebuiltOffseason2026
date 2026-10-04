@@ -2,7 +2,11 @@ package frc.robot.subsystems.intake.pivot;
 
 import org.littletonrobotics.junction.AutoLog;
 
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.revrobotics.AbsoluteEncoder;
+
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 
 public interface PivotIO {
 
@@ -38,4 +42,11 @@ s     */
      * @param inputs The input object that we are updating.
      */
     void updateInputs(PivotInputs inputs);
+
+    /**
+     * Reset the encoder of the motor, based on the readings of an absoluteEncoder.
+     * @param motor The motor whose encoder we are reseting
+     * @param referenceEncoder The absoluteEncoder we are reading from.
+     */
+    void resetMotorEncoder(DutyCycleEncoder referenceEncoder);
 }

@@ -16,6 +16,8 @@ import frc.lib.statemachine.StateMachine.StateName;
 
 public class PivotConstants {
     public final static int MOTOR_CANID = 4; //TODO: get the real value
+    /**The port of the duty cycle encoder */
+    public final static int DUTY_CYCLE_ENCODER_PORT = 1;
 
     /**The motors that are spinning the pivot*/
     public final static DCMotor GEAR_BOX = DCMotor.getKrakenX60(1);
@@ -29,15 +31,18 @@ public class PivotConstants {
     /**whether we are accounting for gravity in the simulation */
     private static final boolean SIMULATE_GRAVITY = false;                              // TODO: change to wanted mode
     /** The gear ratio between the motor and the pivot arm (a single roation of the pivot is equal to GEAR_RATIO roations of the motor).*/
-    public static final double GEAR_RATIO = 50;
-    
+    public static final double MOTOR_TO_ARM_RATIO = 50;
+    /**The gear ratio between the absolute encoder and the pivot arm (a single roation of the pivot is equal to GEAR_RATIO roations of the encoder).*/
+    public static final double ABOSLUTE_ENCODER_TO_ARM_RATIO = 1; //TODO: find the real value from CAD
+    /**The gear ratio between the motor and the absolute encoder (a single roation of the motor is equal to GEAR_RATIO roations of the encoder).*/
+    public static final double MOTOR_TO_ABSOLUTE_ENCODER_RATIO = MOTOR_TO_ARM_RATIO / ABOSLUTE_ENCODER_TO_ARM_RATIO;
+
     public static final Rotation2d TOLERANCE = Rotation2d.fromDegrees(3);
 
     /**The state name of opening the pivot for state machines */
     public static final StateName OPEN_PIVOT_STATE_NAME = new StateName("OpenPivotState");
     /**The state name of closing the pivot for state machine */
     public static final StateName CLOSE_PIVOT_STATE_NAME = new StateName("ClosePivotState");
-
 
     /**
      * @return The plant for the sim
@@ -46,7 +51,7 @@ public class PivotConstants {
         return LinearSystemId.createSingleJointedArmSystem(
                 GEAR_BOX,
                 MOMENT_OF_INERTIA,
-                GEAR_RATIO
+                MOTOR_TO_ARM_RATIO
         );
     }
 
@@ -58,7 +63,7 @@ public class PivotConstants {
         return new SingleJointedArmSim(
                 getPlant(),
                 GEAR_BOX,
-                GEAR_RATIO,
+                MOTOR_TO_ARM_RATIO,
                 PIVOT_LENGTH_METERS,
                 PIVOT_CLOSE_ANGLE.getRadians(),
                 PIVOT_OPEN_ANGLE.getRadians(),
@@ -96,7 +101,7 @@ public class PivotConstants {
 
         config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
-        config.Feedback.SensorToMechanismRatio = GEAR_RATIO;
+        config.Feedback.SensorToMechanismRatio = MOTOR_TO_ARM_RATIO;
 
         config.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
         config.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;

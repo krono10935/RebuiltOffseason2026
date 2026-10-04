@@ -2,7 +2,11 @@ package frc.robot.subsystems.intake.pivot;
 
 import org.littletonrobotics.junction.Logger;
 
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.revrobotics.AbsoluteEncoder;
+
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -13,6 +17,7 @@ import frc.lib.statemachine.StateMachine.StateName;
 public class PivotSubsystem extends SubsystemBase {
     private final PivotInputsAutoLogged inputs;
     private final PivotIO io;
+    private final DutyCycleEncoder dutyCycleEncoder;
 
     /**An enum of the two possible pivot target states: open and close */
     public enum PivotState{
@@ -20,7 +25,7 @@ public class PivotSubsystem extends SubsystemBase {
         OPEN(PivotConstants.OPEN_PIVOT_STATE_NAME),
         /**The pivot is closed */
         CLOSE(PivotConstants.CLOSE_PIVOT_STATE_NAME);
-        
+
         /**The name of the state */
         private StateName stateName;
         
@@ -52,10 +57,12 @@ public class PivotSubsystem extends SubsystemBase {
     public PivotSubsystem(){
         inputs = new PivotInputsAutoLogged();
         io = RobotBase.isReal() ? new PivotIOCTRE() : new PivotIOSim(); 
+        dutyCycleEncoder = new DutyCycleEncoder(PivotConstants.DUTY_CYCLE_ENCODER_PORT);
     }
 
     @Override
     public void periodic(){
+        io.resetMotorEncoder(dutyCycleEncoder);
         updateInputs();
         Logger.processInputs(getName(), inputs);
         
