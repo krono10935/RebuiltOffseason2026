@@ -17,12 +17,9 @@ public class PivotSubsystem extends SubsystemBase {
     /**An enum of the two possible pivot target states: open and close */
     public enum PivotState{
         /**The pivot is open and can intake/outtake*/
-        OPEN(PivotConstants.PIVOT_OPEN_ANGLE, PivotConstants.OPEN_PIVOT_STATE_NAME),
+        OPEN(PivotConstants.OPEN_PIVOT_STATE_NAME),
         /**The pivot is closed */
-        CLOSE(PivotConstants.PIVOT_OPEN_ANGLE, PivotConstants.CLOSE_PIVOT_STATE_NAME);
-
-        /**The wanted angle from the pivot */
-        private Rotation2d targetAngle;
+        CLOSE(PivotConstants.CLOSE_PIVOT_STATE_NAME);
         
         /**The name of the state */
         private StateName stateName;
@@ -32,16 +29,8 @@ public class PivotSubsystem extends SubsystemBase {
          * @param targetAngle The wanted angle from the pivot
          * @param stateName The stateName of the state
          */
-        private PivotState(Rotation2d targetAngle, StateName stateName){
-            this.targetAngle = targetAngle;
+        private PivotState(StateName stateName){
             this.stateName = stateName;
-        }
-
-        /**
-         * @return The target angle of the pivot
-         */
-        public Rotation2d getTargetAngle(){
-            return targetAngle;
         }
 
         /**
