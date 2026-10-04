@@ -83,7 +83,7 @@ public enum SwerveModulesMK5 {
             new PIDGains(),
             new FeedForwardsGains());
             
-    private static final double RADIUS = 0.508;
+    private static final double RADIUS = 0.0508;
     private static final double UNIT_CONVERSION = 2 * Math.PI * RADIUS;
 
     SwerveModulesMK5(int canCoderID,
@@ -202,8 +202,7 @@ public enum SwerveModulesMK5 {
             driveConfig,
             DCMotor.getKrakenX44Foc(1),
             steerConfig,
-            DCMotor.getKrakenX60Foc(1),
-            1);
+            DCMotor.getKrakenX60Foc(1));
         return genericConf;
     }
 

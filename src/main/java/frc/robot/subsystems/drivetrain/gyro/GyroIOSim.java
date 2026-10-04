@@ -9,7 +9,7 @@ import java.util.function.Supplier;
 
 public final class GyroIOSim implements GyroIO{
 
-    private Supplier<ChassisSpeeds> speedsSupplier;
+    private final Supplier<ChassisSpeeds> speedsSupplier;
     
     private Rotation2d angle = Rotation2d.kZero;
 
@@ -30,6 +30,6 @@ public final class GyroIOSim implements GyroIO{
             .times(Constants.LOOP_PERIOD_SECONDS)
         );
 
-        inputs.rotation =  angle;
+        inputs.rotation = angle;
     }
 }

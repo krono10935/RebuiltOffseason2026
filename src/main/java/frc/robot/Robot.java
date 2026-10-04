@@ -143,7 +143,9 @@ public class Robot extends LoggedRobot {
   public void autonomousPeriodic() {}
 
   @Override
-  public void autonomousExit() {}
+  public void autonomousExit() {
+    RobotContainer.getInstance().getDrivetrain().stop();
+  }
 
   @Override
   public void teleopInit() {

@@ -92,6 +92,6 @@ public class HomeToSupplierChassisSpeedsCalculator extends ControllerChassisSpee
      * @return 0 if the angular output is less than the deadband, otherwise the angular output itself
      */
     public double angularDeadband(double angularOutput){
-        return angularOutput < DrivetrainConstants.ANGULAR_DEADBAND ? 0 : angularOutput;
+        return Math.abs(angularOutput) < DrivetrainConstants.ANGULAR_DEADBAND ? 0 : angularOutput;
     }
 }

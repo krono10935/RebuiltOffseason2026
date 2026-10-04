@@ -8,6 +8,7 @@ import frc.robot.RobotContainer;
 import frc.robot.subsystems.drivetrain.configsStructure.ChassisConstants.ChassisSpeedConfig;
 
 public class ControllerChassisSpeedsCalculator {
+        /** Calculate the needed ChassisSpeeds from the controller */
         public enum ControllerMode {
         
         /** No exponent used */

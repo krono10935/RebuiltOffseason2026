@@ -216,7 +216,7 @@ public class DrivetrainReal extends Drivetrain {
 
         for (int i = 0; i < 4; i++){
             var targetSpeed = previousSetpoint.moduleStates()[i];
-            if (hasBalls) io[i].setTargetStateWithBalls(targetSpeed); 
+            if (hasBalls) io[i].setTargetState(targetSpeed, DrivetrainConstants.BALLS_CLOSED_LOOP_SLOT);
             else io[i].setTargetState(targetSpeed);
         }
         Logger.recordOutput("drivetrain/requested speeds", speeds);
@@ -236,16 +236,18 @@ public class DrivetrainReal extends Drivetrain {
      * @return A command that when run drives the robot field relative
      */
     public Command driveCommand(){
+        final double moduleDistanceFromCenterMeters = constants.MODULE_CONSTANTS[0].TRANSLATION().getNorm();
+
         ControllerChassisSpeedsCalculator chassisSpeedsCalculator =
             new ControllerChassisSpeedsCalculator(
                 constants.SPEED_CONFIG, 
-                constants.MODULE_CONSTANTS[0].TRANSLATION().getNorm()
+                moduleDistanceFromCenterMeters
             );
-        
-        Command updateSpeedsRepeatedly = Commands.run(() -> setGoalSpeeds(
-            new DriveSpeeds(chassisSpeedsCalculator.getControllerInputs())), this);
 
-        return updateSpeedsRepeatedly.andThen(stopCommand()).withName("DriveCommand");
+        return driveBySpeedsSupplier(
+            () -> new DriveSpeeds(
+                chassisSpeedsCalculator.getControllerInputs()))
+        .withName("DriveCommand");
     }
 
     /**
@@ -260,11 +262,12 @@ public class DrivetrainReal extends Drivetrain {
                 constants.SPEED_CONFIG, 
                 moduleDistanceFromCenterMeters
             );
-        
-        Command updateSpeedsRepeatedly = Commands.run(() -> setGoalSpeeds(
-            new DriveSpeeds(chassisSpeedsCalculator.getControllerInputs(), false)), this);
 
-        return updateSpeedsRepeatedly.andThen(stopCommand()).withName("DriveRobotRelative");
+        return driveBySpeedsSupplier(
+            () -> new DriveSpeeds(
+                chassisSpeedsCalculator.getControllerInputs(), 
+                false))
+        .withName("DriveRobotRelative");
     }
 
     /**
@@ -281,10 +284,17 @@ public class DrivetrainReal extends Drivetrain {
                 angularSupplier,
                 "DriveAndHomeToAngleSupplier");
 
-        Command updateSpeedsRepeatedly = Commands.run(() -> setGoalSpeeds(
-            new DriveSpeeds(homeToSupplierChassisSpeedsCalculator.getControllerInputs(), false)), this);
+   
+        return driveBySpeedsSupplier(
+            () -> new DriveSpeeds(
+                homeToSupplierChassisSpeedsCalculator.getControllerInputs(), 
+                false))
+        .withName("DriveAndHomeToAngle");
+    }
 
-        return updateSpeedsRepeatedly.andThen(stopCommand()).withName("DriveAndHomeTeAngle");
+    public Command driveBySpeedsSupplier(Supplier<DriveSpeeds> speedsSupplier){
+        return Commands.runEnd(() -> setGoalSpeeds(speedsSupplier.get()), this::stop, this)
+        .withName("DriveBySpeedsSupplier");
     }
 
 }

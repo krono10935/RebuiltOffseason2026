@@ -8,12 +8,12 @@ public record GenericModuleConfigCTRE(
     TalonFXConfiguration steerMotorControllerConfig,
     DCMotor steerMotor,
     TalonFXConfiguration driveMotorControllerConfig,
-    DCMotor driveMotor,
-    double steerSpeedReduction) implements GenericModuleConfig {
+    DCMotor driveMotor) implements GenericModuleConfig {
     
     @Override
     public double getMaxSteerSpeed(){
-        return steerMotor.freeSpeedRadPerSec * 
-            steerSpeedReduction;
+        return steerMotor.freeSpeedRadPerSec /
+            (steerMotorControllerConfig.Feedback.RotorToSensorRatio *
+             steerMotorControllerConfig.Feedback.SensorToMechanismRatio);
     }
 }

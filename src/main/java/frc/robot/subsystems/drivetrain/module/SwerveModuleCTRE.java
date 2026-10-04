@@ -1,5 +1,7 @@
 package frc.robot.subsystems.drivetrain.module;
 
+import org.opencv.calib3d.StereoBM;
+
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
@@ -26,11 +28,6 @@ public abstract class SwerveModuleCTRE extends SwerveModuleIO {
     }
 
     @Override
-    public void update(){
-        super.update();
-    }
-
-    @Override
     protected double getDriveVelocity() {
         if (drivingMotor.isConnected())
             return drivingMotor.getVelocity().getValueAsDouble() * constants.UNIT_CONVERSION();
@@ -39,7 +36,7 @@ public abstract class SwerveModuleCTRE extends SwerveModuleIO {
     }
 
     @Override
-    protected double getDrivePos() {
+    protected double getDriveDistance() {
         return drivingMotor.getPosition().getValueAsDouble() * constants.UNIT_CONVERSION();
     }
 
@@ -49,28 +46,16 @@ public abstract class SwerveModuleCTRE extends SwerveModuleIO {
     }
 
     @Override
-    public void setTargetState(SwerveModuleState targetState) {
-        drivingMotor.setControl(new VelocityTorqueCurrentFOC(targetState.speedMetersPerSecond / constants.UNIT_CONVERSION()));
-        steeringMotor.setControl(new PositionTorqueCurrentFOC(targetState.angle.getRotations()));
+    public void setTargetState(SwerveModuleState targetState, int slot) {
+        drivingMotor.setControl(new VelocityTorqueCurrentFOC(
+            targetState.speedMetersPerSecond / constants.UNIT_CONVERSION())
+            .withSlot(slot));
+
+        steeringMotor.setControl(new PositionTorqueCurrentFOC(
+            targetState.angle.getRotations())
+            .withSlot(slot));
     }
 
-    
-    //TODO: tune pid with balls
-    @Override
-    public void setTargetStateWithBalls(SwerveModuleState targetState){
-        drivingMotor.setControl(
-            new VelocityTorqueCurrentFOC(
-                targetState.speedMetersPerSecond / constants.UNIT_CONVERSION())
-            .withSlot(1)
-        );
-
-
-        steeringMotor.setControl(
-            new PositionTorqueCurrentFOC(
-                targetState.angle.getRotations())
-            .withSlot(1)
-        );
-    }
 
     @Override
     public void setSteerVoltage(double voltage){
@@ -85,12 +70,9 @@ public abstract class SwerveModuleCTRE extends SwerveModuleIO {
 
     @Override
     public void setBrakeMode(boolean isBrake) {
-        MotorOutputConfigs neutralModeConfig = new MotorOutputConfigs()
-            .withNeutralMode(isBrake ? NeutralModeValue.Brake : NeutralModeValue.Coast);
+        NeutralModeValue neutralMode = isBrake ? NeutralModeValue.Brake : NeutralModeValue.Coast;
         
-        drivingMotor.getConfigurator().apply(neutralModeConfig);
-
-        steeringMotor.getConfigurator().apply(neutralModeConfig);
-
+        drivingMotor.setNeutralMode(neutralMode);
+        steeringMotor.setNeutralMode(neutralMode);
     }
 }
