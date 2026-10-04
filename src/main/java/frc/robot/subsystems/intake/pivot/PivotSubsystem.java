@@ -58,6 +58,7 @@ public class PivotSubsystem extends SubsystemBase {
         io = RobotBase.isReal() ? new PivotIOCTRE() : new PivotIOSim();
 
         //We only want to reset the motor encoder if it is no a sim, WPILib does not simulate absolute encoder well.
+        if(RobotBase.isReal()) io.resetMotorEncoder();
     }
 
     @Override
