@@ -98,7 +98,7 @@ public abstract class SuperStructureBase extends SubsystemBase {
         return statemachine;
     }
 
-    protected State getRegisterdState(SuperMode stateName){
+    protected State getRegisteredState(SuperMode stateName){
         return statemachine.getState(stateName);
     }
 

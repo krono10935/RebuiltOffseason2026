@@ -13,6 +13,10 @@ import frc.robot.subsystems.indexer.IndexerSubsystem;
 import frc.robot.subsystems.intake.IntakeCoordinator;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 
+
+// TODO: make the indexer turn off when transitioning from shooting mode to intake mode AND clean up the insance amount of boilerplate
+
+
 /**
  * Controls the robot's high-level mechanisms and operating modes.
  *
@@ -93,17 +97,17 @@ public class SuperStructure extends SuperStructureBase {
 //        drivetrain.setDefaultCommand(new );
 
         bindWhileTrue(
-                getRegisterdState(Constants.SHOOTING_MODE_STATE_NAME),
+                getRegisteredState(Constants.SHOOTING_MODE_STATE_NAME),
                 SHOOTING_TRIGGER
         );
 
         bindWhileTrue(
-                getRegisterdState(Constants.INTAKING_MODE_STATE_NAME),
+                getRegisteredState(Constants.INTAKING_MODE_STATE_NAME),
                 SHOOTING_TRIGGER.negate()
         );
 
         bindWhileTrue(
-                getRegisterdState(Constants.RESET_GYRO_NAME),
+                getRegisteredState(Constants.RESET_GYRO_NAME),
                 RESET_GYRO_TRIGGER
         );
 

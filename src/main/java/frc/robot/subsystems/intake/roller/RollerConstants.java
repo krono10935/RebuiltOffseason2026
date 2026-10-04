@@ -11,8 +11,8 @@ import frc.lib.math.UnitConversions;
 import frc.lib.statemachine.StateMachine.StateName;
 
 public class RollerConstants {
-    public final static int MOTOR_ONE_CANID = 1; //TODO: find the correct can id
-    public final static int MOTOR_TWO_CANID = 2; //TODO: find the correct can id
+    public final static int MOTOR_ONE_CANID = 24; //TODO: find the correct can id
+    public final static int MOTOR_TWO_CANID = 25; //TODO: find the correct can id
 
     /**The roller's radius in meters */
     public final static double ROLLER_RADIUS_METER = 0.055;
