@@ -1,5 +1,6 @@
 package frc.robot.subsystems.intake.pivot;
 
+import edu.wpi.first.wpilibj.simulation.DutyCycleEncoderSim;
 import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
@@ -8,21 +9,20 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.sim.TalonFXSimState;
 
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import frc.lib.math.UnitConversions;
 import frc.robot.Constants;
 
 public class PivotIOSim implements PivotIO {
-    final DutyCycleEncoder dutyCycleEncoder;
     private final TalonFX motor;
     private final SingleJointedArmSim pivotSim;
 
     public PivotIOSim(){
 
-        dutyCycleEncoder = new DutyCycleEncoder(PivotConstants.DUTY_CYCLE_ENCODER_PORT);
+
+
         motor = new TalonFX(PivotConstants.MOTOR_CANID);
-        
+
         motor.getConfigurator().apply(PivotConstants.getMotorConfig());
 
         pivotSim = PivotConstants.getSim();
@@ -43,9 +43,7 @@ public class PivotIOSim implements PivotIO {
     }
 
     @Override
-    public void resetMotorEncoder() {
-        motor.setPosition(dutyCycleEncoder.get());
-    }
+    public void resetMotorEncoder() { return; }
 
     /**
      * Steps the simulation by Constants.LOOP_PERIOD_SECONDS(20ms).
@@ -61,7 +59,7 @@ public class PivotIOSim implements PivotIO {
         motorSim.setRawRotorPosition(
             UnitConversions.radiansToRotations(pivotSim.getAngleRads() * PivotConstants.MOTOR_TO_ARM_RATIO)
         );
-        
+
         motorSim.setRotorVelocity(
             UnitConversions.radiansPerSecondToRotationsPerSecond(pivotSim.getVelocityRadPerSec() * PivotConstants.MOTOR_TO_ARM_RATIO)
         );

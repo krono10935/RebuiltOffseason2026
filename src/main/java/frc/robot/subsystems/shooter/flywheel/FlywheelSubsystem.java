@@ -78,7 +78,7 @@ public class FlywheelSubsystem extends SubsystemBase {
    * @return the command the set the flywheel's speed
    */
   public Command spinUpCommand(Supplier<Double> mpsSupplier){
-    return Commands.run(() -> this.spinUp(mpsSupplier.get()), this).withName("spinUpFlywheel");
+    return Commands.runEnd(() -> this.spinUp(mpsSupplier.get()),this::stop, this).withName("spinUpFlywheel");
   }
 
   /**
@@ -86,7 +86,7 @@ public class FlywheelSubsystem extends SubsystemBase {
    * @return the command the hold the flywheel's speed
    */
   public Command holdSpeedCommand(Supplier<Double> mpsSupplier){
-    return Commands.run(() -> this.holdSpeed(mpsSupplier.get()), this).withName("holdFlywheelSpeed");
+    return Commands.runEnd(() -> this.holdSpeed(mpsSupplier.get()),this::stop, this).withName("holdFlywheelSpeed");
   }
 
   /**
