@@ -2,7 +2,11 @@ package frc.robot.subsystems.intake.pivot;
 
 import org.littletonrobotics.junction.Logger;
 
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.revrobotics.AbsoluteEncoder;
+
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -17,13 +21,10 @@ public class PivotSubsystem extends SubsystemBase {
     /**An enum of the two possible pivot target states: open and close */
     public enum PivotState{
         /**The pivot is open and can intake/outtake*/
-        OPEN(PivotConstants.PIVOT_OPEN_ANGLE, PivotConstants.OPEN_PIVOT_STATE_NAME),
+        OPEN(PivotConstants.OPEN_PIVOT_STATE_NAME),
         /**The pivot is closed */
-        CLOSE(PivotConstants.PIVOT_OPEN_ANGLE, PivotConstants.CLOSE_PIVOT_STATE_NAME);
+        CLOSE(PivotConstants.CLOSE_PIVOT_STATE_NAME);
 
-        /**The wanted angle from the pivot */
-        private Rotation2d targetAngle;
-        
         /**The name of the state */
         private StateName stateName;
         
@@ -32,16 +33,8 @@ public class PivotSubsystem extends SubsystemBase {
          * @param targetAngle The wanted angle from the pivot
          * @param stateName The stateName of the state
          */
-        private PivotState(Rotation2d targetAngle, StateName stateName){
-            this.targetAngle = targetAngle;
+        private PivotState(StateName stateName){
             this.stateName = stateName;
-        }
-
-        /**
-         * @return The target angle of the pivot
-         */
-        public Rotation2d getTargetAngle(){
-            return targetAngle;
         }
 
         /**
@@ -67,6 +60,7 @@ public class PivotSubsystem extends SubsystemBase {
 
     @Override
     public void periodic(){
+        io.resetMotorEncoder();
         updateInputs();
         Logger.processInputs(getName(), inputs);
         
