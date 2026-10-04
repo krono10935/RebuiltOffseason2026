@@ -66,7 +66,7 @@ public class IntakeCoordinator {
      * @param changePivotStateSlow Weather we should open/close the pivot using a trapezoid profile. Should be used if the hopper is full with fuel.
      * @return A state machine that opens the pivot, then turns the roller on.
      */
-    public Command getDeployIntake(boolean changePivotStateSlow){ //TODO Change all the get functions to get Command so it will be understandable
+    public Command getDeployIntake(boolean changePivotStateSlow){ //TODO Change all the get functions to Command so it will be understandable
         return intakeStateMachineFactory(RollerState.ON, PivotState.OPEN, changePivotStateSlow);
     }
 

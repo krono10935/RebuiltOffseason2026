@@ -108,7 +108,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public Trigger isReadyToShoot(){
         return new Trigger(()-> true);
-    }
+    } //TODO: add a real function that returns if shooter is ready to shoot
 }
 
 

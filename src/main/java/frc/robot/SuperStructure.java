@@ -1,7 +1,8 @@
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.lib.statemachine.StateMachine;
@@ -10,7 +11,6 @@ import frc.robot.subsystems.drivetrain.Drivetrain;
 import frc.robot.subsystems.indexer.IndexerSubsystem;
 import frc.robot.subsystems.intake.IntakeCoordinator;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
-import org.littletonrobotics.junction.Logger;
 
 public class SuperStructure extends SuperStructureBase{
 
@@ -22,6 +22,7 @@ public class SuperStructure extends SuperStructureBase{
     public final Trigger OUTTAKE_TRIGGER;
     public final Trigger INDEXER_TRIGGER;
     public final Trigger CLOSE_INTAKE_TRIGGER;
+    public final Trigger RESET_GYRO_TRIGGER;
 
     private final Drivetrain drivetrain;
     private final ShooterSubsystem shooter;
@@ -54,17 +55,22 @@ public class SuperStructure extends SuperStructureBase{
         OUTTAKE_TRIGGER = driverXboxController.leftBumper();
         INDEXER_TRIGGER = SHOOTING_TRIGGER.and(shooter.isReadyToShoot());
         CLOSE_INTAKE_TRIGGER = driverXboxController.b();
+        RESET_GYRO_TRIGGER = driverXboxController.start();
 
         registerIntakingState();
         registerShootingState();
-        sunLightyellowOverrideIdleState();
+        overrideIdleState();
+        registerResetGyroState();
 
         configureBindings();
     }
 
     protected void configureBindings(){
+//        drivetrain.setDefaultCommand(new );
         bindWhileTrue(getRegisterdState(Constants.SHOOTING_STATE_NAME), SHOOTING_TRIGGER);
         bindWhileFalse(getRegisterdState(Constants.INTAKING_STATE_NAME), SHOOTING_TRIGGER);
+        bindOnTrue(getRegisterdState(Constants.RESET_GYRO_NAME), RESET_GYRO_TRIGGER);
+        driverXboxController.a().onTrue(drivetrain.driveToPose(new Pose2d(14,4,new Rotation2d(180))));
     }
 
     protected void configurePitBinding(){
@@ -83,15 +89,21 @@ public class SuperStructure extends SuperStructureBase{
                 Constants.INTAKING_STATE_NAME);
     }
 
-    private void sunLightyellowOverrideIdleState(){
+    private void overrideIdleState(){
         registerState(shooter.disableShooterCommand().
                 alongWith(intake.getDisableIntake(false)).
                         alongWith(indexer.turnOffIndexer()),Constants.IDLE_STATE_NAME);
     }
 
+    private void registerResetGyroState(){
+        registerState(
+                drivetrain.resetGyro(),
+                Constants.RESET_GYRO_NAME);
+    }
+
     private Command getShootingStateCommand(){
         StateMachine shootingStateMachine = new StateMachine("shootingStateMachine");
-        StateMachine.State activateShooting = shootingStateMachine.addState(shooter.shootCommand(), Constants.SHOOT_NAME);
+        StateMachine.State activateShooting = shootingStateMachine.addState(shooter.shootCommand(), Constants.ACTIVATE_SHOOTING_NAME);
         StateMachine.State disableShooting = shootingStateMachine.addState(shooter.disableShooterCommand(), Constants.DISABLE_SHOOTING_NAME);
         shootingStateMachine.setInitialState(disableShooting);
         disableShooting.switchTo(activateShooting).when(SHOOTING_TRIGGER);
@@ -115,17 +127,7 @@ public class SuperStructure extends SuperStructureBase{
     }
 
     private Command getIntakeStateCommand(){
-        boolean[] risingEdge = {false};
-        Trigger risingEdgeTrigger = new Trigger(() -> {
-            if(!risingEdge[0] & (INTAKE_TRIGGER.negate().and(OUTTAKE_TRIGGER.negate()).getAsBoolean())){
-                risingEdge[0] = true;
-                Logger.recordOutput("INTAKE_TRIGGER", risingEdge[0]);
-                return false;
-            }
-            risingEdge[0] = (INTAKE_TRIGGER.negate().and(OUTTAKE_TRIGGER.negate()).getAsBoolean());
-            Logger.recordOutput("INTAKE_TRIGGER", risingEdge[0]);
-            return true;
-        });
+
         StateMachine intakeStateMachine = new StateMachine("intakeStateMachine");
         StateMachine.State pivotOpenRollerOn = intakeStateMachine.addState(intake.getDeployIntake(false), Constants.PIVOT_OPEN_ROLLER_ON_NAME);
         StateMachine.State pivotOpenRollerOff = intakeStateMachine.addState(intake.getOpenPivotOffRoller(false), Constants.PIVOT_OPEN_ROLLER_OFF_NAME);
@@ -135,7 +137,7 @@ public class SuperStructure extends SuperStructureBase{
         intakeStateMachine.switchFromAny(pivotOpenRollerOff,pivotCloseRollerOff,pivotOpenRollerReverse).to(pivotOpenRollerOn).when(INTAKE_TRIGGER);
         intakeStateMachine.switchFromAny(pivotOpenRollerOff,pivotCloseRollerOff,pivotOpenRollerOn).to(pivotOpenRollerReverse).when(OUTTAKE_TRIGGER);
         intakeStateMachine.switchFromAny(pivotOpenRollerOff,pivotOpenRollerReverse,pivotOpenRollerOn).to(pivotCloseRollerOff).when(CLOSE_INTAKE_TRIGGER);
-        intakeStateMachine.switchFromAny(pivotCloseRollerOff,pivotOpenRollerReverse,pivotOpenRollerOn).to(pivotOpenRollerOff).when(risingEdgeTrigger);
+        intakeStateMachine.switchFromAny(pivotOpenRollerReverse,pivotOpenRollerOn).to(pivotOpenRollerOff).when(INTAKE_TRIGGER.negate().and(OUTTAKE_TRIGGER.negate()));
 
         return intakeStateMachine;
     }

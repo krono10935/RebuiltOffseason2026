@@ -39,16 +39,16 @@ public class Constants {
     public static final StateName PIVOT_CLOSE_ROLLER_OFF_NAME = new StateName("PIVOT_CLOSE_ROLLER_OFF");
     public static final StateName OUTTAKE_NAME = new StateName("OUTTAKE");
 
-    public static final StateName SHOOT_NAME = new StateName("SHOOT");
+    public static final StateName ACTIVATE_SHOOTING_NAME = new StateName("ACTIVATE_SHOOTING");
     public static final StateName DISABLE_SHOOTING_NAME = new StateName("DISABLE_SHOOTING");
 
     public static final StateName INDEXER_ON_NAME = new StateName("INDEXER_ON");
     public static final StateName INDEXER_OFF_NAME = new StateName("INDEXER_OFF");
 
-    public static final StateName RESET_GYRO_NAME = new StateName("RESET_GYRO");
+    public static final SuperStructureBase.SuperMode RESET_GYRO_NAME = new SuperStructureBase.SuperMode("RESET_GYRO");
 
-    public static final SuperStructureBase.SuperMode SHOOTING_STATE_NAME = new SuperStructureBase.SuperMode("SHOOTING_STATE_NAME");
-    public static final SuperStructureBase.SuperMode INTAKING_STATE_NAME = new SuperStructureBase.SuperMode("INTAKING_STATE_NAME");
+    public static final SuperStructureBase.SuperMode SHOOTING_STATE_NAME = new SuperStructureBase.SuperMode("SHOOTING_STATE");
+    public static final SuperStructureBase.SuperMode INTAKING_STATE_NAME = new SuperStructureBase.SuperMode("INTAKING_STATE");
     public static final SuperStructureBase.SuperMode IDLE_STATE_NAME = new SuperStructureBase.SuperMode("IDLE");
 
 }
