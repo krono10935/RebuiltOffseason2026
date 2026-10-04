@@ -1,6 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.RobotBase;
+import frc.lib.statemachine.StateMachine;
 import frc.lib.statemachine.StateMachine.StateName;
 import frc.lib.statemachine.SuperStructureBase;
 import frc.robot.subsystems.drivetrain.constants.ChassisType;
@@ -45,6 +46,12 @@ public class Constants {
     public static final StateName INDEXER_ON_NAME = new StateName("INDEXER_ON");
     public static final StateName INDEXER_OFF_NAME = new StateName("INDEXER_OFF");
     public static final StateName INDEXER_REVERSED_NAME = new StateName("INDEXER_REVERSED");
+
+    public static final StateName INTAKING_CHECK_INPUTS_NAME = new StateName("INTAKE_CHECK_INPUTS");
+    public static final StateName SHOOTING_CHECK_INPUTS_NAME = new StateName("SHOOTING_CHECK_INPUTS");
+    public static final StateName INTAKING_SHOOTING_CHECK_INPUTS_NAME = new StateName("INTAKING_SHOOTING_CHECK_INPUTS");
+    public static final StateName SHOOTING_INDEXER_CHECK_INPUTS_NAME = new StateMachine.StateName("SHOOTING_INDEXER_CHECK_INPUTS");
+    public static final StateName INTAKING_INDEXER_CHECK_INPUTS_NAME = new StateMachine.StateName("INTAKING_INDEXER_CHECK_INPUTS");
 
     public static final SuperStructureBase.SuperMode RESET_GYRO_NAME = new SuperStructureBase.SuperMode("RESET_GYRO");
 
