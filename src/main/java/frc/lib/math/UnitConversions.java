@@ -4,6 +4,7 @@
 
 package frc.lib.math;
 
+
 /** Utility class that converts between commonly used units in FRC. */
 public final class UnitConversions {
   private static final double kInchesPerFoot = 12.0;
@@ -16,7 +17,7 @@ public final class UnitConversions {
 
   /** Utility class, so constructor is private. */
   private UnitConversions() {
-    throw new UnsupportedOperationException("This is a utility class!");
+    throw new RuntimeException("This is a utility class!");
   }
 
   /**
