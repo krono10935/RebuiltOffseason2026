@@ -214,6 +214,14 @@ public final class StateMachine extends Command {
 
     @Override
     public void end(boolean interrupted){
+        if (currentState != null && CommandScheduler.getInstance().isScheduled(currentState.command())){
+                    currentState.runExitCallbacks();
+                    currentState.command().cancel();
+        }
+
+        currentState = null;
+        queuedTransition = true;
+        
         Logger.recordOutput("Statemachines/" + getName() + "/currentState", "None");
     }
 
@@ -584,7 +592,7 @@ public final class StateMachine extends Command {
             // state1.switchTo(state1).when(() -> foo == true);
             // If the condition is itself a rising edge detector, this wrapping is redundant but harmless.
             boolean currentValue = condition.getAsBoolean();
-            boolean isRisingEdge = currentValue && previousSignal;
+            boolean isRisingEdge = currentValue && !previousSignal;
             previousSignal = currentValue;
             return isRisingEdge;
         }
