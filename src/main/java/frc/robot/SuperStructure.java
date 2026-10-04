@@ -67,8 +67,8 @@ public class SuperStructure extends SuperStructureBase{
 
     protected void configureBindings(){
 //        drivetrain.setDefaultCommand(new );
-        bindWhileTrue(getRegisterdState(Constants.SHOOTING_STATE_NAME), SHOOTING_TRIGGER);
-        bindWhileFalse(getRegisterdState(Constants.INTAKING_STATE_NAME), SHOOTING_TRIGGER);
+        bindWhileTrue(getRegisterdState(Constants.SHOOTING_MODE_STATE_NAME), SHOOTING_TRIGGER);
+        bindWhileFalse(getRegisterdState(Constants.INTAKING_MODE_STATE_NAME), SHOOTING_TRIGGER);
         bindOnTrue(getRegisterdState(Constants.RESET_GYRO_NAME), RESET_GYRO_TRIGGER);
         driverXboxController.a().onTrue(drivetrain.driveToPose(new Pose2d(14,4,new Rotation2d(180))));
     }
@@ -80,13 +80,13 @@ public class SuperStructure extends SuperStructureBase{
     private void registerShootingState(){
         registerState(
                 getShootingModeStateCommand(),
-                Constants.SHOOTING_STATE_NAME);
+                Constants.SHOOTING_MODE_STATE_NAME);
     }
 
     private void registerIntakingState(){
         registerState(
                 getIntakeModeStateCommand(),
-                Constants.INTAKING_STATE_NAME);
+                Constants.INTAKING_MODE_STATE_NAME);
     }
 
     private void overrideIdleState(){
@@ -105,7 +105,7 @@ public class SuperStructure extends SuperStructureBase{
         StateMachine shootingStateMachine = new StateMachine("shootingStateMachine");
         StateMachine.State activateShooting = shootingStateMachine.addState(shooter.shootCommand(), Constants.ACTIVATE_SHOOTING_NAME);
         StateMachine.State disableShooting = shootingStateMachine.addState(shooter.disableShooterCommand(), Constants.DISABLE_SHOOTING_NAME);
-        shootingStateMachine.setInitialState(disableShooting);
+        shootingStateMachine.setInitialState(activateShooting);
         disableShooting.switchTo(activateShooting).when(SHOOTING_TRIGGER);
         activateShooting.switchTo(disableShooting).when(SHOOTING_TRIGGER.negate());
 
