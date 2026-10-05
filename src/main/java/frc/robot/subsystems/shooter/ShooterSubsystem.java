@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.lib.statemachine.StateMachine;
 import frc.lib.statemachine.StateMachine.State;
+import frc.robot.GeneralRobotState;
 import frc.robot.subsystems.shooter.ShotCalculator.ShootingParameters;
 import frc.robot.subsystems.shooter.flywheel.FlywheelSubsystem;
 import frc.robot.subsystems.shooter.hood.HoodSubsystem;
@@ -165,7 +166,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        params = ShotCalculator.getInstance().getParameters(new Pose2d(), new ChassisSpeeds()); // TODO: use RobotState class to get these params after it is implemented.
+        params = ShotCalculator.getInstance().getParameters(GeneralRobotState.getInstance().getEstimatedPose(), GeneralRobotState.getInstance().getChassisSpeedsSupplier().get()); // TODO: use RobotState class to get these params after it is implemented.
 
         Logger.recordOutput("Shooter/Command", this.getCurrentCommand() == null ? "None" : this.getCurrentCommand().getName());
         Logger.recordOutput("Shooter/shot parameters", params);
