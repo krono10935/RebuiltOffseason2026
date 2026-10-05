@@ -12,6 +12,7 @@ import frc.robot.subsystems.drivetrain.Drivetrain;
 import frc.robot.subsystems.indexer.IndexerSubsystem;
 import frc.robot.subsystems.intake.IntakeCoordinator;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
+import frc.robot.subsystems.drivetrain.DrivetrainReal;
 
 
 // TODO: make the indexer turn off when transitioning from shooting mode to intake mode AND clean up the insance amount of boilerplate
@@ -40,10 +41,10 @@ public class SuperStructure extends SuperStructureBase {
     public final Trigger CLOSE_INTAKE_TRIGGER;
     public final Trigger RESET_GYRO_TRIGGER;
 
-    private final Drivetrain drivetrain;
     private final ShooterSubsystem shooter;
     private final IndexerSubsystem indexer;
     private final IntakeCoordinator intake;
+    private final DrivetrainReal drivetrain;
 
     private static SuperStructure instance = null;
 

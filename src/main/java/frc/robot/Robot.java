@@ -114,6 +114,9 @@ public class Robot extends LoggedRobot {
         Logger.recordOutput("PDH/ChannelPower/" + i, conduit.getPDPChannelCurrent(i) * voltage);
     }
     Logger.recordOutput("PDH/Total Power", conduit.getPDPTotalCurrent() * voltage);
+
+    Logger.recordOutput("drivetrain/estimated pose", GeneralRobotState.getInstance().getEstimatedPose());
+    GeneralRobotState.getInstance().getField().setRobotPose(GeneralRobotState.getInstance().getEstimatedPose());
   }
 
   @Override
@@ -124,7 +127,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void disabledExit() {
-    // RobotContainer.getInstance().drivetrain.setBrakeMode(true);
+    RobotContainer.getInstance().getDrivetrain().setBrakeMode(true);
   }
 
   @Override
@@ -140,7 +143,9 @@ public class Robot extends LoggedRobot {
   public void autonomousPeriodic() {}
 
   @Override
-  public void autonomousExit() {}
+  public void autonomousExit() {
+    RobotContainer.getInstance().getDrivetrain().stop();
+  }
 
   @Override
   public void teleopInit() {
@@ -153,8 +158,6 @@ public class Robot extends LoggedRobot {
     if (m_teleopSuperStructre != null) {
       CommandScheduler.getInstance().schedule(m_teleopSuperStructre);
     }
-
-    // RobotContainer.getInstance().drivetrain.reset(RobotContainer.getInstance().drivetrain.getEstimatedPosition());
   }
 
   @Override
@@ -162,7 +165,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void teleopExit() {
-    // RobotContainer.getInstance().drivetrain.setBrakeMode(false);
+    RobotContainer.getInstance().getDrivetrain().setBrakeMode(false);
   }
 
   @Override

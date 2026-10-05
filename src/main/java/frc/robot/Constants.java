@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.RobotBase;
 import frc.lib.statemachine.StateMachine;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.lib.statemachine.StateMachine.StateName;
 import frc.lib.statemachine.SuperStructureBase;
 import frc.robot.subsystems.drivetrain.constants.ChassisType;
@@ -9,11 +10,12 @@ import frc.robot.subsystems.drivetrain.constants.ChassisType;
 public class Constants {
     public static final ChassisType CHASSIS_TYPE = ChassisType.COMPBOT;
     public static final boolean IS_COMP = false;
+    public static final Alliance DEFAULT_ALLIANCE = Alliance.Blue;
     
     public static final Mode simMode = Mode.REAL;
     public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;
 
-    public static final boolean isPit = false;//TODO update before match
+    public static boolean isPit = false; //TODO update before match
 
     public static enum Mode {
         /**

@@ -30,7 +30,8 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.drivetrain.Drivetrain;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.subsystems.drivetrain.DrivetrainReal;
 import frc.robot.subsystems.drivetrain.configsStructure.ChassisConstants;
 
 public class RobotContainer {
@@ -40,7 +41,9 @@ public class RobotContainer {
   private final ShooterSubsystem shooter;
   private final IndexerSubsystem indexer;
   private final IntakeCoordinator intake;
-  public final Drivetrain drivetrain;
+  private final DrivetrainReal drivetrain;
+
+  private final CommandXboxController controller;
 
   private final LoggedDashboardChooser<Command> autoChooser;
 
@@ -56,7 +59,7 @@ public class RobotContainer {
   }
 
   private RobotContainer() {
-    drivetrain = new Drivetrain(ConduitApi.getInstance()::getPDPVoltage, Constants.CHASSIS_TYPE.constants);
+    drivetrain = new DrivetrainReal(ConduitApi.getInstance()::getPDPVoltage, Constants.CHASSIS_TYPE.constants);
 
     shooter =  new ShooterSubsystem(new FlywheelSubsystem(),new HoodSubsystem());
     indexer = new IndexerSubsystem();
@@ -96,8 +99,15 @@ public class RobotContainer {
       return intake;
   }
 
-  public Drivetrain getDrivetrain(){
+  public DrivetrainReal getDrivetrain(){
     return drivetrain;
+  }
+
+  /**
+   * @return The used controller
+   */
+  public CommandXboxController getController(){
+    return controller;
   }
 
   /**
@@ -122,7 +132,7 @@ public class RobotContainer {
    */
   private void displayChosenAuto(Command command) {
       if (RobotState.isEnabled()) {
-          drivetrain.clearFiledPath();
+          GeneralRobotState.getInstance().clearFiledPath();
           return;
       }
 
@@ -132,7 +142,7 @@ public class RobotContainer {
           auto = PathPlannerAuto.getPathGroupFromAutoFile(command.getName());
       } catch (IOException | ParseException e) {
           Logger.recordOutput("autoDisplay", e.getMessage());
-          drivetrain.clearFiledPath();
+          GeneralRobotState.getInstance().clearFiledPath();
           return;
       }
 
@@ -142,7 +152,7 @@ public class RobotContainer {
           poses.addAll(path.getPathPoses());
       }
 
-      drivetrain.addPathToField(poses);
+      GeneralRobotState.getInstance().addPathToField(poses);
   }
 
   /**

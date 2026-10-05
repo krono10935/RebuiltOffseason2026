@@ -1,66 +1,20 @@
 package frc.robot.subsystems.drivetrain.module.constants;
 
+import java.util.Optional;
+
+import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.SlotConfigs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.signals.NeutralModeValue;
+
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
-import frc.robot.subsystems.drivetrain.configsStructure.moduleConfig.CommonModuleConstants;
-import frc.robot.subsystems.drivetrain.configsStructure.moduleConfig.ModuleConstants;
-import io.github.captainsoccer.basicmotor.BasicMotor;
-import io.github.captainsoccer.basicmotor.BasicMotorConfig;
-import io.github.captainsoccer.basicmotor.ctre.talonfx.BasicTalonFXConfig;
-import io.github.captainsoccer.basicmotor.gains.ConstraintsGains;
-import io.github.captainsoccer.basicmotor.gains.FeedForwardsGains;
-import io.github.captainsoccer.basicmotor.gains.PIDGains;
+import frc.lib.math.PIDGains;
+import frc.lib.simulation.SimulationConfig;
+import frc.robot.subsystems.drivetrain.configsStructure.moduleConfig.CTREModuleConstants;
+import frc.lib.math.FeedForwardsGains;
 
 public enum SwerveModulesMK4 {
-
-    // FRONT_LEFT(
-    //         6,  0.248, 12
-    //         ,
-    //         new PIDGains(5, 7, 0, 0, 0, 0),
-    //         new FeedForwardsGains(2.016),
-    //         0.13666,
-    //         4,
-    //         new PIDGains(10, 40, 0, 0.05, 1, 0.001),
-    //         new FeedForwardsGains(0),
-    //         1.4128,0.725,
-    //         new Translation2d(0.29, 0.29)),
-
-
-    // FRONT_RIGHT(
-    //         9, 0, 13,
-    //         new PIDGains(5, 7, 0, 0, 0, 0),
-    //         new FeedForwardsGains(1.8745),
-    //         0.12113,
-    //         5,
-    //         new PIDGains(10, 40, 0, 0.05, 1, 0.001),
-    //         new FeedForwardsGains(0),
-    //         1.3695,0.61619,
-    //         new Translation2d(0.29, -0.29)),
-
-
-    // BACK_LEFT(
-    //         7, 0.111, 11,
-    //         new PIDGains(5, 7, 0, 0, 0, 0),
-    //         new FeedForwardsGains(1.8745),
-    //         0.12113,
-    //         3,
-    //         new PIDGains(10, 40, 0, 0.05, 1, 0.001),
-    //         new FeedForwardsGains(0),
-    //         1.4873,0.28857,
-    //         new Translation2d(-0.29, 0.29)),
-
-
-    // BACK_RIGHT(
-    //         8, 0.257, 10,
-    //         new PIDGains(5, 7, 0, 0, 0, 0),
-    //         new FeedForwardsGains(2.05),
-    //         0.12315,
-    //         2,
-    //         new PIDGains(10, 40, 0, 0.05, 1, 0.001),
-    //         new FeedForwardsGains(0),
-    //         1.3854,0.83239,
-    //         new Translation2d(-0.29, -0.29));
-
         FRONT_LEFT(
             8, 0.257 - 0.5, 10,
             new PIDGains(5, 7, 0, 0, 0, 0),
@@ -69,7 +23,7 @@ public enum SwerveModulesMK4 {
             2,
             new PIDGains(15, 40, 0, 0.05, 1, 0.001),
             new FeedForwardsGains(0),
-            1.3854,0.83239,
+            0.83239,
             new Translation2d(-0.29, -0.29)),
 
 
@@ -81,7 +35,7 @@ public enum SwerveModulesMK4 {
             3,
             new PIDGains(15, 40, 0, 0.05, 1, 0.001),
             new FeedForwardsGains(0),
-            1.4873,0.28857,
+            0.28857,
             new Translation2d(-0.29, 0.29)),
 
 
@@ -93,7 +47,7 @@ public enum SwerveModulesMK4 {
             5,
             new PIDGains(15, 40, 0, 0.05, 1, 0.001),
             new FeedForwardsGains(0),
-            1.3695,0.61619,
+            0.61619,
             new Translation2d(0.29, -0.29)),
 
 
@@ -106,9 +60,12 @@ public enum SwerveModulesMK4 {
             4,
             new PIDGains(15, 40, 0, 0.05, 1, 0.001),
             new FeedForwardsGains(0),
-            1.4128,0.725,
+            0.725,
             new Translation2d(0.29, 0.29));
 
+
+    private static final double RADIUS = 0.0508;
+    private static final double UNIT_CONVERSION = 2 * Math.PI * RADIUS;
 
     SwerveModulesMK4(int canCoderID,
                      double zeroOffset,
@@ -119,73 +76,94 @@ public enum SwerveModulesMK4 {
                      int steerMotorID,
                      PIDGains steerPIDGains,
                      FeedForwardsGains steerFeedForwards,
-                     double steerKV,
                      double steerKA,
                      Translation2d location) {
-        BasicTalonFXConfig driveConfig = getGenericConf().DRIVE_CONFIG().copy();
-        BasicTalonFXConfig steerConfig = getGenericConf().STEER_CONFIG().copy();
+        
+        TalonFXConfiguration driveConfig = getGenericConf().driveMotorControllerConfig().clone();
+        TalonFXConfiguration steerConfig = getGenericConf().steerMotorControllerConfig().clone();
 
-        driveConfig.motorConfig.id = driveMotorID;
-        steerConfig.motorConfig.id = steerMotorID;
+        SlotConfigs driveConfigSlot0 = new SlotConfigs();
+        SlotConfigs steerConfigSlot0 = new SlotConfigs();
 
-        driveConfig.slot0Config.pidConfig = BasicMotorConfig.PIDConfig.fromGains(drivePIDGains);
-        steerConfig.slot0Config.pidConfig = BasicMotorConfig.PIDConfig.fromGains(steerPIDGains);
 
-        driveConfig.slot0Config.feedForwardConfig = BasicMotorConfig.FeedForwardConfig.fromFeedForwards(driveFeedForwards);
-        steerConfig.slot0Config.feedForwardConfig = BasicMotorConfig.FeedForwardConfig.fromFeedForwards(steerFeedForwards);
+        driveConfig.withSlot0(Slot0Configs.from(
+            driveFeedForwards.applyConfigCTRE(
+                drivePIDGains.applyConfigCTRE(driveConfigSlot0)
+            )
+        ));
 
-        driveConfig.simulationConfig.kA = driveKA;
+        
+        steerConfig.withSlot0(Slot0Configs.from(
+            steerFeedForwards.applyConfigCTRE(
+                steerPIDGains.applyConfigCTRE(steerConfigSlot0)
+            )
+        ));
 
-        steerConfig.simulationConfig.kV = steerKV;
-        steerConfig.simulationConfig.kA = steerKA;
+        SimulationConfig driveSimConfig = new SimulationConfig(
+            Optional.of(driveFeedForwards.withkA(driveKA)), 
+            0,
+            0,
+            getGenericConf().driveMotor()
+        );
 
-        driveConfig.motorConfig.name = this.name() + " drive motor";
-        steerConfig.motorConfig.name = this.name() + " steer motor";
+        SimulationConfig steerSimConfig = new SimulationConfig(
+            Optional.of(steerFeedForwards.withkA(steerKA)),
+            0,
+            0,
+            getGenericConf().steerMotor()
+        );
 
-        constants = new ModuleConstants(canCoderID, zeroOffset, driveConfig, steerConfig, location,this.name());
+
+        constants = new CTREModuleConstants(
+            canCoderID, steerMotorID, driveMotorID,
+            driveSimConfig, steerSimConfig, UNIT_CONVERSION, zeroOffset,
+            driveConfig, steerConfig, location,this.name());
 
     }
 
-    public final ModuleConstants constants;
+    public final CTREModuleConstants constants;
 
-    private static CommonModuleConstants genericConf;
+    private static GenericModuleConfigCTRE genericConf;
 
     /**
      *
      * @return the generic config
      */
-    public static CommonModuleConstants getGenericConf(){
+    public static GenericModuleConfigCTRE getGenericConf(){
         if(genericConf != null) return genericConf;
 
-        var driveConfig = new BasicTalonFXConfig();
+        var driveConfig = new TalonFXConfiguration();
 
-        driveConfig.motorConfig.gearRatio = 6.75;
-        driveConfig.motorConfig.unitConversion = 2 * Math.PI * 0.0508;
-        driveConfig.motorConfig.idleMode = BasicMotor.IdleMode.COAST;
-        driveConfig.motorConfig.motorType = DCMotor.getKrakenX60(1);
+        driveConfig.Feedback.SensorToMechanismRatio = 6.75;
+        driveConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
 
-        driveConfig.currentLimitConfig.statorCurrentLimit = 90;
-        driveConfig.currentLimitConfig.supplyCurrentLimit = 0;
+        driveConfig.CurrentLimits.StatorCurrentLimit = 90;
+        driveConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+        driveConfig.CurrentLimits.SupplyCurrentLimitEnable = false;
 
-        var steerConfig = new BasicTalonFXConfig();
-
-        steerConfig.motorConfig.gearRatio = 12.8;
-        steerConfig.motorConfig.idleMode = BasicMotor.IdleMode.COAST;
-        steerConfig.motorConfig.motorType = DCMotor.getFalcon500(1);
-
-        steerConfig.currentLimitConfig.statorCurrentLimit = 35;
-
-        steerConfig.constraintsConfig.constraintType = ConstraintsGains.ConstraintType.CONTINUOUS;
-        steerConfig.constraintsConfig.maxValue = 0.5;
-        steerConfig.constraintsConfig.minValue = -0.5;
+        var steerConfig = new TalonFXConfiguration();
 
 
-        genericConf = new CommonModuleConstants(driveConfig,steerConfig,1);
+        steerConfig.Feedback.SensorToMechanismRatio = 12.8;
+        steerConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+
+        steerConfig.CurrentLimits.StatorCurrentLimit = 35;
+        steerConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+
+        steerConfig.ClosedLoopGeneral.ContinuousWrap = true;
+
+
+
+        genericConf = new GenericModuleConfigCTRE(
+            steerConfig, 
+            DCMotor.getFalcon500Foc(1), 
+            driveConfig,
+            DCMotor.getKrakenX60Foc(1));
         return genericConf;
     }
 
-    public static ModuleConstants[] getConstants(){
-        ModuleConstants[] constants = new ModuleConstants[values().length];
+    public static CTREModuleConstants[] getConstants(){
+        CTREModuleConstants[] constants = new CTREModuleConstants[values().length];
         for(int i=0;i<values().length;i++){
             constants[i] = values()[i].constants;
         }
