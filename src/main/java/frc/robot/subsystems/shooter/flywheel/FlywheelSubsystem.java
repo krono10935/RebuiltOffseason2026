@@ -8,6 +8,8 @@ import java.util.function.Supplier;
 
 import org.littletonrobotics.junction.Logger;
 
+import com.ctre.phoenix6.controls.DutyCycleOut;
+
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -39,6 +41,26 @@ public class FlywheelSubsystem extends SubsystemBase {
    */
   private void holdSpeed(double mps){
     io.holdSpeed(mps);
+  }
+
+  int i = 0;
+  /**
+   * commands the io to set the wanted flywheel speed
+   * @param mps the wanted speed in meters/second
+   */
+  private void spinUp(DutyCycleOut dutyCycle){
+    i++;
+    System.out.println("spinup: " + dutyCycle.Output + " " + i);
+    io.spinUp(dutyCycle);
+  }
+
+  /**
+   * command the io to hold the wanted flywheel speed
+   * @param mps the wanted speed in meters/second
+   */
+  private void holdSpeed(DutyCycleOut dutyCycle){
+    System.out.println("hold speed: " + dutyCycle.Output);
+    io.holdSpeed(dutyCycle);
   }
 
   /**
@@ -87,6 +109,24 @@ public class FlywheelSubsystem extends SubsystemBase {
    */
   public Command holdSpeedCommand(Supplier<Double> mpsSupplier){
     return Commands.run(() -> this.holdSpeed(mpsSupplier.get()), this).withName("holdFlywheelSpeed");
+  }
+
+  /**
+   * spinUpCommand but dutycycle
+   * @param dutyCycleSupplier the supplier for the duty cycle
+   * @return the command for the basic spin up
+   */
+  public Command basicSpinUpCommand(Supplier<DutyCycleOut> dutyCycleSupplier){
+    return Commands.run(() -> this.spinUp(dutyCycleSupplier.get()), this).withName("basicSpinUpFlywheel");
+  }
+
+  /**
+   * holdSpeedCommand but dutycycle
+   * @param dutyCycleSupplier the supplier for the duty cycle
+   * @return the command for the basic hold speed
+   */
+  public Command basicHoldSpeedCommand(Supplier<DutyCycleOut> dutyCycleSupplier){
+    return Commands.run(() -> this.holdSpeed(dutyCycleSupplier.get()), this).withName("basicHoldFlywheelSpeed");
   }
 
   /**

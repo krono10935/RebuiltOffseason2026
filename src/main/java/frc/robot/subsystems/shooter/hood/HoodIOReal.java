@@ -11,7 +11,6 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import edu.wpi.first.wpilibj.simulation.DutyCycleEncoderSim;
 import frc.lib.math.IsNear;
 
 public class HoodIOReal implements HoodIO {

@@ -2,6 +2,8 @@ package frc.robot.subsystems.shooter.flywheel;
 
 import org.littletonrobotics.junction.AutoLog;
 
+import com.ctre.phoenix6.controls.DutyCycleOut;
+
 public interface FlywheelIO {
 
     @AutoLog
@@ -17,10 +19,22 @@ public interface FlywheelIO {
     void spinUp(double mps);
 
     /**
+     * sets the wanted flywheel dutycycle
+     * @param dutyCycle the duty cycle to set to
+     */
+    void spinUp(DutyCycleOut dutyCycle);
+
+    /**
      * holds the wanted flywheel speed (slow but accurate PID)
      * @param mps the wanted speed in meters/second
      */
     void holdSpeed(double mps);
+
+    /**
+     * holds the wanted flywheel dutycycle
+     * @param dutyCycle the duty cycle to hold
+     */
+    void holdSpeed(DutyCycleOut dutyCycle);
 
     /**
      * stops the flywheel
