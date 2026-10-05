@@ -14,6 +14,8 @@ public class PivotIOCTRE implements PivotIO {
         motor = new TalonFX(PivotConstants.MOTOR_CANID);
         dutyCycleEncoder = new DutyCycleEncoder(PivotConstants.DUTY_CYCLE_ENCODER_PORT);
         motor.getConfigurator().apply(PivotConstants.getMotorConfig());
+
+        resetMotorEncoder();
     }
 
     @Override

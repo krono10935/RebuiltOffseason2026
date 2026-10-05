@@ -41,9 +41,4 @@ s     */
      * @param inputs The input object that we are updating.
      */
     void updateInputs(PivotInputs inputs);
-
-    /**
-     * Reset the encoder of the motor, based on the readings of an absoluteEncoder.
-     */
-    void resetMotorEncoder();
 }

@@ -84,8 +84,5 @@ public class PivotIOSim implements PivotIO {
         Logger.recordOutput("pivotSim/PID/real error", error);
         Logger.recordOutput("pivotSim/PID/output", motor.getClosedLoopOutput().getValueAsDouble());
     }
-    @Override
-    public void resetMotorEncoder() {
-        throw new UnsupportedOperationException("Unimplemented method 'resetMotorEncoder'");
-    }
+
 }
