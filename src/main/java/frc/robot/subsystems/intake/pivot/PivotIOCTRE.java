@@ -37,7 +37,7 @@ public class PivotIOCTRE implements PivotIO {
      * Reset the encoder of the motor, based on the readings of an absoluteEncoder.
      */
     public void resetMotorEncoder() {
-        motor.setPosition(dutyCycleEncoder.get());
+        motor.setPosition(dutyCycleEncoder.get() * PivotConstants.MOTOR_TO_ABSOLUTE_ENCODER_RATIO);
     }
         
     
