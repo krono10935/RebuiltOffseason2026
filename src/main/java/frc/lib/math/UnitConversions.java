@@ -4,6 +4,7 @@
 
 package frc.lib.math;
 
+
 /** Utility class that converts between commonly used units in FRC. */
 public final class UnitConversions {
   private static final double kInchesPerFoot = 12.0;
@@ -16,7 +17,7 @@ public final class UnitConversions {
 
   /** Utility class, so constructor is private. */
   private UnitConversions() {
-    throw new UnsupportedOperationException("This is a utility class!");
+    throw new RuntimeException("This is a utility class!");
   }
 
   /**
@@ -219,5 +220,23 @@ public final class UnitConversions {
    */
   public static double rotationsPerMinutetoRotationsPerSecond(double rpm){
     return rpm / kSecondsPerMinute;
+  }
+
+  /**
+   * Converts rotations per minute to rotations per second.
+   * @param rotationsPerMinutes The RPM to convert into RPS;
+   * @return RPS converted from RPM
+   */
+  public static double RPMtoRPS(double rotationsPerMinutes){
+    return rotationsPerMinutes / kSecondsPerMinute;
+  }
+
+    /**
+   * Converts radians per second RPS.
+   * @param radiansPerSecond The radians per second to convert into RPS;
+   * @return RPS converted from radians per second
+   */
+  public static double radiansPerSecondToRotationsPerSecond(double radiansPerSecond){
+    return radiansPerSecond / (2 * Math.PI);
   }
 }
