@@ -97,7 +97,6 @@ public class FlywheelIOSim implements FlywheelIO{
 
     @Override
     public void basicSpinUp(double dutyCycle) {
-        System.out.println("basic spin up " + dutyCycle);
         getLeadMotor().setControl(new DutyCycleOut(dutyCycle));
     }
 }

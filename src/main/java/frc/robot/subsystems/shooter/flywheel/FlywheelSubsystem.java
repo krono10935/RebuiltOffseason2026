@@ -96,7 +96,7 @@ public class FlywheelSubsystem extends SubsystemBase {
    * @return the command the hold the flywheel's speed
    */
   public Command holdSpeedCommand(Supplier<Double> mpsSupplier){
-    return Commands.run(() -> {this.holdSpeed(mpsSupplier.get()); System.out.println("called");}, this).withName("holdFlywheelSpeed");
+    return Commands.run(() -> this.holdSpeed(mpsSupplier.get()), this).withName("holdFlywheelSpeed");
   }
 
   /**
