@@ -22,19 +22,13 @@ public interface FlywheelIO {
      * sets the wanted flywheel dutycycle
      * @param dutyCycle the duty cycle to set to
      */
-    void spinUp(DutyCycleOut dutyCycle);
+    void basicSpinUp(double dutyCycle);
 
     /**
      * holds the wanted flywheel speed (slow but accurate PID)
      * @param mps the wanted speed in meters/second
      */
     void holdSpeed(double mps);
-
-    /**
-     * holds the wanted flywheel dutycycle
-     * @param dutyCycle the duty cycle to hold
-     */
-    void holdSpeed(DutyCycleOut dutyCycle);
 
     /**
      * stops the flywheel

@@ -44,19 +44,11 @@ public class FlywheelSubsystem extends SubsystemBase {
   }
 
   /**
-   * commands the io to set the wanted flywheel speed
-   * @param mps the wanted speed in meters/second
+   * commands the io to set the wanted flywheel speed dutycycle
+   * @param dutyCycle the wanted duty cycle
    */
-  private void spinUp(DutyCycleOut dutyCycle){
-    io.spinUp(dutyCycle);
-  }
-
-  /**
-   * command the io to hold the wanted flywheel speed
-   * @param mps the wanted speed in meters/second
-   */
-  private void holdSpeed(DutyCycleOut dutyCycle){
-    io.holdSpeed(dutyCycle);
+  private void basicSpinUp(double dutyCycle){
+    io.basicSpinUp(dutyCycle);
   }
 
   /**
@@ -104,7 +96,7 @@ public class FlywheelSubsystem extends SubsystemBase {
    * @return the command the hold the flywheel's speed
    */
   public Command holdSpeedCommand(Supplier<Double> mpsSupplier){
-    return Commands.run(() -> this.holdSpeed(mpsSupplier.get()), this).withName("holdFlywheelSpeed");
+    return Commands.run(() -> {this.holdSpeed(mpsSupplier.get()); System.out.println("called");}, this).withName("holdFlywheelSpeed");
   }
 
   /**
@@ -112,17 +104,8 @@ public class FlywheelSubsystem extends SubsystemBase {
    * @param dutyCycleSupplier the supplier for the duty cycle
    * @return the command for the basic spin up
    */
-  public Command basicSpinUpCommand(Supplier<DutyCycleOut> dutyCycleSupplier){
-    return Commands.run(() -> this.spinUp(dutyCycleSupplier.get()), this).withName("basicSpinUpFlywheel");
-  }
-
-  /**
-   * holdSpeedCommand but dutycycle
-   * @param dutyCycleSupplier the supplier for the duty cycle
-   * @return the command for the basic hold speed
-   */
-  public Command basicHoldSpeedCommand(Supplier<DutyCycleOut> dutyCycleSupplier){
-    return Commands.run(() -> this.holdSpeed(dutyCycleSupplier.get()), this).withName("basicHoldFlywheelSpeed");
+  public Command basicSpinUpCommand(Supplier<Double> dutyCycleSupplier){
+    return Commands.run(() -> this.basicSpinUp(dutyCycleSupplier.get()), this).withName("basicSpinUpFlywheel");
   }
 
   /**

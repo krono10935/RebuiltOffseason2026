@@ -62,13 +62,7 @@ public class FlywheelIOReal implements FlywheelIO {
     }
 
     @Override
-    public void spinUp(DutyCycleOut dutyCycle) {
-        getLeadMotor().setControl(dutyCycle);
+    public void basicSpinUp(double dutyCycle) {
+        getLeadMotor().setControl(new DutyCycleOut(dutyCycle));
     }
-
-    @Override
-    public void holdSpeed(DutyCycleOut dutyCycle) {
-        getLeadMotor().setControl(dutyCycle);
-    }
-
 }
