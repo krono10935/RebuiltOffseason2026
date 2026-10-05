@@ -169,7 +169,6 @@ public class ShooterSubsystem extends SubsystemBase {
 
         Logger.recordOutput("Shooter/Command", this.getCurrentCommand() == null ? "None" : this.getCurrentCommand().getName());
         Logger.recordOutput("Shooter/shot parameters", params);
-        Logger.recordOutput("LNN1", flywheelSpeedDutyCycle.get());
 
 
         ShotCalculator.getInstance().clearShootingParameters();

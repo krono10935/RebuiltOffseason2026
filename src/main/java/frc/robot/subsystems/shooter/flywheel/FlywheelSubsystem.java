@@ -43,14 +43,11 @@ public class FlywheelSubsystem extends SubsystemBase {
     io.holdSpeed(mps);
   }
 
-  int i = 0;
   /**
    * commands the io to set the wanted flywheel speed
    * @param mps the wanted speed in meters/second
    */
   private void spinUp(DutyCycleOut dutyCycle){
-    i++;
-    System.out.println("spinup: " + dutyCycle.Output + " " + i);
     io.spinUp(dutyCycle);
   }
 
@@ -59,7 +56,6 @@ public class FlywheelSubsystem extends SubsystemBase {
    * @param mps the wanted speed in meters/second
    */
   private void holdSpeed(DutyCycleOut dutyCycle){
-    System.out.println("hold speed: " + dutyCycle.Output);
     io.holdSpeed(dutyCycle);
   }
 
