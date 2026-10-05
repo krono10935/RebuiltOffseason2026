@@ -41,6 +41,10 @@ public class SuperStructure extends SuperStructureBase {
     public final Trigger CLOSE_INTAKE_TRIGGER;
     public final Trigger RESET_GYRO_TRIGGER;
 
+    public final Trigger DISABLE_SHOOTER_TRIGGER;
+    public final Trigger DISABLE_INTAKE_TRIGGER;
+    public final Trigger DISABLE_INDEXER_TRIGGER;
+
     private final ShooterSubsystem shooter;
     private final IndexerSubsystem indexer;
     private final IntakeCoordinator intake;
@@ -83,6 +87,10 @@ public class SuperStructure extends SuperStructureBase {
         CLOSE_INTAKE_TRIGGER = driverXboxController.b();
         RESET_GYRO_TRIGGER = driverXboxController.start();
 
+        DISABLE_SHOOTER_TRIGGER = operatorXboxController.a();
+        DISABLE_INTAKE_TRIGGER = operatorXboxController.y();
+        DISABLE_INDEXER_TRIGGER = operatorXboxController.b();
+
         registerIntakingState();
         registerShootingState();
         overrideIdleState();
@@ -95,7 +103,6 @@ public class SuperStructure extends SuperStructureBase {
      * Configures the driver's and operator's controller bindings.
      */
     protected void configureBindings() {
-//        drivetrain.setDefaultCommand(new );
 
         bindWhileTrue(
                 getRegisteredState(Constants.SHOOTING_MODE_STATE_NAME),
@@ -112,11 +119,7 @@ public class SuperStructure extends SuperStructureBase {
                 RESET_GYRO_TRIGGER
         );
 
-        driverXboxController.a().onTrue(
-                drivetrain.driveToPose(
-                        new Pose2d(14, 4, new Rotation2d(180))
-                )
-        );
+
     }
 
     /**
@@ -165,7 +168,7 @@ public class SuperStructure extends SuperStructureBase {
      */
     private void registerResetGyroState() {
         registerState(
-                drivetrain.resetGyro(),
+                drivetrain.resetGyroCommand(),
                 Constants.RESET_GYRO_NAME
         );
     }
@@ -183,6 +186,15 @@ public class SuperStructure extends SuperStructureBase {
      * @return the shooting mode command
      */
     private Command getShootingModeStateCommand() {
+        StateMachine drivetrainStateMachine = new StateMachine("drivetrainStateMachine");
+
+        StateMachine.State driveMode = drivetrainStateMachine.addState(drivetrain.driveCommand(),Constants.DRIVE_MODE);
+        StateMachine.State defenceMode = drivetrainStateMachine.addState(drivetrain.defenseModeCommand(),Constants.DEFENCE_MODE);
+
+        drivetrainStateMachine.setInitialState(driveMode);
+        driveMode.switchTo(defenceMode).when(SHOOTING_TRIGGER);
+        defenceMode.switchTo(driveMode).when(SHOOTING_TRIGGER.negate());
+
         StateMachine shootingStateMachine = new StateMachine("shootingStateMachine");
 
         StateMachine.State activateShooting = shootingStateMachine.addState(
@@ -281,7 +293,7 @@ public class SuperStructure extends SuperStructureBase {
         return shootingStateMachine
                 .alongWith(
                         intakeShootingStateMachine.alongWith(indexerStateMachine)
-                )
+                ).alongWith(drivetrainStateMachine)
                 .withName("SHOOTING MODE");
     }
 
@@ -424,6 +436,6 @@ public class SuperStructure extends SuperStructureBase {
                 .switchTo(indexerOff)
                 .when(OUTTAKE_TRIGGER.negate());
 
-        return intakeStateMachine.alongWith(indexerStateMachine);
+        return intakeStateMachine.alongWith(indexerStateMachine).alongWith(drivetrain.driveCommand());
     }
 }

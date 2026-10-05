@@ -43,8 +43,6 @@ public class RobotContainer {
   private final IntakeCoordinator intake;
   private final DrivetrainReal drivetrain;
 
-  private final CommandXboxController controller;
-
   private final LoggedDashboardChooser<Command> autoChooser;
 
   private final CommandXboxController driverXboxController;
@@ -73,12 +71,6 @@ public class RobotContainer {
 
   }
 
-  private void configureBindings() {
-      //drivetrain.setDefaultCommand(new ); //TODO add drivecommand
-      // driverXboxController.start().onTrue()
-
-  }
-
   public CommandXboxController getDriverXboxController() {
       return driverXboxController;
   }
@@ -101,13 +93,6 @@ public class RobotContainer {
 
   public DrivetrainReal getDrivetrain(){
     return drivetrain;
-  }
-
-  /**
-   * @return The used controller
-   */
-  public CommandXboxController getController(){
-    return controller;
   }
 
   /**

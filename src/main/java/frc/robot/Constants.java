@@ -57,6 +57,9 @@ public class Constants {
 
     public static final SuperStructureBase.SuperMode RESET_GYRO_NAME = new SuperStructureBase.SuperMode("RESET_GYRO");
 
+    public static final StateName DRIVE_MODE = new StateName("DRIVE_MODE");
+    public static final StateName DEFENCE_MODE = new StateName("DEFENCE_MODE");
+
     public static final SuperStructureBase.SuperMode SHOOTING_MODE_STATE_NAME = new SuperStructureBase.SuperMode("SHOOTING_STATE");
     public static final SuperStructureBase.SuperMode INTAKING_MODE_STATE_NAME = new SuperStructureBase.SuperMode("INTAKING_STATE");
     public static final SuperStructureBase.SuperMode IDLE_STATE_NAME = new SuperStructureBase.SuperMode("IDLE");
