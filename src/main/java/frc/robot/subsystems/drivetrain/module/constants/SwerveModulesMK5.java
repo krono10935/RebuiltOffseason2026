@@ -199,9 +199,9 @@ public enum SwerveModulesMK5 {
         steerConfig.ClosedLoopGeneral.ContinuousWrap = true;
 
         genericConf = new GenericModuleConfigCTRE(
-            driveConfig,
-            DCMotor.getKrakenX44Foc(1),
             steerConfig,
+            DCMotor.getKrakenX44Foc(1),
+            driveConfig,
             DCMotor.getKrakenX60Foc(1));
         return genericConf;
     }
