@@ -1,13 +1,20 @@
 package frc.robot.subsystems.shooter;
 
 import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.networktables.LoggedNetworkNumber;
 
+import com.ctre.phoenix6.controls.DutyCycleOut;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.lib.statemachine.StateMachine;
 import frc.lib.statemachine.StateMachine.State;
+import frc.robot.GeneralRobotState;
 import frc.robot.subsystems.shooter.ShotCalculator.ShootingParameters;
 import frc.robot.subsystems.shooter.flywheel.FlywheelSubsystem;
 import frc.robot.subsystems.shooter.hood.HoodSubsystem;
@@ -15,14 +22,32 @@ import frc.robot.subsystems.shooter.hood.HoodSubsystem;
 public class ShooterSubsystem extends SubsystemBase {
     /** flywheel controller */
     private final FlywheelSubsystem flywheel;
+
     /** hood controller */
     private final HoodSubsystem hood;
+
     /** one instance for all shooting parameters, gets updated in periodic() */
     private ShootingParameters params;
+
+    /** the flywheel duty cycle LoggedNetworkNumber */
+    public LoggedNetworkNumber flywheelSpeedDutyCycle;
 
     public ShooterSubsystem(FlywheelSubsystem flywheel, HoodSubsystem hood) {
         this.flywheel = flywheel;
         this.hood = hood;
+
+        flywheelSpeedDutyCycle = new LoggedNetworkNumber("/Tuning/Shooter/flywheel speed duty cycle", 0);
+    }
+
+    /**
+     * @return basic shoot command using duty cycles (not used in tournament)
+     */
+    public Command basicShootCommand(){
+        return flywheel.basicSpinUpCommand(() -> flywheelSpeedDutyCycle.get());
+    }
+
+    public Command disableBasicShooterCommand() {
+        return flywheel.stopCommand();
     }
 
     /**
@@ -94,11 +119,10 @@ public class ShooterSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        params = ShotCalculator.getInstance().getParameters(null, null); // TODO: use RobotState class to get these params after it is implemented.
+        params = ShotCalculator.getInstance().getParameters(GeneralRobotState.getInstance().getEstimatedPose(), GeneralRobotState.getInstance().getChassisSpeedsSupplier().get()); // TODO: use RobotState class to get these params after it is implemented.
 
         Logger.recordOutput("Shooter/Command", this.getCurrentCommand() == null ? "None" : this.getCurrentCommand().getName());
         Logger.recordOutput("Shooter/shot parameters", params);
-
 
         ShotCalculator.getInstance().clearShootingParameters();
     }
