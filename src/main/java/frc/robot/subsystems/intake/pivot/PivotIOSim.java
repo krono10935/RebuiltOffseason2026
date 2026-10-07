@@ -14,13 +14,10 @@ import frc.lib.math.UnitConversions;
 import frc.robot.Constants;
 
 public class PivotIOSim implements PivotIO {
-    final DutyCycleEncoder dutyCycleEncoder;
     private final TalonFX motor;
     private final SingleJointedArmSim pivotSim;
 
     public PivotIOSim(){
-
-        dutyCycleEncoder = new DutyCycleEncoder(PivotConstants.DUTY_CYCLE_ENCODER_PORT);
         motor = new TalonFX(PivotConstants.MOTOR_CANID);
         
         motor.getConfigurator().apply(PivotConstants.getMotorConfig());
@@ -42,10 +39,7 @@ public class PivotIOSim implements PivotIO {
         motor.stopMotor();
     }
 
-    @Override
-    public void resetMotorEncoder() {
-        motor.setPosition(dutyCycleEncoder.get());
-    }
+
 
     /**
      * Steps the simulation by Constants.LOOP_PERIOD_SECONDS(20ms).
@@ -90,4 +84,5 @@ public class PivotIOSim implements PivotIO {
         Logger.recordOutput("pivotSim/PID/real error", error);
         Logger.recordOutput("pivotSim/PID/output", motor.getClosedLoopOutput().getValueAsDouble());
     }
+
 }
