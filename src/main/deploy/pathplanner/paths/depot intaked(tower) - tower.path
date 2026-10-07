@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.0,
-        "y": 7.0
+        "x": 0.468,
+        "y": 6.962136363636364
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.0,
-        "y": 7.0
+        "x": 1.7251704545454545,
+        "y": 7.116738636363636
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "depot pickuped(tower)"
     },
     {
       "anchor": {
-        "x": 4.0,
-        "y": 6.0
+        "x": 2.1580568181818176,
+        "y": 5.209977272727273
       },
       "prevControl": {
-        "x": 3.0,
-        "y": 6.0
+        "x": 1.591181818181818,
+        "y": 5.921147727272728
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -25.407718108948465
   },
   "reversed": false,
-  "folder": null,
+  "folder": "depot - outpost",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -90.0
   },
   "useDefaultConstraints": true
 }
