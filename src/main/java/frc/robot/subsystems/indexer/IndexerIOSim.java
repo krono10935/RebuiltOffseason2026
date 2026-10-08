@@ -61,7 +61,7 @@ public class IndexerIOSim implements IndexerIO{
         indexerSim.update(Constants.LOOP_PERIOD_SECONDS);
 
         simState.addRotorPosition(
-            UnitConversions.RPMtoRotationsPerCycle(
+            UnitConversions.rotationsPerMinutetoRotationsPerCycle(
                 indexerSim.getAngularVelocityRPM(), 
                 Constants.LOOP_PERIOD_SECONDS)
                 * IndexerConstants.GEAR_RATIO);
