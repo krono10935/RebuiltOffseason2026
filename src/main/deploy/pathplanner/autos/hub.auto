@@ -23,7 +23,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "WaitUntilNoBalls"
+                  "name": "WaitUntilNoFuel"
                 }
               }
             ]
