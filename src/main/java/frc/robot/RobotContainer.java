@@ -14,6 +14,7 @@ import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 
@@ -21,9 +22,17 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.drivetrain.DrivetrainReal;
 import frc.robot.subsystems.drivetrain.configsStructure.ChassisConstants;
+import frc.robot.subsystems.indexer.IndexerSubsystem;
+import frc.robot.subsystems.intake.IntakeCoordinator;
+import frc.robot.subsystems.intake.pivot.PivotSubsystem;
+import frc.robot.subsystems.intake.roller.RollerSubsystem;
+import frc.robot.subsystems.shooter.ShooterSubsystem;
+import frc.robot.subsystems.shooter.flywheel.FlywheelSubsystem;
+import frc.robot.subsystems.shooter.hood.HoodSubsystem;
 
 public class RobotContainer {
 
@@ -31,23 +40,48 @@ public class RobotContainer {
 
   private final DrivetrainReal drivetrain;
 
+  private final RollerSubsystem rollerSubsystem;
+  private final PivotSubsystem pivotSubsystem;
+  private final IntakeCoordinator intakeCoordinator;
+
+  private final FlywheelSubsystem flywheelSubsystem;
+  private final HoodSubsystem hoodSubsystem;
+  private final ShooterSubsystem shooterSubsystem;
+
+  private final IndexerSubsystem indexerSubsystem;
+
   private final CommandXboxController controller;
 
   private final LoggedDashboardChooser<Command> autoChooser;
+
+  private final GeneralRobotState generalRobotState;
 
   public static RobotContainer getInstance(){
     if (instance == null){
       instance = new RobotContainer();
     }
 
+
     return instance;
   }
-
+  
   private RobotContainer() {
     drivetrain = new DrivetrainReal(ConduitApi.getInstance()::getPDPVoltage, Constants.CHASSIS_TYPE.constants);
 
     controller = new CommandXboxController(0);
 
+    generalRobotState = GeneralRobotState.getInstance();
+
+    rollerSubsystem = new RollerSubsystem();
+    pivotSubsystem = new PivotSubsystem();
+
+    flywheelSubsystem = new FlywheelSubsystem();
+    rollerSubsystem = new RollerSubsystem();
+    shooterSubsystem = new ShooterSubsystem(flywheelSubsystem, hoodSubsystem);
+
+    indexerSubsystem = new IndexerSubsystem();
+
+    intakeCoordinator = new IntakeCoordinator(pivotSubsystem, rollerSubsystem);
 
     autoChooser = registerNamedCommand();
   }
@@ -119,6 +153,20 @@ public class RobotContainer {
       LoggedDashboardChooser<Command> autoChooser = new LoggedDashboardChooser<>("Auto", AutoBuilder.buildAutoChooser());
       autoChooser.onChange(this::displayChosenAuto);
       autoChooser.addDefaultOption("idle", drivetrain.idle());
+      
+        NamedCommands.registerCommand("deployIntake", intakeCoordinator.deployIntake(false));
+
+        NamedCommands.registerCommand("openPivotOffRoller", intakeCoordinator.openPivotOffRoller(false));
+
+        NamedCommands.registerCommand("ShootAndAim", Commands.parallel(
+          shooterSubsystem.shootCommand(),
+          intakeCoordinator.disableIntake(true),
+          indexerSubsystem.turnOnIndexer()
+        ));
+
+        NamedCommands.registerCommand("WaitUntilNoFuel",Commands.waitUntil(() -> generalRobotState.hasBalls()));
+
+        
       return autoChooser;
   }
 }
