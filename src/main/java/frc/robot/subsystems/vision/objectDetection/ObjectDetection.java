@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.lib.subsystem.VirtualSubSystem;
 import frc.robot.Constants;
+import frc.robot.GeneralRobotState;
 import frc.robot.subsystems.vision.objectDetection.ObjectDetectionIO.ObjectDetectionIOReplay;
 
 /** Add your docs here. */
@@ -66,6 +67,8 @@ public class ObjectDetection extends VirtualSubSystem {
             lastBallTimer.stop();
             lastBallTimer.reset();
         }
+
+        GeneralRobotState.getInstance().updateHasBalls(inputs.hasBalls);
 
         Logger.recordOutput("ObjectDetection/lastBallTimer", lastBallTimer.get());
         Logger.recordOutput("ObjectDetection/hasBalls", hasBalls());
