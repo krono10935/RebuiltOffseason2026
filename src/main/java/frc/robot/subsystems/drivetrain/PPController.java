@@ -31,7 +31,7 @@ public class PPController implements PathFollowingController {
             translationConstants.kD, period
         );
 
-        this.xController.setIZone(0.15);
+        this.xController.setIZone(translationConstants.iZone);
 
 
 
