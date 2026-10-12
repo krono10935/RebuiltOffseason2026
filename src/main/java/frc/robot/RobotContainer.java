@@ -76,7 +76,7 @@ public class RobotContainer {
     pivotSubsystem = new PivotSubsystem();
 
     flywheelSubsystem = new FlywheelSubsystem();
-    rollerSubsystem = new RollerSubsystem();
+    hoodSubsystem = new HoodSubsystem();
     shooterSubsystem = new ShooterSubsystem(flywheelSubsystem, hoodSubsystem);
 
     indexerSubsystem = new IndexerSubsystem();
@@ -164,7 +164,7 @@ public class RobotContainer {
           indexerSubsystem.turnOnIndexer()
         ));
 
-        NamedCommands.registerCommand("WaitUntilNoFuel",Commands.waitUntil(() -> generalRobotState.hasBalls()));
+        NamedCommands.registerCommand("WaitUntilNoFuel",Commands.waitUntil(() -> !generalRobotState.hasBalls()));
 
         
       return autoChooser;

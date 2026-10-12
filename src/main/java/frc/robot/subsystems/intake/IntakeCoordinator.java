@@ -105,13 +105,6 @@ public class IntakeCoordinator {
     public Command deployIntake(boolean changePivotStateSlow){
         return intakeCommandFactory(RollerState.ON, PivotState.OPEN, changePivotStateSlow);
     }
-    /**
-     * @param changePivotStateSlow Whether we should open/close the pivot using a trapezoid profile. Should be used if the hopper is full with fuel.
-     * @return A command that opens the pivot and turns the roller on.(at the same time).
-     */
-    public Command deployIntake(BooleanSupplier changePivotStateSlow){
-        return intakeCommandFactory(RollerState.ON, PivotState.OPEN, changePivotStateSlow.getAsBoolean());
-    }
 
     /**
      * @param changePivotStateSlow Whether we should open/close the pivot using a trapezoid profile. Should be used if the hopper is full with fuel.
@@ -119,13 +112,6 @@ public class IntakeCoordinator {
      */
     public Command disableIntake(boolean changePivotStateSlow){
         return intakeCommandFactory(RollerState.OFF, PivotState.CLOSE, changePivotStateSlow);
-    }
-    /**
-     * @param changePivotStateSlow Whether we should open/close the pivot using a trapezoid profile. Should be used if the hopper is full with fuel.
-     * @return A command that closes the pivot and turns the roller off(at the same time).
-     */
-    public Command disableIntake(BooleanSupplier changePivotStateSlow){
-        return intakeCommandFactory(RollerState.OFF, PivotState.CLOSE, changePivotStateSlow.getAsBoolean());
     }
 
     /**
@@ -135,13 +121,6 @@ public class IntakeCoordinator {
     public Command closePivotOnRoller(boolean changePivotStateSlow){
         return intakeCommandFactory(RollerState.OFF, PivotState.CLOSE, changePivotStateSlow);
     }
-    /**
-     * @param changePivotStateSlow Whether we should open/close the pivot using a trapezoid profile. Should be used if the hopper is full with fuel.
-     * @return A command that opens the pivot and turns the roller off(at the same time).
-     */
-    public Command closePivotOnRoller(BooleanSupplier changePivotStateSlow){
-        return intakeCommandFactory(RollerState.OFF, PivotState.CLOSE, changePivotStateSlow.getAsBoolean());
-    }
 
     /**
      * @param changePivotStateSlow Whether we should open/close the pivot using a trapezoid profile. Should be used if the hopper is full with fuel.
@@ -150,13 +129,6 @@ public class IntakeCoordinator {
     public Command openPivotOffRoller(boolean changePivotStateSlow){
         return intakeCommandFactory(RollerState.OFF, PivotState.OPEN, changePivotStateSlow);
     }
-    /**
-     * @param changePivotStateSlow Whether we should open/close the pivot using a trapezoid profile. Should be used if the hopper is full with fuel.
-     * @return A command that opens the pivot and turns the roller off(at the same time).
-     */
-    public Command openPivotOffRoller(BooleanSupplier changePivotStateSlow){
-        return intakeCommandFactory(RollerState.OFF, PivotState.OPEN, changePivotStateSlow.getAsBoolean());
-    }
 
     /**
      * @param changePivotStateSlow Whether we should open/close the pivot using a trapezoid profile. Should be used if the hopper is full with fuel.
@@ -164,12 +136,5 @@ public class IntakeCoordinator {
      */
     public Command deployIntakeReverse(boolean changePivotStateSlow){
         return intakeCommandFactory(RollerState.REVERSED, PivotState.OPEN, changePivotStateSlow);
-    }
-    /**
-     * @param changePivotStateSlow Whether we should open/close the pivot using a trapezoid profile. Should be used if the hopper is full with fuel.
-     * @return A command that opens the pivot and reverses the roller(at the same time).
-     */
-    public Command deployIntakeReverse(BooleanSupplier changePivotStateSlow){
-        return intakeCommandFactory(RollerState.REVERSED, PivotState.OPEN, changePivotStateSlow.getAsBoolean());
     }
 }
