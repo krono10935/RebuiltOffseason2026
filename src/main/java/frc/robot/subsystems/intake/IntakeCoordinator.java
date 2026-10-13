@@ -1,6 +1,8 @@
 package frc.robot.subsystems.intake;
 
 
+import java.util.function.BooleanSupplier;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.statemachine.StateMachine;
@@ -74,7 +76,7 @@ public class IntakeCoordinator {
      * @return A parallel command that goes the the wanted state, according the the parameters. 
      */
     private Command intakeCommandFactory(RollerState rollerTargetState, PivotState pivotTargetState, boolean changePivotStateSlow){
-        //Create the roller stateMachine
+        //Choose the roller command
         Command rollerCommand = switch (rollerTargetState) {
             case ON: yield roller.turnOnRoller();
             case OFF: yield roller.turnOffRoller();
@@ -82,13 +84,14 @@ public class IntakeCoordinator {
         };
         rollerCommand = rollerCommand.withName(rollerTargetState.getName());
         
-        //Create the pivot stateMachine
+        //Choose the pivot command
         Command pivotCommand = switch (pivotTargetState) {
             case OPEN: yield changePivotStateSlow ? pivot.openPivotSlow(): pivot.openPivot();
             case CLOSE: yield changePivotStateSlow ? pivot.closePivotSlow(): pivot.closePivot();
         };
         pivotCommand = pivotCommand.withName(pivotCommand.getName() + (changePivotStateSlow ? "Slow" : ""));
 
+        //Create the intakeCommand using the pivotCommand and rollerCommand
         Command intakeCommand = Commands.parallel(rollerCommand, pivotCommand);
 
         return intakeCommand;
