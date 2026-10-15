@@ -107,9 +107,12 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public Trigger isReadyToShoot(){
-        return new Trigger(()-> true);
+        return new Trigger(()-> flywheel.isAtGoal()&& hood.isAtGoal());
     } //TODO: add a real function that returns if shooter is ready to shoot
+
+    public Command toggleDisableShooter(){
+        return flywheel.toggleDisableFlywheelCommand().alongWith(hood.toggleDisableHoodCommand());
+    }
 }
 
 
-// skebob

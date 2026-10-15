@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class FlywheelSubsystem extends SubsystemBase {
   /** Creates a new FlywheelSubsystem. */
 
+  private boolean isDisabled = false;
   private final FlywheelIO io;
   private final FlywheelInputsAutoLogged inputs;
 
@@ -71,6 +72,7 @@ public class FlywheelSubsystem extends SubsystemBase {
     String commandName = getCurrentCommand() == null ? "None" : getCurrentCommand().getName();
 
     Logger.recordOutput("Flywheel/Command", commandName);
+    Logger.recordOutput("Flywheel/isDisabled",isDisabled);
   }
 
   /**
@@ -95,4 +97,6 @@ public class FlywheelSubsystem extends SubsystemBase {
   public Command stopCommand(){
     return Commands.run(this::stop, this).withName("stopFlywheel");
   }
+
+  public Command toggleDisableFlywheelCommand() {return Commands.runOnce(()-> isDisabled = !isDisabled);}
 }

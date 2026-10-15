@@ -131,4 +131,6 @@ public class IntakeCoordinator {
     public Command deployIntakeReverse(boolean changePivotStateSlow){
         return intakeCommandFactory(RollerState.REVERSED, PivotState.OPEN, changePivotStateSlow);
     }
+
+    public Command toggleDisableIntake(){return pivot.toggleDisablePivotCommand().alongWith(roller.toggleDisableRollerCommand());}
 }

@@ -1,34 +1,19 @@
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+
 import frc.lib.statemachine.StateMachine;
 import frc.lib.statemachine.SuperStructureBase;
-import frc.robot.subsystems.drivetrain.Drivetrain;
+
+
+import frc.robot.subsystems.drivetrain.DrivetrainReal;
 import frc.robot.subsystems.indexer.IndexerSubsystem;
 import frc.robot.subsystems.intake.IntakeCoordinator;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
-import frc.robot.subsystems.drivetrain.DrivetrainReal;
 
-
-// TODO: make the indexer turn off when transitioning from shooting mode to intake mode AND clean up the insance amount of boilerplate
-
-
-/**
- * Controls the robot's high-level mechanisms and operating modes.
- *
- * <p>The superstructure is divided into two primary modes:
- * <ul>
- *     <li>Intaking mode - controls the intake and intake-side indexer.</li>
- *     <li>Shooting mode - controls the shooter, intake, and shooting indexer.</li>
- * </ul>
- *
- * <p>The active mode is determined by the driver's right trigger.
- */
 public class SuperStructure extends SuperStructureBase {
 
     private final CommandXboxController driverXboxController;
@@ -52,11 +37,6 @@ public class SuperStructure extends SuperStructureBase {
 
     private static SuperStructure instance = null;
 
-    /**
-     * Returns the singleton instance of the superstructure.
-     *
-     * @return the SuperStructure instance
-     */
     public static SuperStructure getInstance() {
         if (instance == null) {
             instance = new SuperStructure();
@@ -65,15 +45,14 @@ public class SuperStructure extends SuperStructureBase {
         return instance;
     }
 
-    /**
-     * Initializes the superstructure, subsystems, controller triggers,
-     * state machines, and controller bindings.
-     */
     private SuperStructure() {
         super();
 
-        driverXboxController = RobotContainer.getInstance().getDriverXboxController();
-        operatorXboxController = RobotContainer.getInstance().getOperatorXboxController();
+        driverXboxController =
+                RobotContainer.getInstance().getDriverXboxController();
+
+        operatorXboxController =
+                RobotContainer.getInstance().getOperatorXboxController();
 
         drivetrain = RobotContainer.getInstance().getDrivetrain();
         shooter = RobotContainer.getInstance().getShooter();
@@ -83,359 +62,232 @@ public class SuperStructure extends SuperStructureBase {
         SHOOTING_TRIGGER = driverXboxController.rightTrigger();
         INTAKE_TRIGGER = driverXboxController.leftTrigger();
         OUTTAKE_TRIGGER = driverXboxController.leftBumper();
-        INDEXER_TRIGGER = SHOOTING_TRIGGER.and(shooter.isReadyToShoot());
+        INDEXER_TRIGGER = SHOOTING_TRIGGER;
         CLOSE_INTAKE_TRIGGER = driverXboxController.b();
         RESET_GYRO_TRIGGER = driverXboxController.start();
 
         DISABLE_SHOOTER_TRIGGER = operatorXboxController.a();
-        DISABLE_INTAKE_TRIGGER = operatorXboxController.y();
-        DISABLE_INDEXER_TRIGGER = operatorXboxController.b();
+        DISABLE_INTAKE_TRIGGER = operatorXboxController.b();
+        DISABLE_INDEXER_TRIGGER = operatorXboxController.x();
 
-        registerIntakingState();
-        registerShootingState();
-        overrideIdleState();
-        registerResetGyroState();
+        registerSuperStructureState();
 
         configureBindings();
     }
 
-    /**
-     * Configures the driver's and operator's controller bindings.
-     */
     protected void configureBindings() {
+        setInitialState(Constants.SUPERSTRUCTURE_STATE_NAME);
 
-        bindWhileTrue(
-                getRegisteredState(Constants.SHOOTING_MODE_STATE_NAME),
-                SHOOTING_TRIGGER
+        RESET_GYRO_TRIGGER.onTrue(
+                drivetrain.resetGyroCommand()
         );
 
-        bindWhileTrue(
-                getRegisteredState(Constants.INTAKING_MODE_STATE_NAME),
-                SHOOTING_TRIGGER.negate()
-        );
+        DISABLE_SHOOTER_TRIGGER.onTrue(shooter.toggleDisableShooter());
+        DISABLE_INDEXER_TRIGGER.onTrue(indexer.toggleDisableIndexer());
+        DISABLE_INTAKE_TRIGGER.onTrue(intake.toggleDisableIntake());
+    }
 
-        bindWhileTrue(
-                getRegisteredState(Constants.RESET_GYRO_NAME),
-                RESET_GYRO_TRIGGER
-        );
+    protected void configurePitBindings() {
 
+        operatorXboxController.y().whileTrue(intake.deployIntake(operatorXboxController.povUp().getAsBoolean()));
+        operatorXboxController.b().whileTrue(intake.closePivotOnRoller(operatorXboxController.povUp().getAsBoolean()));
+        operatorXboxController.a().whileTrue(intake.openPivotOffRoller(operatorXboxController.povUp().getAsBoolean()));
+        operatorXboxController.x().whileTrue(intake.deployIntakeReverse(operatorXboxController.povUp().getAsBoolean()));
+
+        operatorXboxController.rightTrigger().whileTrue(shooter.shootCommand());
+        operatorXboxController.leftTrigger().whileTrue(shooter.disableShooterCommand());
+
+        operatorXboxController.povRight().whileTrue(indexer.turnOnIndexer());
+        operatorXboxController.povLeft().whileTrue(indexer.reverseIndexer());
+        operatorXboxController.povDown().whileTrue(indexer.turnOffIndexer());
 
     }
 
-    /**
-     * Configures bindings used while the robot is in pit mode.
-     */
-    protected void configurePitBinding() {
-
-    }
-
-    /**
-     * Registers the shooting mode state.
-     */
-    private void registerShootingState() {
+    private void registerSuperStructureState() {
         registerState(
-                getShootingModeStateCommand(),
-                Constants.SHOOTING_MODE_STATE_NAME
+                getSuperStructureStateCommand(),
+                Constants.SUPERSTRUCTURE_STATE_NAME
         );
     }
 
-    /**
-     * Registers the intake mode state.
-     */
-    private void registerIntakingState() {
-        registerState(
-                getIntakeModeStateCommand(),
-                Constants.INTAKING_MODE_STATE_NAME
-        );
-    }
 
-    /**
-     * Registers the idle state.
-     *
-     * <p>The idle state disables the shooter, intake, and indexer.
-     */
-    private void overrideIdleState() {
-        registerState(
-                shooter.disableShooterCommand()
-                        .alongWith(intake.disableIntake(false))
-                        .alongWith(indexer.turnOffIndexer()),
-                Constants.IDLE_STATE_NAME
-        );
-    }
+    private Command getSuperStructureStateCommand() {
 
-    /**
-     * Registers the gyro reset state.
-     */
-    private void registerResetGyroState() {
-        registerState(
-                drivetrain.resetGyroCommand(),
-                Constants.RESET_GYRO_NAME
-        );
-    }
+        StateMachine stateMachine =
+                new StateMachine("SuperStructureStateMachine");
 
-    /**
-     * Creates the shooting mode state machine.
-     *
-     * <p>Shooting mode controls:
-     * <ul>
-     *     <li>The shooter.</li>
-     *     <li>The intake and roller.</li>
-     *     <li>The indexer.</li>
-     * </ul>
-     *
-     * @return the shooting mode command
-     */
-    private Command getShootingModeStateCommand() {
-        StateMachine drivetrainStateMachine = new StateMachine("drivetrainStateMachine");
-
-        StateMachine.State driveMode = drivetrainStateMachine.addState(drivetrain.driveCommand(),Constants.DRIVE_MODE);
-        StateMachine.State defenceMode = drivetrainStateMachine.addState(drivetrain.defenseModeCommand(),Constants.DEFENCE_MODE);
-
-        drivetrainStateMachine.setInitialState(driveMode);
-        driveMode.switchTo(defenceMode).when(SHOOTING_TRIGGER);
-        defenceMode.switchTo(driveMode).when(SHOOTING_TRIGGER.negate());
-
-        StateMachine shootingStateMachine = new StateMachine("shootingStateMachine");
-
-        StateMachine.State activateShooting = shootingStateMachine.addState(
-                shooter.shootCommand(),
-                Constants.ACTIVATE_SHOOTING_NAME
+        StateMachine.State check = stateMachine.addState(
+                Commands.runOnce(() -> {}),
+                Constants.SUPERSTRUCTURE_CHECK
         );
 
-        StateMachine.State disableShooting = shootingStateMachine.addState(
-                shooter.disableShooterCommand(),
-                Constants.DISABLE_SHOOTING_NAME
+        StateMachine.State shootingCheck = stateMachine.addState(
+                Commands.runOnce(() -> {}),
+                Constants.SUPERSTRUCTURE_SHOOTING_CHECK
         );
 
-        shootingStateMachine.setInitialState(activateShooting);
-
-        disableShooting.switchTo(activateShooting).when(SHOOTING_TRIGGER);
-        activateShooting.switchTo(disableShooting).when(SHOOTING_TRIGGER.negate());
-
-        StateMachine intakeShootingStateMachine =
-                new StateMachine("intakeShootingStateMachine");
-
-        StateMachine.State checkInputsIntakeShooter =
-                intakeShootingStateMachine.addState(
-                        Commands.run(() -> {}),
-                        Constants.INTAKING_SHOOTING_CHECK_INPUTS_NAME
-                );
-
-        StateMachine.State pivotOpenRollerOn =
-                intakeShootingStateMachine.addState(
-                        intake.deployIntake(false),
-                        Constants.PIVOT_OPEN_ROLLER_ON_NAME
-                );
-
-        StateMachine.State pivotCloseRollerOff =
-                intakeShootingStateMachine.addState(
-                        intake.disableIntake(true),
-                        Constants.PIVOT_CLOSE_ROLLER_OFF_NAME
-                );
-
-        intakeShootingStateMachine.setInitialState(checkInputsIntakeShooter);
-
-        checkInputsIntakeShooter
-                .switchTo(pivotOpenRollerOn)
-                .when(INTAKE_TRIGGER);
-
-        checkInputsIntakeShooter
-                .switchTo(pivotCloseRollerOff)
-                .when(INTAKE_TRIGGER.negate().and(shooter.isReadyToShoot()));
-
-        pivotOpenRollerOn
-                .switchTo(pivotCloseRollerOff)
-                .when(INTAKE_TRIGGER.negate().and(shooter.isReadyToShoot()));
-
-        pivotCloseRollerOff
-                .switchTo(pivotOpenRollerOn)
-                .when(INTAKE_TRIGGER);
-
-        StateMachine indexerStateMachine =
-                new StateMachine("indexerShootingStateMachine");
-
-        StateMachine.State checkInputsIndexerShooter =
-                indexerStateMachine.addState(
-                        Commands.run(() -> {}),
-                        Constants.SHOOTING_INDEXER_CHECK_INPUTS_NAME
-                );
-
-        StateMachine.State indexerOn =
-                indexerStateMachine.addState(
-                        indexer.turnOnIndexer(),
-                        Constants.INDEXER_ON_NAME
-                );
-
-        StateMachine.State indexerOff =
-                indexerStateMachine.addState(
-                        indexer.turnOffIndexer(),
-                        Constants.INDEXER_OFF_NAME
-                );
-
-        indexerStateMachine.setInitialState(checkInputsIndexerShooter);
-
-        checkInputsIndexerShooter
-                .switchTo(indexerOn)
-                .when(INDEXER_TRIGGER);
-
-        checkInputsIndexerShooter
-                .switchTo(indexerOff)
-                .when(INDEXER_TRIGGER.negate());
-
-        indexerOff
-                .switchTo(indexerOn)
-                .when(INDEXER_TRIGGER);
-
-        indexerOn
-                .switchTo(indexerOff)
-                .when(INDEXER_TRIGGER.negate());
-
-        return shootingStateMachine
-                .alongWith(
-                        intakeShootingStateMachine.alongWith(indexerStateMachine)
-                ).alongWith(drivetrainStateMachine)
-                .withName("SHOOTING MODE");
-    }
-
-    /**
-     * Creates the intake mode state machine.
-     *
-     * <p>Intake mode controls:
-     * <ul>
-     *     <li>Opening and closing the intake.</li>
-     *     <li>Forward and reverse intake operation.</li>
-     *     <li>The intake-side indexer.</li>
-     * </ul>
-     *
-     * @return the intake mode command
-     */
-    private Command getIntakeModeStateCommand() {
-        StateMachine intakeStateMachine = new StateMachine("intakeStateMachine");
-
-        StateMachine.State checkInputsIntake =
-                intakeStateMachine.addState(
-                        Commands.run(() -> {}),
-                        Constants.INTAKING_CHECK_INPUTS_NAME
-                );
-
-        StateMachine.State pivotOpenRollerOn =
-                intakeStateMachine.addState(
-                        intake.deployIntake(false),
-                        Constants.PIVOT_OPEN_ROLLER_ON_NAME
-                );
-
-        StateMachine.State pivotOpenRollerOff =
-                intakeStateMachine.addState(
-                        intake.openPivotOffRoller(false),
-                        Constants.PIVOT_OPEN_ROLLER_OFF_NAME
-                );
-
-        StateMachine.State pivotCloseRollerOff =
-                intakeStateMachine.addState(
+        StateMachine.State normalClosed = stateMachine.addState(
+                Commands.parallel(
                         intake.disableIntake(false),
-                        Constants.PIVOT_CLOSE_ROLLER_OFF_NAME
-                );
+                        indexer.turnOffIndexer(),
+                        shooter.disableShooterCommand(),
+                        drivetrain.driveCommand()
+                ),
+                Constants.NORMAL_CLOSED
+        );
 
-        StateMachine.State pivotOpenRollerReverse =
-                intakeStateMachine.addState(
+        StateMachine.State normalOpenOff = stateMachine.addState(
+                Commands.parallel(
+                        intake.openPivotOffRoller(false),
+                        indexer.turnOffIndexer(),
+                        shooter.disableShooterCommand(),
+                        drivetrain.driveCommand()
+                ),
+                Constants.NORMAL_OPEN_OFF
+        );
+
+        StateMachine.State normalOpenOn = stateMachine.addState(
+                Commands.parallel(
+                        intake.deployIntake(false),
+                        indexer.turnOffIndexer(),
+                        shooter.disableShooterCommand(),
+                        drivetrain.driveCommand()
+                ),
+                Constants.NORMAL_OPEN_ON
+        );
+
+        StateMachine.State normalOuttake = stateMachine.addState(
+                Commands.parallel(
                         intake.deployIntakeReverse(false),
-                        Constants.OUTTAKE_NAME
-                );
+                        indexer.reverseIndexer(),
+                        shooter.disableShooterCommand(),
+                        drivetrain.driveCommand()
+                ),
+                Constants.NORMAL_OUTTAKE
+        );
 
-        intakeStateMachine.setInitialState(checkInputsIntake);
+        StateMachine.State shootingClosed = stateMachine.addState(
+                Commands.parallel(
+                        shooter.shootCommand(),
+                        intake.closePivotOnRoller(true),
+                        indexer.turnOnIndexer().onlyWhile(INDEXER_TRIGGER),
+                        drivetrain.defenseModeCommand()
+                ),
+                Constants.SHOOTING_CLOSED
+        );
 
-        checkInputsIntake
-                .switchTo(pivotOpenRollerOn)
+        StateMachine.State shootingIntake = stateMachine.addState(
+                Commands.parallel(
+                        shooter.shootCommand(),
+                        intake.deployIntake(false),
+                        indexer.turnOnIndexer().onlyWhile(INDEXER_TRIGGER),
+                        drivetrain.defenseModeCommand()
+                ),
+                Constants.SHOOTING_INTAKE
+        );
+
+        // Start inner state machine closed.
+        stateMachine.setInitialState(normalClosed);
+
+        // ============================================================
+        // NORMAL MODE
+        // ============================================================
+
+        // LT pressed -> intake open + roller on
+        stateMachine.switchFromAny(
+                        normalClosed,
+                        normalOpenOff,
+                        normalOuttake
+                ).to(normalOpenOn)
                 .when(INTAKE_TRIGGER);
 
-        checkInputsIntake
-                .switchTo(pivotOpenRollerReverse)
+        // LT released -> intake stays open + roller off
+        normalOpenOn.switchTo(normalOpenOff)
+                .when(INTAKE_TRIGGER.negate());
+
+        // LB pressed -> intake open + roller reverse + indexer reverse
+        stateMachine.switchFromAny(
+                        normalClosed,
+                        normalOpenOff,
+                        normalOpenOn
+                ).to(normalOuttake)
                 .when(OUTTAKE_TRIGGER);
 
-        checkInputsIntake
-                .switchTo(pivotCloseRollerOff)
+        // LB released while LT is not held
+        // -> intake stays open + everything off
+        normalOuttake.switchTo(normalOpenOff)
                 .when(
-                        INTAKE_TRIGGER.negate()
-                                .and(OUTTAKE_TRIGGER.negate())
+                        OUTTAKE_TRIGGER.negate()
+                                .and(INTAKE_TRIGGER.negate())
                 );
 
-        intakeStateMachine
-                .switchFromAny(
-                        pivotOpenRollerOff,
-                        pivotCloseRollerOff,
-                        pivotOpenRollerReverse
-                )
-                .to(pivotOpenRollerOn)
-                .when(INTAKE_TRIGGER);
+        // LB released while LT is held
+        // -> intake open + roller on
+        normalOuttake.switchTo(normalOpenOn)
+                .when(
+                        OUTTAKE_TRIGGER.negate()
+                                .and(INTAKE_TRIGGER)
+                );
 
-        intakeStateMachine
-                .switchFromAny(
-                        pivotOpenRollerOff,
-                        pivotCloseRollerOff,
-                        pivotOpenRollerOn
-                )
-                .to(pivotOpenRollerReverse)
-                .when(OUTTAKE_TRIGGER);
-
-        intakeStateMachine
-                .switchFromAny(
-                        pivotOpenRollerOff,
-                        pivotOpenRollerReverse,
-                        pivotOpenRollerOn
-                )
-                .to(pivotCloseRollerOff)
+        // B -> close intake
+        stateMachine.switchFromAny(
+                        normalOpenOff,
+                        normalOpenOn,
+                        normalOuttake
+                ).to(normalClosed)
                 .when(CLOSE_INTAKE_TRIGGER);
 
-        intakeStateMachine
-                .switchFromAny(
-                        pivotOpenRollerReverse,
-                        pivotOpenRollerOn
-                )
-                .to(pivotOpenRollerOff)
-                .when(
+        // ============================================================
+        // SHOOTING
+        // ============================================================
+
+        // RT pressed from any normal state -> determine shooting state
+        stateMachine.switchFromAny(
+                        normalClosed,
+                        normalOpenOff,
+                        normalOpenOn,
+                        normalOuttake
+                ).to(shootingCheck)
+                .when(SHOOTING_TRIGGER);
+
+        // RT released while shooting -> return to check
+        stateMachine.switchFromAny(
+                        shootingClosed,
+                        shootingIntake
+                ).to(check)
+                .when(SHOOTING_TRIGGER.negate());
+
+        // LT while shooting
+        shootingClosed.switchTo(shootingIntake)
+                .when(INTAKE_TRIGGER);
+
+        shootingIntake.switchTo(shootingClosed)
+                .when(INTAKE_TRIGGER.negate());
+
+        // ============================================================
+        // CHECK STATES
+        // ============================================================
+
+        // Decide which shooting state to enter
+        shootingCheck.switchTo(shootingIntake)
+                .whenCompleteAnd(INTAKE_TRIGGER);
+
+        shootingCheck.switchTo(shootingClosed)
+                .whenCompleteAnd(INTAKE_TRIGGER.negate());
+
+        // After shooting ends, restore state based on held buttons
+        check.switchTo(normalOpenOn)
+                .whenCompleteAnd(INTAKE_TRIGGER);
+
+        check.switchTo(normalOuttake)
+                .whenCompleteAnd(OUTTAKE_TRIGGER);
+
+        check.switchTo(normalOpenOff)
+                .whenCompleteAnd(
                         INTAKE_TRIGGER.negate()
                                 .and(OUTTAKE_TRIGGER.negate())
                 );
 
-        StateMachine indexerStateMachine =
-                new StateMachine("indexerIntakingStateMachine");
-
-        StateMachine.State checkInputsIndexerIntake =
-                indexerStateMachine.addState(
-                        Commands.run(() -> {}),
-                        Constants.INTAKING_INDEXER_CHECK_INPUTS_NAME
-                );
-
-        StateMachine.State indexerOff =
-                indexerStateMachine.addState(
-                        indexer.turnOffIndexer(),
-                        Constants.INDEXER_OFF_NAME
-                );
-
-        StateMachine.State indexerReverse =
-                indexerStateMachine.addState(
-                        indexer.reverseIndexer(),
-                        Constants.INDEXER_REVERSED_NAME
-                );
-
-        indexerStateMachine.setInitialState(checkInputsIndexerIntake);
-
-        checkInputsIndexerIntake
-                .switchTo(indexerReverse)
-                .when(OUTTAKE_TRIGGER);
-
-        checkInputsIndexerIntake
-                .switchTo(indexerOff)
-                .when(OUTTAKE_TRIGGER.negate());
-
-        indexerOff
-                .switchTo(indexerReverse)
-                .when(OUTTAKE_TRIGGER);
-
-        indexerReverse
-                .switchTo(indexerOff)
-                .when(OUTTAKE_TRIGGER.negate());
-
-        return intakeStateMachine.alongWith(indexerStateMachine).alongWith(drivetrain.driveCommand());
+        return stateMachine;
     }
 }

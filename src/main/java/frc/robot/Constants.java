@@ -37,31 +37,18 @@ public class Constants {
     public static final double LOOP_PERIOD_SECONDS = 0.02;
     public static final boolean USE_OBJECT_DETECTION = true;
 
-    public static final StateName PIVOT_OPEN_ROLLER_ON_NAME = new StateName("PIVOT_OPEN_ROLLER_ON");
-    public static final StateName PIVOT_OPEN_ROLLER_OFF_NAME = new StateName("PIVOT_OPEN_ROLLER_OFF");
-    public static final StateName PIVOT_CLOSE_ROLLER_OFF_NAME = new StateName("PIVOT_CLOSE_ROLLER_OFF");
-    public static final StateName OUTTAKE_NAME = new StateName("OUTTAKE");
 
-    public static final StateName ACTIVATE_SHOOTING_NAME = new StateName("ACTIVATE_SHOOTING");
-    public static final StateName DISABLE_SHOOTING_NAME = new StateName("DISABLE_SHOOTING");
-
-    public static final StateName INDEXER_ON_NAME = new StateName("INDEXER_ON");
-    public static final StateName INDEXER_OFF_NAME = new StateName("INDEXER_OFF");
-    public static final StateName INDEXER_REVERSED_NAME = new StateName("INDEXER_REVERSED");
-
-    public static final StateName INTAKING_CHECK_INPUTS_NAME = new StateName("INTAKE_CHECK_INPUTS");
-    public static final StateName SHOOTING_CHECK_INPUTS_NAME = new StateName("SHOOTING_CHECK_INPUTS");
-    public static final StateName INTAKING_SHOOTING_CHECK_INPUTS_NAME = new StateName("INTAKING_SHOOTING_CHECK_INPUTS");
-    public static final StateName SHOOTING_INDEXER_CHECK_INPUTS_NAME = new StateMachine.StateName("SHOOTING_INDEXER_CHECK_INPUTS");
-    public static final StateName INTAKING_INDEXER_CHECK_INPUTS_NAME = new StateMachine.StateName("INTAKING_INDEXER_CHECK_INPUTS");
-
-    public static final SuperStructureBase.SuperMode RESET_GYRO_NAME = new SuperStructureBase.SuperMode("RESET_GYRO");
-
-    public static final StateName DRIVE_MODE = new StateName("DRIVE_MODE");
-    public static final StateName DEFENCE_MODE = new StateName("DEFENCE_MODE");
-
-    public static final SuperStructureBase.SuperMode SHOOTING_MODE_STATE_NAME = new SuperStructureBase.SuperMode("SHOOTING_STATE");
-    public static final SuperStructureBase.SuperMode INTAKING_MODE_STATE_NAME = new SuperStructureBase.SuperMode("INTAKING_STATE");
     public static final SuperStructureBase.SuperMode IDLE_STATE_NAME = new SuperStructureBase.SuperMode("IDLE");
+    public static final SuperStructureBase.SuperMode SUPERSTRUCTURE_STATE_NAME = new SuperStructureBase.SuperMode("SUPERSTRUCTRUE");
 
+    public static final SuperStructureBase.SuperMode SUPERSTRUCTURE_CHECK = new SuperStructureBase.SuperMode("SUPERSTRUCTURE_CHECK");
+    public static final SuperStructureBase.SuperMode SUPERSTRUCTURE_SHOOTING_CHECK = new SuperStructureBase.SuperMode("SUPERSTRUCTURE_SHOOTING_CHECK");
+
+    public static final SuperStructureBase.SuperMode NORMAL_CLOSED = new SuperStructureBase.SuperMode("NORMAL_CLOSED");
+    public static final SuperStructureBase.SuperMode NORMAL_OPEN_OFF = new SuperStructureBase.SuperMode("NORMAL_OPEN_OFF");
+    public static final SuperStructureBase.SuperMode NORMAL_OPEN_ON = new SuperStructureBase.SuperMode("NORMAL_OPEN_ON");
+    public static final SuperStructureBase.SuperMode NORMAL_OUTTAKE = new SuperStructureBase.SuperMode("NORMAL_OUTTAKE");
+
+    public static final SuperStructureBase.SuperMode SHOOTING_CLOSED = new SuperStructureBase.SuperMode("SHOOTING_CLOSED");
+    public static final SuperStructureBase.SuperMode SHOOTING_INTAKE = new SuperStructureBase.SuperMode("SHOOTING_INTAKE");
 }

@@ -19,6 +19,7 @@ import frc.lib.statemachine.StateMachine.State;
 
 public class HoodSubsystem extends SubsystemBase {
 
+  private boolean isDisabled = false;
   private final HoodIO io;
   private final HoodInputsAutoLogged inputs;
 
@@ -73,6 +74,7 @@ public class HoodSubsystem extends SubsystemBase {
     
     String commandName = getCurrentCommand() == null ? "None" : getCurrentCommand().getName();
     Logger.recordOutput("Hood/Command", commandName);
+    Logger.recordOutput("Hood/isDisabled",isDisabled);
   }
 
   /**
@@ -111,4 +113,6 @@ public class HoodSubsystem extends SubsystemBase {
 
     return disableHoodStateMachine;
   }
+
+  public Command toggleDisableHoodCommand() {return Commands.runOnce(()-> isDisabled = !isDisabled);}
 }

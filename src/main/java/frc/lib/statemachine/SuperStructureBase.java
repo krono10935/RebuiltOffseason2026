@@ -102,7 +102,11 @@ public abstract class SuperStructureBase extends SubsystemBase {
         return statemachine.getState(stateName);
     }
 
-    
+    protected void setInitialState(SuperMode stateName) {
+        statemachine.setInitialState(
+                statemachine.getState(stateName)
+        );
+    }
 }
 
 

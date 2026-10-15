@@ -15,6 +15,8 @@ import frc.lib.math.IsNear;
 import frc.lib.statemachine.StateMachine.StateName;
 
 public class PivotSubsystem extends SubsystemBase {
+
+    private boolean isDisabled = false;
     private final PivotInputsAutoLogged inputs;
     private final PivotIO io;
 
@@ -63,6 +65,7 @@ public class PivotSubsystem extends SubsystemBase {
         io.resetMotorEncoder();// TODO make this once on initialization of the subsystem
         updateInputs();
         Logger.processInputs(getName(), inputs);
+        Logger.recordOutput("Pivot/isDisabled",isDisabled);
         
         if (getCurrentCommand() == null){
             Logger.recordOutput("Pivot command", "null!");
@@ -190,4 +193,6 @@ s    */
             this
         );
     }
+
+    public Command toggleDisablePivotCommand() {return Commands.runOnce(()-> isDisabled = !isDisabled);}
 }
