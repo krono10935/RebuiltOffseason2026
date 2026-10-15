@@ -100,8 +100,7 @@ public class SuperStructure extends SuperStructureBase {
     private SuperStructure() {
         super();
 
-        driverXboxController =
-                RobotContainer.getInstance().getDriverXboxController();
+        driverXboxController = RobotContainer.getInstance().getDriverXboxController();
 
         operatorXboxController =
                 RobotContainer.getInstance().getOperatorXboxController();
