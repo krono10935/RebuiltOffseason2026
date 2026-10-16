@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 
 public class IndexerConstants {
     /** CANIDs of all indexer motors */
-    public static final int[] CAN_IDS = {0, 1, 2}; //TODO: change to correct CANID
+    public static final int[] CAN_IDS = {20, 21, 22}; //TODO: change to correct CANID
     
     /**
      * 

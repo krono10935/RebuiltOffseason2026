@@ -16,6 +16,12 @@ import frc.robot.Constants;
 
 public abstract class SuperStructureBase extends SubsystemBase {
     
+    public static class SuperMode extends StateName {
+        public SuperMode(String stateName) {
+            super(stateName);
+        }
+    }
+    
     // All registered states of the SuperStructure
     private final List<State> registeredStates;
 
@@ -41,7 +47,7 @@ public abstract class SuperStructureBase extends SubsystemBase {
      * @param stateName The name of the State which you are registering.
      * @return The state that has just been initialized and registered.
      */
-    protected State registerState(Command cmd, StateName stateName){
+    protected State registerState(Command cmd, SuperMode stateName) {
         var state = statemachine.addState(cmd, stateName);
         registeredStates.add(state);
         return state;
@@ -61,8 +67,27 @@ public abstract class SuperStructureBase extends SubsystemBase {
      * @param to The state to activate on the trigger activation.
      * @param binding The trigger which trigger's the state.
      */
-    protected void configureBinding(State to, Trigger binding){
+    protected void bindWhileTrue(State to, Trigger binding){
         switchFromAnyOtherThanMyself(to, binding);
+    }
+
+    protected void bindWhileFalse(State to, Trigger binding){
+        switchFromAnyOtherThanMyself(to, binding.negate());
+    }
+
+    protected void bindToggleTrue(State to, Trigger binding){
+        final boolean[] toggle = { false };
+        final boolean[] risingEdge = { false };
+
+        Trigger toggleTrigger = new Trigger(() -> {
+            if (binding.getAsBoolean() & !risingEdge[0]){
+                toggle[0] = !toggle[0];
+            }
+            risingEdge[0] = binding.getAsBoolean();
+            return toggle[0];
+        });
+
+        bindWhileTrue(to, toggleTrigger);
     }
 
     /**
@@ -72,4 +97,16 @@ public abstract class SuperStructureBase extends SubsystemBase {
     public Command getCommand(){
         return statemachine;
     }
+
+    protected State getRegisteredState(SuperMode stateName){
+        return statemachine.getState(stateName);
+    }
+
+    protected void setInitialState(SuperMode stateName) {
+        statemachine.setInitialState(
+                statemachine.getState(stateName)
+        );
+    }
 }
+
+

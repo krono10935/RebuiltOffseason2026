@@ -5,11 +5,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.statemachine.StateMachine;
 import frc.lib.statemachine.StateMachine.State;
-import frc.lib.statemachine.StateMachine.StateName;
 import frc.robot.subsystems.intake.pivot.PivotSubsystem;
 import frc.robot.subsystems.intake.pivot.PivotSubsystem.PivotState;
 import frc.robot.subsystems.intake.roller.RollerSubsystem;
 import frc.robot.subsystems.intake.roller.RollerSubsystem.RollerState;
+
 
 /**This class is used to coordinate the roller and pivot commands */
 public class IntakeCoordinator {
@@ -17,7 +17,6 @@ public class IntakeCoordinator {
     private final PivotSubsystem pivot;
     /**The roller object we will be using */
     private final RollerSubsystem roller;
-
     /**Create a new IntakeCoordinator */
     public IntakeCoordinator(PivotSubsystem pivot, RollerSubsystem roller){
         this.pivot = pivot;
@@ -56,11 +55,9 @@ public class IntakeCoordinator {
         State pivotState = intakeStateMachine.addState(pivotCommand, pivotTargetState.getStateName());
 
         intakeStateMachine.setInitialState(pivotState);
+
         pivotState.switchTo(rollerState).when(
-            switch (pivotTargetState) {
-                case OPEN: yield (() -> pivot.isPivotOpen());
-                case CLOSE: yield (() -> pivot.isPivotClose());
-            }
+                pivotTargetState == PivotState.OPEN ? pivot::isPivotOpen : pivot::isPivotClose
         );
 
         return intakeStateMachine;
@@ -134,4 +131,6 @@ public class IntakeCoordinator {
     public Command deployIntakeReverse(boolean changePivotStateSlow){
         return intakeCommandFactory(RollerState.REVERSED, PivotState.OPEN, changePivotStateSlow);
     }
+
+    public Command toggleDisableIntake(){return pivot.toggleDisablePivotCommand().alongWith(roller.toggleDisableRollerCommand());}
 }

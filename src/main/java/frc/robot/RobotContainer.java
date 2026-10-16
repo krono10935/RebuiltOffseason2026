@@ -5,6 +5,15 @@
 package frc.robot;
 
 import java.io.IOException;
+
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.subsystems.indexer.IndexerSubsystem;
+import frc.robot.subsystems.intake.IntakeCoordinator;
+import frc.robot.subsystems.intake.pivot.PivotSubsystem;
+import frc.robot.subsystems.intake.roller.RollerSubsystem;
+import frc.robot.subsystems.shooter.ShooterSubsystem;
+import frc.robot.subsystems.shooter.flywheel.FlywheelSubsystem;
+import frc.robot.subsystems.shooter.hood.HoodSubsystem;
 import org.json.simple.parser.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,11 +38,15 @@ public class RobotContainer {
 
   private static RobotContainer instance = null;
 
+  private final ShooterSubsystem shooter;
+  private final IndexerSubsystem indexer;
+  private final IntakeCoordinator intake;
   private final DrivetrainReal drivetrain;
 
-  private final CommandXboxController controller;
-
   private final LoggedDashboardChooser<Command> autoChooser;
+
+  private final CommandXboxController driverXboxController;
+  private final CommandXboxController operatorXboxController;
 
   public static RobotContainer getInstance(){
     if (instance == null){
@@ -46,24 +59,40 @@ public class RobotContainer {
   private RobotContainer() {
     drivetrain = new DrivetrainReal(ConduitApi.getInstance()::getPDPVoltage, Constants.CHASSIS_TYPE.constants);
 
-    controller = new CommandXboxController(0);
-
+    shooter =  new ShooterSubsystem(new FlywheelSubsystem(),new HoodSubsystem());
+    indexer = new IndexerSubsystem();
+    intake = new IntakeCoordinator(new PivotSubsystem(), new RollerSubsystem());
 
     autoChooser = registerNamedCommand();
+
+    driverXboxController = new CommandXboxController(0);
+
+    operatorXboxController = new CommandXboxController(1);
+
   }
 
-  /**
-   * @return The drivetrain subsystem
-   */
+  public CommandXboxController getDriverXboxController() {
+      return driverXboxController;
+  }
+
+  public CommandXboxController getOperatorXboxController() {
+      return operatorXboxController;
+  }
+
+  public ShooterSubsystem getShooter(){
+      return shooter;
+  }
+
+  public IndexerSubsystem getIndexer(){
+      return indexer;
+  }
+
+  public IntakeCoordinator getIntake(){
+      return intake;
+  }
+
   public DrivetrainReal getDrivetrain(){
     return drivetrain;
-  }
-
-  /**
-   * @return The used controller
-   */
-  public CommandXboxController getController(){
-    return controller;
   }
 
   /**

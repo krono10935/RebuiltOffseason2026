@@ -15,7 +15,7 @@ import frc.lib.statemachine.StateMachine.StateName;
 
 
 public class PivotConstants {
-    public final static int MOTOR_CANID = 4; //TODO: get the real value
+    public final static int MOTOR_CANID = 23; //TODO: get the real value
     /**The port of the duty cycle encoder */
     public final static int DUTY_CYCLE_ENCODER_PORT = 1;
 

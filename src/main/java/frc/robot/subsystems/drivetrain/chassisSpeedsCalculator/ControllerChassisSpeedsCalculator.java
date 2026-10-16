@@ -113,7 +113,7 @@ public class ControllerChassisSpeedsCalculator {
      * Converts controller input into chassis speeds.
      */
     public ChassisSpeeds getControllerInputs() {
-        CommandXboxController controller = RobotContainer.getInstance().getController();
+        CommandXboxController controller = RobotContainer.getInstance().getDriverXboxController();
 
         double triggerValue = CONTROLLER_MODE.calculateTrigger(1 - controller.getRightTriggerAxis());
 
