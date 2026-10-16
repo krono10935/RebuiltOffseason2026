@@ -1,5 +1,6 @@
 package frc.robot.subsystems.shooter.flywheel;
 
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -60,4 +61,8 @@ public class FlywheelIOReal implements FlywheelIO {
         inputs.isAtGoal = IsNear.isNear(inputs.speedMPS, getLeadMotor().getClosedLoopReference().getValueAsDouble() * FlywheelConstants.FLYWHEEL_CIRCUMFERENCE, FlywheelConstants.MPS_TOLERANCE);
     }
 
+    @Override
+    public void basicSpinUp(double dutyCycle) {
+        getLeadMotor().setControl(new DutyCycleOut(dutyCycle));
+    }
 }

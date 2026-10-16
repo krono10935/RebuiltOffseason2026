@@ -2,6 +2,7 @@ package frc.robot.subsystems.shooter.flywheel;
 
 import org.littletonrobotics.junction.Logger;
 
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -102,4 +103,8 @@ public class FlywheelIOSim implements FlywheelIO{
         Logger.recordOutput("Flywheel/Goal", getLeadMotor().getClosedLoopReference().getValueAsDouble() * FlywheelConstants.FLYWHEEL_CIRCUMFERENCE);
     }
 
+    @Override
+    public void basicSpinUp(double dutyCycle) {
+        getLeadMotor().setControl(new DutyCycleOut(dutyCycle));
+    }
 }

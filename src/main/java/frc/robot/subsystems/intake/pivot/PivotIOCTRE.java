@@ -14,6 +14,8 @@ public class PivotIOCTRE implements PivotIO {
         motor = new TalonFX(PivotConstants.MOTOR_CANID);
         dutyCycleEncoder = new DutyCycleEncoder(PivotConstants.DUTY_CYCLE_ENCODER_PORT);
         motor.getConfigurator().apply(PivotConstants.getMotorConfig());
+
+        resetMotorEncoder();
     }
 
     @Override
@@ -31,9 +33,11 @@ public class PivotIOCTRE implements PivotIO {
         motor.stopMotor();
     }   
 
-    @Override
+    /**
+     * Reset the encoder of the motor, based on the readings of an absoluteEncoder.
+     */
     public void resetMotorEncoder() {
-        motor.setPosition(dutyCycleEncoder.get());
+        motor.setPosition(dutyCycleEncoder.get() * PivotConstants.MOTOR_TO_ABSOLUTE_ENCODER_RATIO);
     }
         
     

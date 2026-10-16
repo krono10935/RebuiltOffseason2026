@@ -57,12 +57,11 @@ public class PivotSubsystem extends SubsystemBase {
     //Create a new PivotSubsystem
     public PivotSubsystem(){
         inputs = new PivotInputsAutoLogged();
-        io = RobotBase.isReal() ? new PivotIOCTRE() : new PivotIOSim(); 
+        io = RobotBase.isReal() ? new PivotIOCTRE() : new PivotIOSim();
     }
 
     @Override
     public void periodic(){
-        io.resetMotorEncoder();// TODO make this once on initialization of the subsystem
         updateInputs();
         Logger.processInputs(getName(), inputs);
         Logger.recordOutput("Pivot/isDisabled",isDisabled);
@@ -174,7 +173,7 @@ s    */
      * A command that closes the pivot
      * @return A command that closes the pivot
      */
-    public Command closePivot(){
+    public Command closePivot(){    
         return Commands.runEnd(
             () -> setRotation(PivotConstants.PIVOT_CLOSE_ANGLE),
             this::stop,

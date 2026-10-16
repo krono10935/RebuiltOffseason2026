@@ -18,9 +18,6 @@ public class PivotIOSim implements PivotIO {
     private final SingleJointedArmSim pivotSim;
 
     public PivotIOSim(){
-
-
-
         motor = new TalonFX(PivotConstants.MOTOR_CANID);
 
         motor.getConfigurator().apply(PivotConstants.getMotorConfig());
@@ -41,9 +38,6 @@ public class PivotIOSim implements PivotIO {
     public void stop() {
         motor.stopMotor();
     }
-
-    @Override
-    public void resetMotorEncoder() { return; }
 
     /**
      * Steps the simulation by Constants.LOOP_PERIOD_SECONDS(20ms).
@@ -88,4 +82,5 @@ public class PivotIOSim implements PivotIO {
         Logger.recordOutput("pivotSim/PID/real error", error);
         Logger.recordOutput("pivotSim/PID/output", motor.getClosedLoopOutput().getValueAsDouble());
     }
+
 }
