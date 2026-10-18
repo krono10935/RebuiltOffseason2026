@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import frc.lib.statemachine.StateMachine;
+import frc.lib.statemachine.StateMachine.State;
 import frc.lib.statemachine.SuperStructureBase;
 
 import frc.robot.subsystems.drivetrain.DrivetrainReal;
@@ -14,51 +15,43 @@ import frc.robot.subsystems.intake.IntakeCoordinator;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 
 /**
- * Coordinates the robot's major subsystems and manages the high-level
- * behavior of the robot during teleoperated operation.
+ * Coordinates the robot's major subsystems and manages high-level robot
+ * behavior during driver operation.
  *
  * <p>The SuperStructure combines the intake, indexer, shooter, and drivetrain
- * into a single state machine. This allows driver inputs to control multiple
- * subsystems together without requiring each subsystem to independently
- * determine what the robot is trying to do.
- *
- * <p>The class also contains normal driver bindings, subsystem disable
- * controls, gyro reset, and manual pit-mode bindings for testing individual
- * mechanisms.
+ * into a single state machine. This allows one driver input to control
+ * multiple subsystems together.
  */
 public class SuperStructure extends SuperStructureBase {
 
-    /** Driver controller used for normal robot operation. */
+    /** Controller used for normal robot operation. */
     private final CommandXboxController driverXboxController;
 
-    /** Operator controller used for subsystem controls and pit testing. */
+    /** Controller used for subsystem controls and pit testing. */
     private final CommandXboxController operatorXboxController;
 
-    /** Trigger used to enter shooting mode. */
+    /** Driver trigger used to enter shooting mode. */
     public final Trigger SHOOTING_TRIGGER;
 
-    /** Trigger used to deploy the intake and run the intake roller. */
+    /** Driver trigger used to run the intake forward. */
     public final Trigger INTAKE_TRIGGER;
 
-    /** Trigger used to reverse the intake and indexer. */
+    /** Driver trigger used to run the intake and indexer in reverse. */
     public final Trigger OUTTAKE_TRIGGER;
 
-    /** Trigger used to run the indexer while shooting. */
-    public final Trigger INDEXER_TRIGGER;
-
-    /** Trigger used to close the intake. */
+    /** Driver button used to close the intake. */
     public final Trigger CLOSE_INTAKE_TRIGGER;
 
-    /** Trigger used to reset the drivetrain gyro. */
+    /** Driver button used to reset the drivetrain gyro. */
     public final Trigger RESET_GYRO_TRIGGER;
 
-    /** Operator trigger used to toggle the shooter disabled state. */
+    /** Operator button used to disable or enable the shooter. */
     public final Trigger DISABLE_SHOOTER_TRIGGER;
 
-    /** Operator trigger used to toggle the intake disabled state. */
+    /** Operator button used to disable or enable the intake. */
     public final Trigger DISABLE_INTAKE_TRIGGER;
 
-    /** Operator trigger used to toggle the indexer disabled state. */
+    /** Operator button used to disable or enable the indexer. */
     public final Trigger DISABLE_INDEXER_TRIGGER;
 
     /** Shooter subsystem controlled by the SuperStructure. */
@@ -67,7 +60,7 @@ public class SuperStructure extends SuperStructureBase {
     /** Indexer subsystem controlled by the SuperStructure. */
     private final IndexerSubsystem indexer;
 
-    /** Intake coordinator controlled by the SuperStructure. */
+    /** Intake subsystem controlled by the SuperStructure. */
     private final IntakeCoordinator intake;
 
     /** Drivetrain controlled by the SuperStructure. */
@@ -77,11 +70,9 @@ public class SuperStructure extends SuperStructureBase {
     private static SuperStructure instance = null;
 
     /**
-     * Returns the single SuperStructure instance.
+     * Returns the singleton instance of the SuperStructure.
      *
-     * <p>The instance is created the first time this method is called.
-     *
-     * @return the SuperStructure singleton instance
+     * @return the SuperStructure instance
      */
     public static SuperStructure getInstance() {
         if (instance == null) {
@@ -92,15 +83,14 @@ public class SuperStructure extends SuperStructureBase {
     }
 
     /**
-     * Creates the SuperStructure.
-     *
-     * <p>This initializes the controllers, subsystem references, driver
-     * triggers, disable triggers, SuperStructure state, and normal bindings.
+     * Initializes the controllers, subsystem references, driver triggers,
+     * and SuperStructure state machine.
      */
     private SuperStructure() {
         super();
 
-        driverXboxController = RobotContainer.getInstance().getDriverXboxController();
+        driverXboxController =
+                RobotContainer.getInstance().getDriverXboxController();
 
         operatorXboxController =
                 RobotContainer.getInstance().getOperatorXboxController();
@@ -113,7 +103,6 @@ public class SuperStructure extends SuperStructureBase {
         SHOOTING_TRIGGER = driverXboxController.rightTrigger();
         INTAKE_TRIGGER = driverXboxController.leftTrigger();
         OUTTAKE_TRIGGER = driverXboxController.leftBumper();
-        INDEXER_TRIGGER = SHOOTING_TRIGGER;
         CLOSE_INTAKE_TRIGGER = driverXboxController.b();
         RESET_GYRO_TRIGGER = driverXboxController.start();
 
@@ -122,20 +111,15 @@ public class SuperStructure extends SuperStructureBase {
         DISABLE_INDEXER_TRIGGER = operatorXboxController.x();
 
         registerSuperStructureState();
-
         configureBindings();
     }
 
     /**
-     * Configures the bindings used during normal robot operation.
+     * Configures bindings that operate outside of the main SuperStructure
+     * state machine.
      *
-     * <p>The outer SuperStructure state machine starts in the main
-     * SuperStructure state. Gyro reset is scheduled independently so resetting
-     * the gyro does not interrupt or reset the internal SuperStructure state
-     * machine.
-     *
-     * <p>The operator controller can also toggle the disabled state of the
-     * shooter, indexer, and intake.
+     * <p>These bindings handle gyro reset and operator subsystem disable
+     * controls.
      */
     protected void configureBindings() {
         setInitialState(Constants.SUPERSTRUCTURE_STATE_NAME);
@@ -158,59 +142,36 @@ public class SuperStructure extends SuperStructureBase {
     }
 
     /**
-     * Configures manual controls used for testing mechanisms in the pit.
+     * Configures manual subsystem controls used for pit testing.
      *
-     * <p>Each control directly schedules a subsystem command instead of
-     * controlling the subsystem through the normal SuperStructure state
-     * machine.
-     *
-     * <p>Intake controls:
-     * <ul>
-     *     <li>Y - deploy intake and run the roller forward</li>
-     *     <li>B - close the intake pivot</li>
-     *     <li>A - open the intake pivot with the roller off</li>
-     *     <li>X - deploy the intake and reverse the roller</li>
-     * </ul>
-     *
-     * <p>Shooter controls:
-     * <ul>
-     *     <li>Right Trigger - run the shooter</li>
-     *     <li>Left Trigger - disable the shooter</li>
-     * </ul>
-     *
-     * <p>Indexer controls:
-     * <ul>
-     *     <li>D-pad Right - run the indexer forward</li>
-     *     <li>D-pad Left - run the indexer in reverse</li>
-     *     <li>D-pad Down - stop the indexer</li>
-     * </ul>
-     *
-     * <p>D-pad Up is passed into the intake commands as their boolean
-     * configuration value.
+     * <p>These bindings bypass the normal SuperStructure state machine and
+     * allow individual mechanisms to be tested directly.
      */
     protected void configurePitBindings() {
+        Trigger intakeSpeed = operatorXboxController.povUp();
+
 
         operatorXboxController.y().whileTrue(
                 intake.deployIntake(
-                        operatorXboxController.povUp().getAsBoolean()
+                        intakeSpeed.getAsBoolean()
                 )
         );
 
         operatorXboxController.b().whileTrue(
                 intake.closePivotOnRoller(
-                        operatorXboxController.povUp().getAsBoolean()
+                        intakeSpeed.getAsBoolean()
                 )
         );
 
         operatorXboxController.a().whileTrue(
                 intake.openPivotOffRoller(
-                        operatorXboxController.povUp().getAsBoolean()
+                        intakeSpeed.getAsBoolean()
                 )
         );
 
         operatorXboxController.x().whileTrue(
                 intake.deployIntakeReverse(
-                        operatorXboxController.povUp().getAsBoolean()
+                        intakeSpeed.getAsBoolean()
                 )
         );
 
@@ -231,11 +192,8 @@ public class SuperStructure extends SuperStructureBase {
     }
 
     /**
-     * Registers the main SuperStructure command as a state in the outer
+     * Registers the main SuperStructure state machine with the outer
      * SuperStructure state machine.
-     *
-     * <p>The registered command contains the internal state machine responsible
-     * for coordinating the intake, indexer, shooter, and drivetrain.
      */
     private void registerSuperStructureState() {
         registerState(
@@ -245,184 +203,175 @@ public class SuperStructure extends SuperStructureBase {
     }
 
     /**
-     * Creates the internal SuperStructure state machine.
+     * Creates the command used for normal driving states.
      *
-     * <p>The state machine coordinates normal intake operation, outtake
-     * operation, shooting, and drivetrain behavior.
+     * <p>During normal operation the shooter is disabled and the drivetrain
+     * uses its normal driving command. The intake and indexer commands are
+     * provided by the individual state.
      *
-     * <p>The normal states determine whether the intake is closed, open with
-     * the roller off, open with the roller running, or reversing. The shooting
-     * states allow the intake to switch between closed and deployed while the
-     * shooting trigger remains held.
+     * @param intakeCommand command defining the intake behavior
+     * @param indexerCommand command defining the indexer behavior
+     * @return command containing the complete normal driving behavior
+     */
+    private Command normalState(
+            Command intakeCommand,
+            Command indexerCommand) {
+
+        return Commands.parallel(
+                intakeCommand,
+                indexerCommand,
+                shooter.disableShooterCommand(),
+                drivetrain.driveCommand()
+        );
+    }
+
+    /**
+     * Creates the command used for shooting states.
      *
-     * <p>Check states are used when entering and leaving shooting mode to
-     * determine which state should be selected based on the driver's currently
-     * held controls.
+     * <p>During shooting the shooter and indexer are active and the drivetrain
+     * uses defense mode. The intake behavior is provided by the individual
+     * shooting state.
      *
-     * @return the command representing the complete internal SuperStructure
-     *         state machine
+     * @param intakeCommand command defining the intake behavior
+     * @return command containing the complete shooting behavior
+     */
+    private Command shootingState(Command intakeCommand) {
+        return Commands.parallel(
+                shooter.shootCommand(),
+                intakeCommand,
+                indexer.turnOnIndexer().onlyWhile(SHOOTING_TRIGGER),
+                drivetrain.defenseModeCommand()
+        );
+    }
+
+    /**
+     * Creates the state machine that controls the robot during normal
+     * driver operation.
+     *
+     * <p>The state machine is divided into normal states and shooting states.
+     * Check states are used when entering or leaving shooting mode so that
+     * the robot can choose the correct state based on the controls currently
+     * being held.
+     *
+     * @return command containing the complete SuperStructure state machine
      */
     private Command getSuperStructureStateCommand() {
-
         StateMachine stateMachine =
                 new StateMachine("SuperStructureStateMachine");
 
         /*
-         * Temporary state used after leaving shooting mode.
-         * Determines which normal state should be restored based on
-         * the driver's currently held controls.
+         * Check states don't control any subsystem.
+         * They only decide which real state should come next.
          */
-        StateMachine.State check = stateMachine.addState(
-                Commands.runOnce(() -> {}),
+        State check = stateMachine.addState(
+                Commands.none(),
                 Constants.SUPERSTRUCTURE_CHECK
         );
 
-        /*
-         * Temporary state used when entering shooting mode.
-         * Determines whether the intake should begin open or closed.
-         */
-        StateMachine.State shootingCheck = stateMachine.addState(
-                Commands.runOnce(() -> {}),
+        State shootingCheck = stateMachine.addState(
+                Commands.none(),
                 Constants.SUPERSTRUCTURE_SHOOTING_CHECK
         );
 
-        /*
-         * Normal operation with the intake closed.
-         * Intake roller, indexer, and shooter are disabled.
-         */
-        StateMachine.State normalClosed = stateMachine.addState(
-                Commands.parallel(
+        // ---------------- NORMAL STATES ----------------
+
+        State normalClosed = stateMachine.addState(
+                normalState(
                         intake.disableIntake(false),
-                        indexer.turnOffIndexer(),
-                        shooter.disableShooterCommand(),
-                        drivetrain.driveCommand()
+                        indexer.turnOffIndexer()
                 ),
                 Constants.NORMAL_CLOSED
         );
 
-        /*
-         * Normal operation with the intake open but the roller stopped.
-         */
-        StateMachine.State normalOpenOff = stateMachine.addState(
-                Commands.parallel(
+        State normalOpenOff = stateMachine.addState(
+                normalState(
                         intake.openPivotOffRoller(false),
-                        indexer.turnOffIndexer(),
-                        shooter.disableShooterCommand(),
-                        drivetrain.driveCommand()
+                        indexer.turnOffIndexer()
                 ),
                 Constants.NORMAL_OPEN_OFF
         );
 
-        /*
-         * Normal intake operation.
-         * Intake is open and the roller is running forward.
-         */
-        StateMachine.State normalOpenOn = stateMachine.addState(
-                Commands.parallel(
+        State normalOpenOn = stateMachine.addState(
+                normalState(
                         intake.deployIntake(false),
-                        indexer.turnOffIndexer(),
-                        shooter.disableShooterCommand(),
-                        drivetrain.driveCommand()
+                        indexer.turnOffIndexer()
                 ),
                 Constants.NORMAL_OPEN_ON
         );
 
-        /*
-         * Outtake operation.
-         * Intake roller and indexer run in reverse.
-         */
-        StateMachine.State normalOuttake = stateMachine.addState(
-                Commands.parallel(
+        State normalOuttake = stateMachine.addState(
+                normalState(
                         intake.deployIntakeReverse(false),
-                        indexer.reverseIndexer(),
-                        shooter.disableShooterCommand(),
-                        drivetrain.driveCommand()
+                        indexer.reverseIndexer()
                 ),
                 Constants.NORMAL_OUTTAKE
         );
 
-        /*
-         * Shooting with the intake closed.
-         * Shooter and indexer run while the drivetrain uses defense mode.
-         */
-        StateMachine.State shootingClosed = stateMachine.addState(
-                Commands.parallel(
-                        shooter.shootCommand(),
-                        intake.closePivotOnRoller(true),
-                        indexer.turnOnIndexer().onlyWhile(INDEXER_TRIGGER),
-                        drivetrain.defenseModeCommand()
+        // ---------------- SHOOTING STATES ----------------
+
+        State shootingClosed = stateMachine.addState(
+                shootingState(
+                        intake.closePivotOnRoller(true)
                 ),
                 Constants.SHOOTING_CLOSED
         );
 
-        /*
-         * Shooting while simultaneously running the intake.
-         * Shooter and indexer remain active and the drivetrain stays
-         * in defense mode.
-         */
-        StateMachine.State shootingIntake = stateMachine.addState(
-                Commands.parallel(
-                        shooter.shootCommand(),
-                        intake.deployIntake(false),
-                        indexer.turnOnIndexer().onlyWhile(INDEXER_TRIGGER),
-                        drivetrain.defenseModeCommand()
+        State shootingIntake = stateMachine.addState(
+                shootingState(
+                        intake.deployIntake(false)
                 ),
                 Constants.SHOOTING_INTAKE
         );
 
-        // Start the robot with the intake closed.
         stateMachine.setInitialState(normalClosed);
 
         // ============================================================
         // NORMAL MODE
         // ============================================================
 
-        // LT pressed -> intake open + roller on.
+        // LT pressed -> open intake and run roller.
         stateMachine.switchFromAny(
                         normalClosed,
                         normalOpenOff,
                         normalOuttake
-                ).to(normalOpenOn)
+                )
+                .to(normalOpenOn)
                 .when(INTAKE_TRIGGER);
 
-        // LT released -> intake stays open + roller off.
+        // LT released -> leave intake open but stop roller.
         normalOpenOn.switchTo(normalOpenOff)
                 .when(INTAKE_TRIGGER.negate());
 
-        // LB pressed -> intake open + roller reverse + indexer reverse.
+        // LB pressed -> reverse intake and indexer.
         stateMachine.switchFromAny(
                         normalClosed,
                         normalOpenOff,
                         normalOpenOn
-                ).to(normalOuttake)
+                )
+                .to(normalOuttake)
                 .when(OUTTAKE_TRIGGER);
 
-        /*
-         * LB released while LT is not held.
-         * Keep the intake open but stop the roller and indexer.
-         */
+        // LB released without LT -> intake stays open and stops.
         normalOuttake.switchTo(normalOpenOff)
                 .when(
                         OUTTAKE_TRIGGER.negate()
                                 .and(INTAKE_TRIGGER.negate())
                 );
 
-        /*
-         * LB released while LT is held.
-         * Return to normal intake operation.
-         */
+        // LB released while LT is held -> return to intake.
         normalOuttake.switchTo(normalOpenOn)
                 .when(
                         OUTTAKE_TRIGGER.negate()
                                 .and(INTAKE_TRIGGER)
                 );
 
-        // B pressed -> close the intake.
+        // B pressed -> close intake.
         stateMachine.switchFromAny(
                         normalOpenOff,
                         normalOpenOn,
                         normalOuttake
-                ).to(normalClosed)
+                )
+                .to(normalClosed)
                 .when(CLOSE_INTAKE_TRIGGER);
 
         // ============================================================
@@ -430,73 +379,62 @@ public class SuperStructure extends SuperStructureBase {
         // ============================================================
 
         /*
-         * RT pressed from any normal state.
-         * Enter the shooting check state to determine whether the intake
-         * should be open or closed.
+         * RT pressed -> use shootingCheck to decide whether shooting
+         * starts with the intake open or closed.
          */
         stateMachine.switchFromAny(
                         normalClosed,
                         normalOpenOff,
                         normalOpenOn,
                         normalOuttake
-                ).to(shootingCheck)
+                )
+                .to(shootingCheck)
                 .when(SHOOTING_TRIGGER);
 
         /*
-         * RT released while shooting.
-         * Enter the check state to determine which normal state should
-         * be restored.
+         * RT released -> use check to restore the correct normal state
+         * based on the controls that are still held.
          */
         stateMachine.switchFromAny(
                         shootingClosed,
                         shootingIntake
-                ).to(check)
+                )
+                .to(check)
                 .when(SHOOTING_TRIGGER.negate());
 
-        // LT pressed while shooting -> deploy intake and run roller.
+        // LT pressed while shooting -> run intake.
         shootingClosed.switchTo(shootingIntake)
                 .when(INTAKE_TRIGGER);
 
-        // LT released while shooting -> close intake and stop roller.
+        // LT released while shooting -> close intake.
         shootingIntake.switchTo(shootingClosed)
                 .when(INTAKE_TRIGGER.negate());
 
         // ============================================================
-        // CHECK STATES
+        // SHOOTING CHECK
         // ============================================================
 
-        /*
-         * When shooting begins with LT held, enter shooting mode with
-         * the intake deployed.
-         */
+        // RT + LT -> shoot with intake running.
         shootingCheck.switchTo(shootingIntake)
                 .whenCompleteAnd(INTAKE_TRIGGER);
 
-        /*
-         * When shooting begins without LT held, enter shooting mode
-         * with the intake closed.
-         */
+        // RT without LT -> shoot with intake closed.
         shootingCheck.switchTo(shootingClosed)
                 .whenCompleteAnd(INTAKE_TRIGGER.negate());
 
-        /*
-         * Shooting ended while LT is held.
-         * Return to normal intake operation.
-         */
+        // ============================================================
+        // EXIT SHOOTING CHECK
+        // ============================================================
+
+        // RT released while LT is held -> return to intake.
         check.switchTo(normalOpenOn)
                 .whenCompleteAnd(INTAKE_TRIGGER);
 
-        /*
-         * Shooting ended while LB is held.
-         * Enter normal outtake operation.
-         */
+        // RT released while LB is held -> return to outtake.
         check.switchTo(normalOuttake)
                 .whenCompleteAnd(OUTTAKE_TRIGGER);
 
-        /*
-         * Shooting ended without LT or LB held.
-         * Leave the intake open with the roller stopped.
-         */
+        // Nothing held -> intake stays open with roller off.
         check.switchTo(normalOpenOff)
                 .whenCompleteAnd(
                         INTAKE_TRIGGER.negate()
