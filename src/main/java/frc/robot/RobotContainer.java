@@ -150,23 +150,23 @@ public class RobotContainer {
    * PathPlanner sequences for our auto commands
    */
   public LoggedDashboardChooser<Command> registerNamedCommand() {
-      LoggedDashboardChooser<Command> autoChooser = new LoggedDashboardChooser<>("Auto", AutoBuilder.buildAutoChooser());
-      autoChooser.onChange(this::displayChosenAuto);
-      autoChooser.addDefaultOption("idle", drivetrain.idle());
       
-        NamedCommands.registerCommand("deployIntake", intakeCoordinator.deployIntake(false));
+    NamedCommands.registerCommand("deployIntake", intakeCoordinator.deployIntake(false));
 
-        NamedCommands.registerCommand("openPivotOffRoller", intakeCoordinator.openPivotOffRoller(false));
+    NamedCommands.registerCommand("openPivotOffRoller", intakeCoordinator.openPivotOffRoller(false));
 
-        NamedCommands.registerCommand("ShootAndAim", Commands.parallel(
-          shooterSubsystem.shootCommand(),
-          intakeCoordinator.disableIntake(true),
-          indexerSubsystem.turnOnIndexer()
-        ));
+    NamedCommands.registerCommand("ShootAndAim", Commands.parallel(
+      shooterSubsystem.shootCommand(),
+      intakeCoordinator.disableIntake(true),
+      indexerSubsystem.turnOnIndexer()
+    ));
 
-        NamedCommands.registerCommand("WaitUntilNoFuel",Commands.waitUntil(() -> !generalRobotState.hasBalls()));
+    NamedCommands.registerCommand("WaitUntilNoFuel",Commands.waitUntil(() -> !generalRobotState.hasBalls()));
+    
+    LoggedDashboardChooser<Command> autoChooser = new LoggedDashboardChooser<>("Auto", AutoBuilder.buildAutoChooser());
+    autoChooser.onChange(this::displayChosenAuto);
+    autoChooser.addDefaultOption("idle", drivetrain.idle());
 
-        
       return autoChooser;
   }
 }
