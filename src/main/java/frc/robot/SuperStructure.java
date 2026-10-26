@@ -14,6 +14,8 @@ import frc.robot.subsystems.indexer.IndexerSubsystem;
 import frc.robot.subsystems.intake.IntakeCoordinator;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 
+import java.util.function.Function;
+
 /**
  * Coordinates the robot's major subsystems and manages high-level robot
  * behavior during driver operation.
@@ -148,32 +150,12 @@ public class SuperStructure extends SuperStructureBase {
      * allow individual mechanisms to be tested directly.
      */
     protected void configurePitBindings() {
-        Trigger intakeSpeed = operatorXboxController.povUp();
+        Trigger fast = operatorXboxController.povUp();
 
-
-        operatorXboxController.y().whileTrue(
-                intake.deployIntake(
-                        intakeSpeed.getAsBoolean()
-                )
-        );
-
-        operatorXboxController.b().whileTrue(
-                intake.closePivotOnRoller(
-                        intakeSpeed.getAsBoolean()
-                )
-        );
-
-        operatorXboxController.a().whileTrue(
-                intake.openPivotOffRoller(
-                        intakeSpeed.getAsBoolean()
-                )
-        );
-
-        operatorXboxController.x().whileTrue(
-                intake.deployIntakeReverse(
-                        intakeSpeed.getAsBoolean()
-                )
-        );
+        bindSpeedVariants(operatorXboxController.y(), fast, intake::deployIntake);
+        bindSpeedVariants(operatorXboxController.b(), fast, intake::closePivotOnRoller);
+        bindSpeedVariants(operatorXboxController.a(), fast, intake::openPivotOffRoller);
+        bindSpeedVariants(operatorXboxController.x(), fast, intake::deployIntakeReverse);
 
         operatorXboxController.rightTrigger()
                 .whileTrue(shooter.shootCommand());
@@ -189,6 +171,12 @@ public class SuperStructure extends SuperStructureBase {
 
         operatorXboxController.povDown()
                 .whileTrue(indexer.turnOffIndexer());
+    }
+
+    private void bindSpeedVariants(Trigger button, Trigger fast,
+                                   Function<Boolean, Command> commandFactory) {
+        button.and(fast).whileTrue(commandFactory.apply(true));
+        button.and(fast.negate()).whileTrue(commandFactory.apply(false));
     }
 
     /**

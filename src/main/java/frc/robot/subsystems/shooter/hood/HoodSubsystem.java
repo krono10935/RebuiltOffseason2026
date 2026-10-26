@@ -82,7 +82,7 @@ public class HoodSubsystem extends SubsystemBase {
   * @return the command the set the hood's angle
   */
   public Command setAngleCommand(Supplier<Rotation2d> angleSupplier){
-    return Commands.runEnd(() -> this.setAngle(angleSupplier.get()),()->this.setAngle(new Rotation2d(0)), this).withName("setHoodAngle");
+    return Commands.runEnd(() -> this.setAngle(angleSupplier.get()),()->this.setAngle(Rotation2d.kZero), this).withName("setHoodAngle");
   }
 
   /**
@@ -90,7 +90,7 @@ public class HoodSubsystem extends SubsystemBase {
    * @return the command the hold the hood's angle
    */
   public Command holdAngleCommand(Supplier<Rotation2d> angleSupplier) {
-    return Commands.runEnd(() -> this.holdAngle(angleSupplier.get()),()->this.setAngle(new Rotation2d(0)), this).withName("holdHoodAngle");
+    return Commands.runEnd(() -> this.holdAngle(angleSupplier.get()),()->this.setAngle(Rotation2d.kZero), this).withName("holdHoodAngle");
   }
 
   /**

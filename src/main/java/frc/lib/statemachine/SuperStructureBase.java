@@ -75,15 +75,16 @@ public abstract class SuperStructureBase extends SubsystemBase {
         switchFromAnyOtherThanMyself(to, binding.negate());
     }
 
-    protected void bindToggleTrue(State to, Trigger binding){
+    protected void bindToggleTrue(State to, Trigger binding) {
         final boolean[] toggle = { false };
-        final boolean[] risingEdge = { false };
+        final boolean[] last = { binding.getAsBoolean() };
 
         Trigger toggleTrigger = new Trigger(() -> {
-            if (binding.getAsBoolean() & !risingEdge[0]){
+            boolean now = binding.getAsBoolean();
+            if (now && !last[0]) {
                 toggle[0] = !toggle[0];
             }
-            risingEdge[0] = binding.getAsBoolean();
+            last[0] = now;
             return toggle[0];
         });
 

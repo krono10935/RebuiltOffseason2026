@@ -161,5 +161,9 @@ public class RollerSubsystem extends SubsystemBase {
         );
     }
 
-    public Command toggleDisableRollerCommand() {return Commands.runOnce(()->{isDisabled = !isDisabled;});}
+    public Command toggleDisableRollerCommand() {
+        return Commands.runOnce(()-> {
+            isDisabled = !isDisabled;
+        });
+    }
 }
