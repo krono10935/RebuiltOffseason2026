@@ -1,5 +1,6 @@
 package frc.robot.subsystems.intake.pivot;
 
+import frc.robot.GeneralRobotState;
 import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -73,7 +74,9 @@ public class PivotSubsystem extends SubsystemBase {
         }
         Logger.recordOutput("Arm angle", inputs.angle.getDegrees());
         
-
+        if(isPivotOpen()){
+            GeneralRobotState.setHasIntakeOpened(true);
+        }
     }
 
     /**
