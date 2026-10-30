@@ -32,6 +32,7 @@ public class GeneralRobotState {
       return instance;
   }
 
+  private static boolean hasIntakeOpened;
   private final Alliance alliance;
   private SwerveDrivePoseEstimator poseEstimator;
   private Supplier<ChassisSpeeds> speedsSupplier;
@@ -63,6 +64,7 @@ public class GeneralRobotState {
 
     SmartDashboard.putData("robotPose", field);
 
+    hasIntakeOpened = false;
   }
 
   /**
@@ -184,5 +186,13 @@ public class GeneralRobotState {
    */
   public void addPathToField(ArrayList<Pose2d> path){
       field.getObject("path").setPoses(path);
+  }
+
+  public static boolean getHasIntakeOpened() {
+    return hasIntakeOpened;
+  }
+
+  public static void setHasIntakeOpened(boolean hasIntakeOpened) {
+    GeneralRobotState.hasIntakeOpened = hasIntakeOpened;
   }
 }

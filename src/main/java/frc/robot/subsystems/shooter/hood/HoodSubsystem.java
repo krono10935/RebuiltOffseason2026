@@ -19,6 +19,7 @@ import frc.lib.statemachine.StateMachine.State;
 
 public class HoodSubsystem extends SubsystemBase {
 
+  private boolean isDisabled = false;
   private final HoodIO io;
   private final HoodInputsAutoLogged inputs;
 
@@ -73,6 +74,7 @@ public class HoodSubsystem extends SubsystemBase {
     
     String commandName = getCurrentCommand() == null ? "None" : getCurrentCommand().getName();
     Logger.recordOutput("Hood/Command", commandName);
+    Logger.recordOutput("Hood/isDisabled",isDisabled);
   }
 
   /**
@@ -80,7 +82,7 @@ public class HoodSubsystem extends SubsystemBase {
   * @return the command the set the hood's angle
   */
   public Command setAngleCommand(Supplier<Rotation2d> angleSupplier){
-    return Commands.run(() -> this.setAngle(angleSupplier.get()), this).withName("setHoodAngle");
+    return Commands.runEnd(() -> this.setAngle(angleSupplier.get()),()->this.setAngle(Rotation2d.kZero), this).withName("setHoodAngle");
   }
 
   /**
@@ -88,7 +90,7 @@ public class HoodSubsystem extends SubsystemBase {
    * @return the command the hold the hood's angle
    */
   public Command holdAngleCommand(Supplier<Rotation2d> angleSupplier) {
-    return Commands.run(() -> this.holdAngle(angleSupplier.get()), this).withName("holdHoodAngle");
+    return Commands.runEnd(() -> this.holdAngle(angleSupplier.get()),()->this.setAngle(Rotation2d.kZero), this).withName("holdHoodAngle");
   }
 
   /**
@@ -111,4 +113,6 @@ public class HoodSubsystem extends SubsystemBase {
 
     return disableHoodStateMachine;
   }
+
+  public Command toggleDisableHoodCommand() {return Commands.runOnce(()-> isDisabled = !isDisabled);}
 }

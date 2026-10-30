@@ -100,7 +100,7 @@ public class DrivetrainSysID extends Drivetrain {
    *  doesn't ram into a wall or person.
    */
   public void setDriveVoltageAndSteerController(double voltage) {
-    CommandXboxController controller = RobotContainer.getInstance().getController();
+    CommandXboxController controller = RobotContainer.getInstance().getDriverXboxController();
     
     Translation2d leftJoystickPosition = 
       new Translation2d(-controller.getLeftX(), -controller.getLeftY());
