@@ -27,7 +27,7 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "WaitUntilNoBalls"
+                        "name": "WaitUntilNoFuel"
                       }
                     },
                     {
@@ -67,7 +67,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "WaitUntilNoBalls"
+                  "name": "WaitUntilNoFuel"
                 }
               },
               {
