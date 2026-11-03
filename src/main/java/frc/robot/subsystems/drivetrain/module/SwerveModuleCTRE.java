@@ -1,8 +1,7 @@
 package frc.robot.subsystems.drivetrain.module;
 
-import org.opencv.calib3d.StereoBM;
+import org.littletonrobotics.junction.Logger;
 
-import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -74,5 +73,28 @@ public abstract class SwerveModuleCTRE extends SwerveModuleIO {
         
         drivingMotor.setNeutralMode(neutralMode);
         steeringMotor.setNeutralMode(neutralMode);
+    }
+
+    @Override
+    public void update(){
+        Logger.recordOutput("drivetrain/ctre module/" + constants.NAME() + "/steer/position", 
+            steeringMotor.getPosition().getValueAsDouble());
+
+        Logger.recordOutput("drivetrain/ctre module/" + constants.NAME() + "/steer/velocity", 
+            steeringMotor.getVelocity().getValueAsDouble());
+
+        Logger.recordOutput("drivetrain/ctre module/" + constants.NAME() + "/steer/voltageOut", 
+            steeringMotor.getMotorVoltage().getValueAsDouble());
+
+
+
+        Logger.recordOutput("drivetrain/ctre module/" + constants.NAME() + "/drive/position", 
+            drivingMotor.getPosition().getValueAsDouble());
+
+        Logger.recordOutput("drivetrain/ctre module/" + constants.NAME() + "/drive/velocity", 
+            drivingMotor.getVelocity().getValueAsDouble());
+
+        Logger.recordOutput("drivetrain/ctre module/" + constants.NAME() + "/drive/voltageOut", 
+            drivingMotor.getMotorVoltage().getValueAsDouble());
     }
 }
