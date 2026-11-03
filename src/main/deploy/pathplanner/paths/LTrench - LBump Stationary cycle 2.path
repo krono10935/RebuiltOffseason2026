@@ -125,7 +125,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "intake",
+      "name": "",
       "waypointRelativePos": 1.6,
       "endWaypointRelativePos": 2.5,
       "command": {
