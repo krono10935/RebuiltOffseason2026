@@ -10,6 +10,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.statemachine.StateMachine.StateName;
 
 public class RollerSubsystem extends SubsystemBase {
+
+    private boolean isDisabled = false;
     private final RollerInputsAutoLogged inputs;
     private final RollerIO io;
 
@@ -71,6 +73,7 @@ public class RollerSubsystem extends SubsystemBase {
         updateInputs();
         
         Logger.processInputs(getName(), inputs);
+        Logger.recordOutput("Roller/isDisabled",isDisabled);
 
         if (getCurrentCommand() == null){
             Logger.recordOutput("Roller command", "null!");
@@ -156,5 +159,11 @@ public class RollerSubsystem extends SubsystemBase {
             () -> setDutyCycle(RollerConstants.ON_DUTY_CYCLE),
             this
         );
+    }
+
+    public Command toggleDisableRollerCommand() {
+        return Commands.runOnce(()-> {
+            isDisabled = !isDisabled;
+        });
     }
 }

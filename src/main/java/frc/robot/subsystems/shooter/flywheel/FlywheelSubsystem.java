@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class FlywheelSubsystem extends SubsystemBase {
   /** Creates a new FlywheelSubsystem. */
 
+  private boolean isDisabled = false;
   private final FlywheelIO io;
   private final FlywheelInputsAutoLogged inputs;
 
@@ -81,6 +82,7 @@ public class FlywheelSubsystem extends SubsystemBase {
     String commandName = getCurrentCommand() == null ? "None" : getCurrentCommand().getName();
 
     Logger.recordOutput("Flywheel/Command", commandName);
+    Logger.recordOutput("Flywheel/isDisabled",isDisabled);
   }
 
   /**
@@ -88,7 +90,7 @@ public class FlywheelSubsystem extends SubsystemBase {
    * @return the command the set the flywheel's speed
    */
   public Command spinUpCommand(Supplier<Double> mpsSupplier){
-    return Commands.run(() -> this.spinUp(mpsSupplier.get()), this).withName("spinUpFlywheel");
+    return Commands.runEnd(() -> this.spinUp(mpsSupplier.get()),this::stop, this).withName("spinUpFlywheel");
   }
 
   /**
@@ -96,7 +98,7 @@ public class FlywheelSubsystem extends SubsystemBase {
    * @return the command the hold the flywheel's speed
    */
   public Command holdSpeedCommand(Supplier<Double> mpsSupplier){
-    return Commands.run(() -> this.holdSpeed(mpsSupplier.get()), this).withName("holdFlywheelSpeed");
+    return Commands.runEnd(() -> this.holdSpeed(mpsSupplier.get()),this::stop, this).withName("holdFlywheelSpeed");
   }
 
   /**
@@ -114,4 +116,6 @@ public class FlywheelSubsystem extends SubsystemBase {
   public Command stopCommand(){
     return Commands.run(this::stop, this).withName("stopFlywheel");
   }
+
+  public Command toggleDisableFlywheelCommand() {return Commands.runOnce(()-> isDisabled = !isDisabled);}
 }

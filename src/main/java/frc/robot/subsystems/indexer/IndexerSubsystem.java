@@ -12,7 +12,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IndexerSubsystem extends SubsystemBase {
-  
+
+  private boolean isDisabled = false;
   private final IndexerIO io;
   private final IndexerInputsAutoLogged inputs;
   
@@ -27,6 +28,7 @@ public class IndexerSubsystem extends SubsystemBase {
   public void periodic() {
     io.updateInputs(inputs);
     Logger.processInputs(getName(), inputs);
+    Logger.recordOutput("Indexer/isDisabled",isDisabled);
   }
 
   /**
@@ -105,7 +107,5 @@ public class IndexerSubsystem extends SubsystemBase {
     );
   }
 
-
-
-
+  public Command toggleDisableIndexer() {return Commands.runOnce(()-> isDisabled = !isDisabled);}
 }

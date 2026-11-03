@@ -15,7 +15,7 @@ import frc.lib.math.UnitConversions;
 
 public class FlywheelConstants {
     /** CANIDs of all flywheel motors */
-    public static final int[] MOTOR_IDS = {0, 1, 2, 3}; // TODO:change to correct CANID
+    public static final int[] MOTOR_IDS = {26, 27, 28, 29}; // TODO:change to correct CANID
     
     /** flywheel radius */
     private static final double FLYWHEEL_RADIUS = UnitConversions.inchesToMeters(4);

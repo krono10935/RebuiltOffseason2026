@@ -190,7 +190,9 @@ public final class StateMachine extends Command {
 
         if (CommandScheduler.getInstance().isScheduled(currentCommand)){
             for (Transition transition : currentState.transitions()){
-                if (transition.shouldTransition()){
+                boolean shouldTransition = transition.shouldTransition();
+                Logger.recordOutput("Statemachines/"+ getName() + "/shouldTransition/" + currentState.getName() + "/to/" + transition.nextState().name, shouldTransition);
+                if (shouldTransition){
                     // Cancel the current state's command and move to the next state specified by the
                     // transition. Break the state loop early to avoid an unnecessary yield() call and
                     // allow the next state's command to start in the same loop iteration that the

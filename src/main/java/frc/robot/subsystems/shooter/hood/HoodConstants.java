@@ -11,13 +11,12 @@ import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.system.LinearSystem;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
-import edu.wpi.first.wpilibj.DutyCycle;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import frc.lib.statemachine.StateMachine.StateName;
 
 public class HoodConstants {
     /** CANID of the hood's motor */
-    public static final int HOOD_MOTOR_CANID = 0; // TODO: change to correct CANID
+    public static final int HOOD_MOTOR_CANID = 30; // TODO: change to correct CANID
 
     /** roborio port of the absolute encoder */
     public static final int ABSOLUTE_ENCODER_PORT = 0; // TODO: change to correct roborio port
