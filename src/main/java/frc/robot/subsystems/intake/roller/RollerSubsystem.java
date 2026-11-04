@@ -119,7 +119,7 @@ public class RollerSubsystem extends SubsystemBase {
      * Stops the motor 
      */
     public void stop() {
-        if(!isDisabled) io.stop();
+        io.stop();
     }
     /**
      * updates the inputs object

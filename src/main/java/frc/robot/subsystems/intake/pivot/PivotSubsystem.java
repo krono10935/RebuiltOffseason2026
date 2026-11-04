@@ -123,7 +123,7 @@ s    */
      * Stops the pivot
      */
     public void stop(){
-        if(!isDisabled) io.stop();
+        io.stop();
     }
 
     /**
