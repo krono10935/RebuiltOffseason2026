@@ -112,14 +112,14 @@ public class RollerSubsystem extends SubsystemBase {
      * @param dutyCycle effort of the motors 
      */
     public void setDutyCycle(double dutyCycle) {
-        io.setDutyCycle(dutyCycle);
+        if(!isDisabled) io.setDutyCycle(dutyCycle);
     }
 
     /**
      * Stops the motor 
      */
     public void stop() {
-        io.stop();
+        if(!isDisabled) io.stop();
     }
     /**
      * updates the inputs object

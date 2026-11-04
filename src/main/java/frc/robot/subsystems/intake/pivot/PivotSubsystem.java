@@ -108,7 +108,7 @@ public class PivotSubsystem extends SubsystemBase {
      */
 
     public void setRotation(Rotation2d rotation){
-        io.setRotation(rotation);
+        if (!isDisabled) io.setRotation(rotation);
     }
 
     /**
@@ -116,14 +116,14 @@ public class PivotSubsystem extends SubsystemBase {
      * @param rotation The wanted rotation
 s    */
     public void setRotationSlow(Rotation2d rotation){
-        io.setRotationSlow(rotation);
+        if(!isDisabled) io.setRotationSlow(rotation);
     }
 
     /**
      * Stops the pivot
      */
     public void stop(){
-        io.stop();
+        if(!isDisabled) io.stop();
     }
 
     /**
