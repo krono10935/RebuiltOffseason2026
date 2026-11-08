@@ -33,6 +33,7 @@ public class FlywheelSubsystem extends SubsystemBase {
    * @param mps the wanted speed in meters/second
    */
   private void spinUp(double mps){
+    if (isDisabled) return;
     io.spinUp(mps);
   }
 
@@ -41,6 +42,7 @@ public class FlywheelSubsystem extends SubsystemBase {
    * @param mps the wanted speed in meters/second
    */
   private void holdSpeed(double mps){
+    if (isDisabled) return;
     io.holdSpeed(mps);
   }
 
@@ -49,6 +51,7 @@ public class FlywheelSubsystem extends SubsystemBase {
    * @param dutyCycle the wanted duty cycle
    */
   private void basicSpinUp(double dutyCycle){
+    if (isDisabled) return;
     io.basicSpinUp(dutyCycle);
   }
 
@@ -117,5 +120,9 @@ public class FlywheelSubsystem extends SubsystemBase {
     return Commands.run(this::stop, this).withName("stopFlywheel");
   }
 
+    /**
+   * command used by ShooterSubsystem to toggle if the flywheel is enabled or disabled
+   * @return the command to toggle if the flywheel is enabled or disabled
+   */
   public Command toggleDisableFlywheelCommand() {return Commands.runOnce(()-> isDisabled = !isDisabled);}
 }
