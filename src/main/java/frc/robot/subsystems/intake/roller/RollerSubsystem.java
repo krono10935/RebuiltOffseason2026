@@ -161,9 +161,16 @@ public class RollerSubsystem extends SubsystemBase {
         );
     }
 
+    /**
+     * @return A commands that toggle the disabled status of the roller, and if isDisabled then also stop the roller motors.
+     * */
     public Command toggleDisableRollerCommand() {
-        return Commands.runOnce(()-> {
-            isDisabled = !isDisabled;
-        });
+        return Commands.runOnce(
+            ()-> {
+                isDisabled = !isDisabled;
+                if(isDisabled) this.stop();
+            },
+            this
+        );
     }
 }
