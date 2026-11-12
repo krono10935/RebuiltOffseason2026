@@ -42,6 +42,10 @@ public class ShooterSubsystem extends SubsystemBase {
         return flywheel.basicSpinUpCommand(() -> flywheelSpeedDutyCycle.get());
     }
 
+    /**
+     * disables the basic shooter (no hood control)
+     * @return the command to disable the shooter in basic mode
+     */
     public Command disableBasicShooterCommand() {
         return flywheel.stopCommand();
     }
@@ -123,10 +127,18 @@ public class ShooterSubsystem extends SubsystemBase {
         ShotCalculator.getInstance().clearShootingParameters();
     }
 
+   /**
+    * checks whether the shooter is ready to shoot
+    * @return if the shooter is ready to shoot
+    */
     public Trigger isReadyToShoot(){
-        return new Trigger(()-> flywheel.isAtGoal()&& hood.isAtGoal()&&GeneralRobotState.getHasIntakeOpened());
-    } //TODO: add a real function that returns if shooter is ready to shoot
+        return new Trigger(()-> flywheel.isAtGoal() && hood.isAtGoal() && GeneralRobotState.getHasIntakeOpened());
+    }
 
+    /**
+     * a command to toggle whether the shooter is enabled or disabled
+     * @return the command to toggle whether the shooter is enabled or disabled
+     */
     public Command toggleDisableShooter(){
         return flywheel.toggleDisableFlywheelCommand().alongWith(hood.toggleDisableHoodCommand());
     }

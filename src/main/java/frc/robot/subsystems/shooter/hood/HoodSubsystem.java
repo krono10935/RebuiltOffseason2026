@@ -35,6 +35,7 @@ public class HoodSubsystem extends SubsystemBase {
    * @param angle the wanted angle
    */
   public void setAngle(Rotation2d angle){
+    if (isDisabled) return;
     io.setAngle(angle);
   }
 
@@ -43,6 +44,7 @@ public class HoodSubsystem extends SubsystemBase {
    * @param angle the wanted angle
    */
   public void holdAngle(Rotation2d angle){
+    if (isDisabled) return;
     io.holdAngle(angle);
   }
 
@@ -100,6 +102,10 @@ public class HoodSubsystem extends SubsystemBase {
     return Commands.run(this::stop, this).withName("stopHood");
   }
 
+  /**
+   * a command to disable the hood, sets angle to 0 and stops the motor
+   * @return the command to disable the hood
+   */
   public Command disableHoodCommand() {
     StateMachine disableHoodStateMachine = new StateMachine("DisableHood_StateMachine");
 
@@ -114,5 +120,9 @@ public class HoodSubsystem extends SubsystemBase {
     return disableHoodStateMachine;
   }
 
+    /**
+   * command used by ShooterSubsystem to toggle if the hood is enabled or disabled
+   * @return the command to toggle if the hood is enabled or disabled
+   */
   public Command toggleDisableHoodCommand() {return Commands.runOnce(()-> isDisabled = !isDisabled);}
 }
