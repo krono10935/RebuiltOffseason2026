@@ -62,7 +62,7 @@ public class RollerConstants {
         
         motorConfig.encoder.velocityConversionFactor(RPM_TO_MPS_RATIO / GEAR_RATIO);
         motorConfig.follow(MOTOR_ONE_CANID, true);
-        motorConfig.smartCurrentLimit(80,30);
+        motorConfig.smartCurrentLimit(100,80);
 
         return motorConfig;
     }
