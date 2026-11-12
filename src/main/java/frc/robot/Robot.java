@@ -153,7 +153,7 @@ public class Robot extends LoggedRobot {
       m_autonomousCommand.cancel();
     }
 
-    m_teleopSuperStructre = SuperStructure.getInstance().getCommand().repeatedly();
+    m_teleopSuperStructre = SuperStructure.getInstance().getCommand();
 
     if (m_teleopSuperStructre != null) {
       CommandScheduler.getInstance().schedule(m_teleopSuperStructre);

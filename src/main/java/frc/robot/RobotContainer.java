@@ -62,20 +62,18 @@ public class RobotContainer {
   private final IndexerSubsystem indexerSubsystem;
 
   private final GeneralRobotState generalRobotState;
-
-  public static RobotContainer getInstance(){
-    if (instance == null){
-      instance = new RobotContainer();
-    }
-
-
-    return instance;
-  }
   
+  private final DrivetrainReal drivetrain;
+  
+    public static RobotContainer getInstance(){
+      if (instance == null){
+        instance = new RobotContainer();
+      }
+      return instance;
+    }
+    
   private RobotContainer() {
     drivetrain = new DrivetrainReal(ConduitApi.getInstance()::getPDPVoltage, Constants.CHASSIS_TYPE.constants);
-
-    controller = new CommandXboxController(0);
 
     generalRobotState = GeneralRobotState.getInstance();
 
@@ -107,15 +105,15 @@ public class RobotContainer {
   }
 
   public ShooterSubsystem getShooter(){
-      return shooter;
+      return shooterSubsystem;
   }
 
   public IndexerSubsystem getIndexer(){
-      return indexer;
+      return indexerSubsystem;
   }
 
   public IntakeCoordinator getIntake(){
-      return intake;
+      return intakeCoordinator;
   }
 
   public DrivetrainReal getDrivetrain(){
