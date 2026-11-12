@@ -93,8 +93,8 @@ public class PivotConstants {
         config.MotionMagic.MotionMagicAcceleration = 100;
         config.MotionMagic.MotionMagicCruiseVelocity = 100;
         
-        config.CurrentLimits.StatorCurrentLimit = 120;
-        config.CurrentLimits.SupplyCurrentLimit = 90;
+        config.CurrentLimits.StatorCurrentLimit = 75;
+        config.CurrentLimits.SupplyCurrentLimit = 30;
 
         config.CurrentLimits.StatorCurrentLimitEnable = true;
         config.CurrentLimits.SupplyCurrentLimitEnable = true;
