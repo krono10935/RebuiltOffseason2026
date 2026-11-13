@@ -120,9 +120,16 @@ public class HoodSubsystem extends SubsystemBase {
     return disableHoodStateMachine;
   }
 
-    /**
+  /**
    * command used by ShooterSubsystem to toggle if the hood is enabled or disabled
    * @return the command to toggle if the hood is enabled or disabled
    */
-  public Command toggleDisableHoodCommand() {return Commands.runOnce(()-> isDisabled = !isDisabled);}
+  public Command toggleDisableHoodCommand() {
+    return Commands.runOnce(()-> {
+      isDisabled = !isDisabled;
+      if (isDisabled) {
+        stop();
+      }
+    });
+  }
 }
