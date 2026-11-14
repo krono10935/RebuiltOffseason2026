@@ -111,6 +111,6 @@ public class IndexerSubsystem extends SubsystemBase {
 
   public Command toggleDisableIndexer() {return Commands.runOnce(()-> {
     isDisabled = !isDisabled; 
-    stop();
+    if (isDisabled) stop();
   });}
 }
