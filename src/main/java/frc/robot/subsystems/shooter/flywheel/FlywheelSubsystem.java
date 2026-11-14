@@ -120,9 +120,16 @@ public class FlywheelSubsystem extends SubsystemBase {
     return Commands.run(this::stop, this).withName("stopFlywheel");
   }
 
-    /**
+  /**
    * command used by ShooterSubsystem to toggle if the flywheel is enabled or disabled
    * @return the command to toggle if the flywheel is enabled or disabled
    */
-  public Command toggleDisableFlywheelCommand() {return Commands.runOnce(()-> isDisabled = !isDisabled);}
+  public Command toggleDisableFlywheelCommand() {
+    return Commands.runOnce(()-> {
+      isDisabled = !isDisabled;
+      if (isDisabled) {
+        stop();
+      }
+    });
+  }
 }
