@@ -80,7 +80,7 @@ public abstract class Drivetrain extends SubsystemBase {
     Logger.recordOutput(getName() + "/current command", currentCommand);
 
 
-    GeneralRobotState.getInstance().updatePoseEstimator(getGyroAngle(), modulePositions);
+    // GeneralRobotState.getInstance().updatePoseEstimator(getGyroAngle(), modulePositions);
   }
 
   /**

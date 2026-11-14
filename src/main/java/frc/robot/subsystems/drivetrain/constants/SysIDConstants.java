@@ -20,5 +20,5 @@ public class SysIDConstants {
     /**
      * How many seconds to perform the test for the sysID routine
      */
-    public static final double TIMEOUT = 24;
+    public static final double TIMEOUT = 10;
 }

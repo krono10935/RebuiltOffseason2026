@@ -67,6 +67,9 @@ public enum SwerveModulesMK4 {
     private static final double RADIUS = 0.0508;
     private static final double UNIT_CONVERSION = 2 * Math.PI * RADIUS;
 
+    private static final double STEER_GEAR_RATIO = 6.75;
+    private static final double DRIVE_GEAR_RATIO = 12.8;
+
     SwerveModulesMK4(int canCoderID,
                      double zeroOffset,
                      int driveMotorID,
@@ -117,6 +120,7 @@ public enum SwerveModulesMK4 {
         constants = new CTREModuleConstants(
             canCoderID, steerMotorID, driveMotorID,
             driveSimConfig, steerSimConfig, UNIT_CONVERSION, zeroOffset,
+            STEER_GEAR_RATIO, DRIVE_GEAR_RATIO,
             driveConfig, steerConfig, location,this.name());
 
     }

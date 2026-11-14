@@ -18,15 +18,15 @@ import frc.lib.math.FeedForwardsGains;
 public enum SwerveModulesMK5 {
 
     FRONT_LEFT(
-            6,  -0.430, 12
+            6,  0, 12
             ,
-            new PIDGains(7, 0.4, 0, 0, 0, 0),
-            new FeedForwardsGains(2.4805, 0.32),
+            new PIDGains(0, 0, 0, 0, 0, 0),
+            new FeedForwardsGains(0, 0),
             0.32661,
             4,
-            new PIDGains(30, 5, 0, 0, 0, 0),
-            new FeedForwardsGains(2.5776, 0),
-            0.37782,
+            new PIDGains(50, 0.1, 0, 0, 0, 0),
+            new FeedForwardsGains(0.096998, 0.57059),
+            0.005314,
             new Translation2d(0.276375, 0.289025),
             new PIDGains(),
             new FeedForwardsGains(),
@@ -35,15 +35,15 @@ public enum SwerveModulesMK5 {
 
 
     FRONT_RIGHT(
-            8,  -0.45, 13
+            8,  -0.188477, 13
             ,
-            new PIDGains(7, 0.4, 0, 0, 0, 0),
-            new FeedForwardsGains(2.3745, 0.32),
+            new PIDGains(0, 0, 0, 0, 0, 0),
+            new FeedForwardsGains(0, 0),
             0.40069,
             5,
-            new PIDGains(30, 5, 0, 0, 0, 0),
-            new FeedForwardsGains(2.4944, 0),
-            1.3643,
+            new PIDGains(50, 0.1, 0, 0, 0, 0),
+            new FeedForwardsGains(0.098022, 0.41552),
+            0.0041816,
             new Translation2d(0.276375, -0.289025),
             new PIDGains(),
             new FeedForwardsGains(),
@@ -51,15 +51,15 @@ public enum SwerveModulesMK5 {
             new FeedForwardsGains()),
 
     BACK_LEFT(
-            7,  0.2624, 11
+            7, -0.015625, 11
             ,
-            new PIDGains(7, 0.4, 0, 0, 0, 0),
-            new FeedForwardsGains(2.4752, 0.32),
+            new PIDGains(0, 0, 0, 0, 0, 0),
+            new FeedForwardsGains(0, 0),
             0.91735,
             3,
-            new PIDGains(30, 5, 0, 0, 0, 0),
-            new FeedForwardsGains(2.4895, 0),
-            0.83686,
+            new PIDGains(50, 0.1, 0, 0, 0, 0),
+            new FeedForwardsGains(0.098978, 0.49769),
+            0.0041157,
             new Translation2d(-0.276375, 0.289025),
             new PIDGains(),
             new FeedForwardsGains(),
@@ -68,15 +68,15 @@ public enum SwerveModulesMK5 {
 
 
     BACK_RIGHT(
-            9,  0.236, 10
+            9,  0.79, 10
             ,
-            new PIDGains(7, 0.4, 0, 0, 0, 0),
-            new FeedForwardsGains(2.3786, 0.32),
+            new PIDGains(0, 0, 0, 0, 0, 0),
+            new FeedForwardsGains(0, 0),
             0.71613,
             2,
-            new PIDGains(30, 5, 0, 0, 0, 0),
-            new FeedForwardsGains(2.5978, 0),
-            0.53702,
+            new PIDGains(50, 0.1, 0, 0, 0, 0),
+            new FeedForwardsGains(0.097727, 0.6269),
+            0.0077327,
             new Translation2d(-0.276375, -0.289025),
             new PIDGains(),
             new FeedForwardsGains(),
@@ -85,6 +85,9 @@ public enum SwerveModulesMK5 {
             
     private static final double RADIUS = 0.0508;
     private static final double UNIT_CONVERSION = 2 * Math.PI * RADIUS;
+
+    private static final double STEER_GEAR_RATIO = 26.1;
+    private static final double DRIVE_GEAR_RARTO = 6.03;
 
     SwerveModulesMK5(int canCoderID,
                      double zeroOffset,
@@ -158,7 +161,8 @@ public enum SwerveModulesMK5 {
 
         constants = new CTREModuleConstants(
             canCoderID, steerMotorID, driveMotorID,
-            driveSimConfig, steerSimConfig, UNIT_CONVERSION, zeroOffset, 
+            driveSimConfig, steerSimConfig, UNIT_CONVERSION, zeroOffset,
+             STEER_GEAR_RATIO, DRIVE_GEAR_RARTO,
             driveConfig, steerConfig, location, this.name());
 
     }
@@ -176,7 +180,6 @@ public enum SwerveModulesMK5 {
 
         var driveConfig = new TalonFXConfiguration();
 
-        driveConfig.Feedback.SensorToMechanismRatio = 6.03;
         driveConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
 
         driveConfig.CurrentLimits.StatorCurrentLimit = 120;
@@ -190,7 +193,6 @@ public enum SwerveModulesMK5 {
 
         var steerConfig = new TalonFXConfiguration();
 
-        steerConfig.Feedback.SensorToMechanismRatio = 26.1;
         steerConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
 
         steerConfig.CurrentLimits.StatorCurrentLimit = 35;

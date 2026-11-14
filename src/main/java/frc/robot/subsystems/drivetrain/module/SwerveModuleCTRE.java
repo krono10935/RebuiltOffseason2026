@@ -4,11 +4,13 @@ import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import frc.robot.Constants;
 import frc.robot.subsystems.drivetrain.configsStructure.moduleConfig.CTREModuleConstants;
 
 public abstract class SwerveModuleCTRE extends SwerveModuleIO {
@@ -18,10 +20,10 @@ public abstract class SwerveModuleCTRE extends SwerveModuleIO {
     
     protected SwerveModuleCTRE(CTREModuleConstants constants){
         super(constants);
-        drivingMotor = new TalonFX(constants.DRIVE_ID());
+        drivingMotor = new TalonFX(constants.DRIVE_ID(), Constants.canivore);
         drivingMotor.getConfigurator().apply(constants.DRIVING_CONFIG());
 
-        steeringMotor = new TalonFX(constants.STEER_ID());
+        steeringMotor = new TalonFX(constants.STEER_ID(), Constants.canivore);
         steeringMotor.getConfigurator().apply(constants.STEERING_CONFIG());
 
     }
@@ -47,7 +49,8 @@ public abstract class SwerveModuleCTRE extends SwerveModuleIO {
     @Override
     public void setTargetState(SwerveModuleState targetState, int slot) {
         drivingMotor.setControl(new VelocityTorqueCurrentFOC(
-            targetState.speedMetersPerSecond / constants.UNIT_CONVERSION())
+            targetState.speedMetersPerSecond * 
+            constants.DRIVE_GEAR_RATIO() / constants.UNIT_CONVERSION())
             .withSlot(slot));
 
         steeringMotor.setControl(new PositionTorqueCurrentFOC(
@@ -58,12 +61,13 @@ public abstract class SwerveModuleCTRE extends SwerveModuleIO {
 
     @Override
     public void setSteerVoltage(double voltage){
-        steeringMotor.setVoltage(voltage);
+        steeringMotor.setControl(new VoltageOut(voltage));
     }
 
     @Override
     public void setDriveVoltageAndSteerAngle(double voltage, Rotation2d angle) {
-        steeringMotor.setControl(new PositionTorqueCurrentFOC(angle.getRotations()));
+        steeringMotor.setControl(new PositionTorqueCurrentFOC(
+            constants.STEER_GEAR_RATIO() * angle.getRotations()));
         drivingMotor.setVoltage(voltage);
     }
 
@@ -86,6 +90,8 @@ public abstract class SwerveModuleCTRE extends SwerveModuleIO {
         Logger.recordOutput("drivetrain/ctre module/" + constants.NAME() + "/steer/voltageOut", 
             steeringMotor.getMotorVoltage().getValueAsDouble());
 
+        Logger.recordOutput("drivetrain/ctre module/" + constants.NAME() + "/steer/Setpoint",
+            steeringMotor.getClosedLoopReference().getValueAsDouble());
 
 
         Logger.recordOutput("drivetrain/ctre module/" + constants.NAME() + "/drive/position", 

@@ -1,5 +1,7 @@
 package frc.robot;
 
+import com.ctre.phoenix6.CANBus;
+
 import edu.wpi.first.wpilibj.RobotBase;
 import frc.lib.statemachine.StateMachine;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -14,6 +16,9 @@ public class Constants {
     
     public static final Mode simMode = Mode.REAL;
     public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;
+
+    public static final CANBus rio = new CANBus("rio");
+    public static final CANBus canivore = new CANBus("Canivore");
 
     public static boolean isPit = false; //TODO update before match
 

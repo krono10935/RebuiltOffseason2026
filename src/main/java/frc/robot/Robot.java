@@ -47,19 +47,7 @@ public class Robot extends LoggedRobot {
     StatusLogger.disableAutoLogging();
     StatusLogger.stop();
 
-    Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
-    Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
-    Logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA);
-    Logger.recordMetadata("GitDate", BuildConstants.GIT_DATE);
-    Logger.recordMetadata("GitBranch", BuildConstants.GIT_BRANCH);
-    Logger.recordMetadata(
-        "GitDirty",
-        switch (BuildConstants.DIRTY) {
-        case 0 -> "All changes committed";
-        case 1 -> "Uncommitted changes";
-        default -> "Unknown";
-        });
-
+   
      if(!Constants.IS_COMP){
       if (isReal()) {
           Logger.addDataReceiver(new WPILOGWriter()); // Log to a USB stick ("/U/logs")
@@ -100,6 +88,20 @@ public class Robot extends LoggedRobot {
       }
     }
 
+    Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
+    Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
+    Logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA);
+    Logger.recordMetadata("GitDate", BuildConstants.GIT_DATE);
+    Logger.recordMetadata("GitBranch", BuildConstants.GIT_BRANCH);
+    Logger.recordMetadata(
+        "GitDirty",
+        switch (BuildConstants.DIRTY) {
+        case 0 -> "All changes committed";
+        case 1 -> "Uncommitted changes";
+        default -> "Unknown";
+        });
+
+
     Logger.start();
   }
 
@@ -115,8 +117,8 @@ public class Robot extends LoggedRobot {
     }
     Logger.recordOutput("PDH/Total Power", conduit.getPDPTotalCurrent() * voltage);
 
-    Logger.recordOutput("drivetrain/estimated pose", GeneralRobotState.getInstance().getEstimatedPose());
-    GeneralRobotState.getInstance().getField().setRobotPose(GeneralRobotState.getInstance().getEstimatedPose());
+    // Logger.recordOutput("drivetrain/estimated pose", GeneralRobotState.getInstance().getEstimatedPose());
+    // GeneralRobotState.getInstance().getField().setRobotPose(GeneralRobotState.getInstance().getEstimatedPose());
   }
 
   @Override
@@ -127,7 +129,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void disabledExit() {
-    RobotContainer.getInstance().getDrivetrain().setBrakeMode(true);
+    // RobotContainer.getInstance().getDrivetrain().setBrakeMode(true);
   }
 
   @Override
@@ -144,7 +146,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void autonomousExit() {
-    RobotContainer.getInstance().getDrivetrain().stop();
+    // RobotContainer.getInstance().getDrivetrain().stop();
   }
 
   @Override
@@ -153,10 +155,10 @@ public class Robot extends LoggedRobot {
       m_autonomousCommand.cancel();
     }
 
-    m_teleopSuperStructre = SuperStructure.getInstance().getCommand();
+    // m_teleopSuperStructre = SuperStructure.getInstance().getCommand();
 
     if (m_teleopSuperStructre != null) {
-      CommandScheduler.getInstance().schedule(m_teleopSuperStructre);
+      // CommandScheduler.getInstance().schedule(m_teleopSuperStructre);
     }
   }
 
@@ -165,7 +167,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void teleopExit() {
-    RobotContainer.getInstance().getDrivetrain().setBrakeMode(false);
+    // RobotContainer.getInstance().getDrivetrain().setBrakeMode(false);
   }
 
   @Override

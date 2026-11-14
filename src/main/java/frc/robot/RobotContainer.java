@@ -7,6 +7,7 @@ package frc.robot;
 import java.io.IOException;
 
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.subsystems.indexer.IndexerSubsystem;
 import frc.robot.subsystems.intake.IntakeCoordinator;
 import frc.robot.subsystems.intake.pivot.PivotSubsystem;
@@ -34,6 +35,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.drivetrain.DrivetrainReal;
+import frc.robot.subsystems.drivetrain.DrivetrainSysID;
 import frc.robot.subsystems.drivetrain.configsStructure.ChassisConstants;
 import frc.robot.subsystems.indexer.IndexerSubsystem;
 import frc.robot.subsystems.intake.IntakeCoordinator;
@@ -50,20 +52,22 @@ public class RobotContainer {
   private final LoggedDashboardChooser<Command> autoChooser;
 
   private final CommandXboxController driverXboxController;
-  private final CommandXboxController operatorXboxController;
-  private final RollerSubsystem rollerSubsystem;
-  private final PivotSubsystem pivotSubsystem;
-  private final IntakeCoordinator intakeCoordinator;
+  // private final CommandXboxController operatorXboxController;
+  // private final RollerSubsystem rollerSubsystem;
+  // private final PivotSubsystem pivotSubsystem;
+  // private final IntakeCoordinator intakeCoordinator;
 
-  private final FlywheelSubsystem flywheelSubsystem;
-  private final HoodSubsystem hoodSubsystem;
-  private final ShooterSubsystem shooterSubsystem;
+  // private final FlywheelSubsystem flywheelSubsystem;
+  // private final HoodSubsystem hoodSubsystem;
+  // private final ShooterSubsystem shooterSubsystem;
 
-  private final IndexerSubsystem indexerSubsystem;
+  // private final IndexerSubsystem indexerSubsystem;
 
-  private final GeneralRobotState generalRobotState;
+  // private final GeneralRobotState generalRobotState;
   
   private final DrivetrainReal drivetrain;
+
+  // private final DrivetrainSysID sysId;
   
     public static RobotContainer getInstance(){
       if (instance == null){
@@ -73,26 +77,41 @@ public class RobotContainer {
     }
     
   private RobotContainer() {
-    drivetrain = new DrivetrainReal(ConduitApi.getInstance()::getPDPVoltage, Constants.CHASSIS_TYPE.constants);
+    // drivetrain = new DrivetrainReal(ConduitApi.getInstance()::getPDPVoltage, Constants.CHASSIS_TYPE.constants);
 
-    generalRobotState = GeneralRobotState.getInstance();
+    // generalRobotState = GeneralRobotState.getInstance();
 
-    rollerSubsystem = new RollerSubsystem();
-    pivotSubsystem = new PivotSubsystem();
+    // rollerSubsystem = new RollerSubsystem();
+    // pivotSubsystem = new PivotSubsystem();
 
-    flywheelSubsystem = new FlywheelSubsystem();
-    hoodSubsystem = new HoodSubsystem();
-    shooterSubsystem = new ShooterSubsystem(flywheelSubsystem, hoodSubsystem);
+    // flywheelSubsystem = new FlywheelSubsystem();
+    // hoodSubsystem = new HoodSubsystem();
+    // shooterSubsystem = new ShooterSubsystem(flywheelSubsystem, hoodSubsystem);
 
-    indexerSubsystem = new IndexerSubsystem();
+    // indexerSubsystem = new IndexerSubsystem();
 
-    intakeCoordinator = new IntakeCoordinator(pivotSubsystem, rollerSubsystem);
+    // intakeCoordinator = new IntakeCoordinator(pivotSubsystem, rollerSubsystem);
 
     autoChooser = registerNamedCommand();
 
     driverXboxController = new CommandXboxController(0);
 
-    operatorXboxController = new CommandXboxController(1);
+    drivetrain = new DrivetrainReal(
+      ConduitApi.getInstance()::getPDPVoltage, Constants.CHASSIS_TYPE.constants
+    );
+
+    CommandScheduler.getInstance().schedule(drivetrain.driveCommand().ignoringDisable(true));
+
+    // sysId = new DrivetrainSysID(Constants.CHASSIS_TYPE.COMPBOT.constants);
+
+    // driverXboxController.a().whileTrue(sysId.sysIdDynamicSteer(Direction.kForward));
+    // driverXboxController.b().whileTrue(sysId.sysIdDynamicSteer(Direction.kReverse));
+    // driverXboxController.y().whileTrue(sysId.sysIdQuasistaticSteer(Direction.kForward));
+    // driverXboxController.x().whileTrue(sysId.sysIdQuasistaticSteer(Direction.kReverse));
+
+
+
+    // operatorXboxController = new CommandXboxController(1);
 
   }
 
@@ -100,25 +119,25 @@ public class RobotContainer {
       return driverXboxController;
   }
 
-  public CommandXboxController getOperatorXboxController() {
-      return operatorXboxController;
-  }
+  // public CommandXboxController getOperatorXboxController() {
+  //     return operatorXboxController;
+  // }
 
-  public ShooterSubsystem getShooter(){
-      return shooterSubsystem;
-  }
+  // public ShooterSubsystem getShooter(){
+  //     return shooterSubsystem;
+  // }
 
-  public IndexerSubsystem getIndexer(){
-      return indexerSubsystem;
-  }
+  // public IndexerSubsystem getIndexer(){
+  //     return indexerSubsystem;
+  // }
 
-  public IntakeCoordinator getIntake(){
-      return intakeCoordinator;
-  }
+  // public IntakeCoordinator getIntake(){
+  //     return intakeCoordinator;
+  // }
 
-  public DrivetrainReal getDrivetrain(){
-    return drivetrain;
-  }
+  // public DrivetrainReal getDrivetrain(){
+  //   return drivetrain;
+  // }
 
   /**
    * @return the chosen autonomous command.
@@ -126,13 +145,15 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
       var selectedAuto = autoChooser.get();
 
-      Command autoCommand =
-              selectedAuto
-                      .andThen(drivetrain.idle());
+      // Command autoCommand =
+      //         selectedAuto
+      //                 .andThen(drivetrain.idle());
 
       CommandScheduler.getInstance().removeComposedCommand(selectedAuto);
 
-      return autoCommand.withName(selectedAuto.getName());
+      // return autoCommand.withName(selectedAuto.getName());
+
+      return null;
   }
 
   /**
@@ -171,22 +192,22 @@ public class RobotContainer {
    */
   public LoggedDashboardChooser<Command> registerNamedCommand() {
       
-    NamedCommands.registerCommand("deployIntake", intakeCoordinator.deployIntake(false));
+    // NamedCommands.registerCommand("deployIntake", intakeCoordinator.deployIntake(false));
 
-    NamedCommands.registerCommand("openPivotOffRoller", intakeCoordinator.openPivotOffRoller(false));
+    // NamedCommands.registerCommand("openPivotOffRoller", intakeCoordinator.openPivotOffRoller(false));
 
-    NamedCommands.registerCommand("ShootAndAim", Commands.parallel(
-      shooterSubsystem.shootCommand(),
-      intakeCoordinator.disableIntake(true),
-      indexerSubsystem.turnOnIndexer()
-    ));
+    // NamedCommands.registerCommand("ShootAndAim", Commands.parallel(
+    //   shooterSubsystem.shootCommand(),
+    //   intakeCoordinator.disableIntake(true),
+    //   indexerSubsystem.turnOnIndexer()
+    // ));
 
-    NamedCommands.registerCommand("WaitUntilNoFuel",Commands.waitUntil(() -> !generalRobotState.hasBalls()));
+    // NamedCommands.registerCommand("WaitUntilNoFuel",Commands.waitUntil(() -> !generalRobotState.hasBalls()));
     
-    LoggedDashboardChooser<Command> autoChooser = new LoggedDashboardChooser<>("Auto", AutoBuilder.buildAutoChooser());
-    autoChooser.onChange(this::displayChosenAuto);
-    autoChooser.addDefaultOption("idle", drivetrain.idle());
+    // LoggedDashboardChooser<Command> autoChooser = new LoggedDashboardChooser<>("Auto", AutoBuilder.buildAutoChooser());
+    // autoChooser.onChange(this::displayChosenAuto);
+    // autoChooser.addDefaultOption("idle", drivetrain.idle());
 
-      return autoChooser;
+      return null;
   }
 }

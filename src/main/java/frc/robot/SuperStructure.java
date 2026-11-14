@@ -94,13 +94,13 @@ public class SuperStructure extends SuperStructureBase {
         driverXboxController =
                 RobotContainer.getInstance().getDriverXboxController();
 
-        operatorXboxController =
-                RobotContainer.getInstance().getOperatorXboxController();
+        operatorXboxController = null;
+                // RobotContainer.getInstance().getOperatorXboxController();
 
-        drivetrain = RobotContainer.getInstance().getDrivetrain();
-        shooter = RobotContainer.getInstance().getShooter();
-        indexer = RobotContainer.getInstance().getIndexer();
-        intake = RobotContainer.getInstance().getIntake();
+        drivetrain = null; //RobotContainer.getInstance().getDrivetrain();
+        shooter = null; //RobotContainer.getInstance().getShooter();
+        indexer = null; //RobotContainer.getInstance().getIndexer();
+        intake = null; //RobotContainer.getInstance().getIntake();
 
         SHOOTING_TRIGGER = driverXboxController.rightTrigger();
         INTAKE_TRIGGER = driverXboxController.leftTrigger();

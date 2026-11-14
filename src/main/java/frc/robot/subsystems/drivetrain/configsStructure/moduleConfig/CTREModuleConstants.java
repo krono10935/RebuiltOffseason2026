@@ -27,7 +27,7 @@ import frc.lib.simulation.SimulationConfig;
 public record CTREModuleConstants(
         int CAN_CODER_ID, int STEER_ID, int DRIVE_ID, 
         SimulationConfig DRIVE_SIM_CONFIG, SimulationConfig STEER_SIM_CONFIG, double UNIT_CONVERSION,
-        double ZERO_OFFSET, TalonFXConfiguration DRIVING_CONFIG, TalonFXConfiguration STEERING_CONFIG,
+        double ZERO_OFFSET, double STEER_GEAR_RATIO, double DRIVE_GEAR_RATIO, TalonFXConfiguration DRIVING_CONFIG, TalonFXConfiguration STEERING_CONFIG,
         Translation2d TRANSLATION, String NAME) {
 }
 
