@@ -134,7 +134,7 @@ public class IntakeCoordinator {
     }
 
     /**
-     * A command that toggles the disable status of the intke(both pivot and roller).
+     * A command that toggles the disable status of the intke(both pivot and roller). If they are disabled also stop the motors.
      * @return The command.
      */
     public Command toggleDisableIntake(){
