@@ -1,8 +1,6 @@
 package frc.robot.subsystems.intake;
 
 
-import java.util.function.BooleanSupplier;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.lib.statemachine.StateMachine;
@@ -135,5 +133,11 @@ public class IntakeCoordinator {
         return intakeCommandFactory(RollerState.REVERSED, PivotState.OPEN, changePivotStateSlow);
     }
 
-    public Command toggleDisableIntake(){return pivot.toggleDisablePivotCommand().alongWith(roller.toggleDisableRollerCommand());}
+    /**
+     * A command that toggles the disable status of the intke(both pivot and roller). If they are disabled also stop the motors.
+     * @return The command.
+     */
+    public Command toggleDisableIntake(){
+        return pivot.toggleDisablePivotCommand().alongWith(roller.toggleDisableRollerCommand());
+    }
 }

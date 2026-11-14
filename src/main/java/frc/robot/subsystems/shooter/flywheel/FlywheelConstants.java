@@ -76,8 +76,8 @@ public class FlywheelConstants {
         
         // current limits
 
-        config.CurrentLimits.StatorCurrentLimit = 120;
-        config.CurrentLimits.SupplyCurrentLimit = 90;
+        config.CurrentLimits.StatorCurrentLimit = 60;
+        config.CurrentLimits.SupplyCurrentLimit = 35;
 
         config.CurrentLimits.StatorCurrentLimitEnable = true;
         config.CurrentLimits.SupplyCurrentLimitEnable = true;
@@ -102,8 +102,8 @@ public class FlywheelConstants {
         
         // current limits
 
-        config.CurrentLimits.StatorCurrentLimit = 120;
-        config.CurrentLimits.SupplyCurrentLimit = 90;
+        config.CurrentLimits.StatorCurrentLimit = 60;
+        config.CurrentLimits.SupplyCurrentLimit = 35;
 
         config.CurrentLimits.StatorCurrentLimitEnable = true;
         config.CurrentLimits.SupplyCurrentLimitEnable = true;

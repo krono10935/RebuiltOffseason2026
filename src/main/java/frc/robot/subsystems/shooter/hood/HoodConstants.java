@@ -78,7 +78,7 @@ public class HoodConstants {
 
         // current limits
 
-        config.smartCurrentLimit(80, 20);
+        config.smartCurrentLimit(60);
 
         return config;
     }

@@ -196,5 +196,24 @@ s    */
         );
     }
 
-    public Command toggleDisablePivotCommand() {return Commands.runOnce(()-> isDisabled = !isDisabled);}
+    /**@return A command that stops the pivot */
+    public Command stopPivot(){
+        return Commands.runOnce(
+            this::stop,
+            this
+        );
+    }
+
+    /**
+     * @return A commands that toggle the disabled status of the pivot, and if isDisabled then also stop the pivot motors.
+    */
+    public Command toggleDisablePivotCommand() {
+        return Commands.runOnce(
+            ()-> {
+                isDisabled = !isDisabled;
+                if(isDisabled) this.stop();
+            },
+            this
+        );
+    }
 }
