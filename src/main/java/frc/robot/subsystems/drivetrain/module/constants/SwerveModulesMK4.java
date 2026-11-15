@@ -5,6 +5,7 @@ import java.util.Optional;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.SlotConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.signals.GainSchedBehaviorValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.geometry.Translation2d;
@@ -69,6 +70,12 @@ public enum SwerveModulesMK4 {
 
     private static final double STEER_GEAR_RATIO = 6.75;
     private static final double DRIVE_GEAR_RATIO = 12.8;
+
+
+    public static double p = 1500;
+    public static double i = 100;
+    public static double d = 0;
+    public static double iMax = 0.67;
 
     SwerveModulesMK4(int canCoderID,
                      double zeroOffset,
@@ -155,8 +162,6 @@ public enum SwerveModulesMK4 {
         steerConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 
         steerConfig.ClosedLoopGeneral.ContinuousWrap = true;
-
-
 
         genericConf = new GenericModuleConfigCTRE(
             steerConfig, 

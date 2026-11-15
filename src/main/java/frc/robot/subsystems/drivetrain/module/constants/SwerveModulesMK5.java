@@ -23,9 +23,9 @@ public enum SwerveModulesMK5 {
             new FeedForwardsGains(0, 0),
             0.32661,
             4,
-            new PIDGains(1300, 0, 0, 0, 0 , 0),
-            new FeedForwardsGains(0.096998, 0.57059),
-            0.005314,
+            new PIDGains(SwerveModulesMK4.p, SwerveModulesMK4.i, SwerveModulesMK4.d, 0, SwerveModulesMK4.iMax , 0),
+            new FeedForwardsGains(0.099965, 0.52098),
+            0.011139,
             new Translation2d(0.276375, 0.289025),
             new PIDGains(),
             new FeedForwardsGains(),
@@ -40,9 +40,9 @@ public enum SwerveModulesMK5 {
             new FeedForwardsGains(0, 0),
             0.40069,
             5,
-            new PIDGains(1300, 0, 0, 0, 0 , 0),
-            new FeedForwardsGains(0.098022, 0.41552),
-            0.0041816,
+            new PIDGains(SwerveModulesMK4.p, SwerveModulesMK4.i, SwerveModulesMK4.d, 0, SwerveModulesMK4.iMax , 0),
+            new FeedForwardsGains(0.10363, 0.29686),
+            0.0060669,
             new Translation2d(0.276375, -0.289025),
             new PIDGains(),
             new FeedForwardsGains(),
@@ -56,9 +56,9 @@ public enum SwerveModulesMK5 {
             new FeedForwardsGains(0, 0),
             0.91735,
             3,
-            new PIDGains(1300, 0, 0, 0, 0 , 0),
-            new FeedForwardsGains(0.098978, 0.49769),
-            0.0041157,
+            new PIDGains(SwerveModulesMK4.p, SwerveModulesMK4.i, SwerveModulesMK4.d, 0, SwerveModulesMK4.iMax , 0),
+            new FeedForwardsGains(0.10471, 0.40178),
+            0.0052174,
             new Translation2d(-0.276375, 0.289025),
             new PIDGains(),
             new FeedForwardsGains(),
@@ -73,9 +73,9 @@ public enum SwerveModulesMK5 {
             new FeedForwardsGains(0, 0),
             0.71613,
             2,
-            new PIDGains(1300, 0, 0, 0, 0 , 0),
-            new FeedForwardsGains(0.097727, 0.6269),
-            0.0077327,
+            new PIDGains(SwerveModulesMK4.p, SwerveModulesMK4.i, SwerveModulesMK4.d, 0, SwerveModulesMK4.iMax , 0),
+            new FeedForwardsGains(0.10256, 0.52537),
+            0.010426,
             new Translation2d(-0.276375, -0.289025),
             new PIDGains(),
             new FeedForwardsGains(),
@@ -193,7 +193,7 @@ public enum SwerveModulesMK5 {
         driveConfig.CurrentLimits.SupplyCurrentLowerTime = 0.2;
 
         // TODO check how the motors react to this being enabled
-        // driveConfig.Feedback.RotorToSensorRatio = DRIVE_GEAR_RATIO;
+        driveConfig.Feedback.RotorToSensorRatio = DRIVE_GEAR_RATIO;
 
         var steerConfig = new TalonFXConfiguration();
 
@@ -202,7 +202,7 @@ public enum SwerveModulesMK5 {
         steerConfig.CurrentLimits.StatorCurrentLimit = 35;
         steerConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 
-        // steerConfig.Feedback.RotorToSensorRatio = STEER_GEAR_RATIO;
+        steerConfig.Feedback.RotorToSensorRatio = STEER_GEAR_RATIO;
 
         steerConfig.ClosedLoopGeneral.ContinuousWrap = true;
 

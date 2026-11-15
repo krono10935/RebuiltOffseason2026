@@ -103,13 +103,13 @@ public class DrivetrainSysID extends Drivetrain {
     CommandXboxController controller = RobotContainer.getInstance().getDriverXboxController();
     
     Translation2d leftJoystickPosition = 
-      new Translation2d(-controller.getLeftX(), -controller.getLeftY());
+      new Translation2d(-controller.getLeftY(), -controller.getLeftX());
 
     Rotation2d goalAngle = leftJoystickPosition.getAngle();    
 
     for (int i = 0; i < 4; i++){
         io[i].setDriveVoltageAndSteerAngle(voltage, 
-          goalAngle.minus(gyroInputs.rotation));
+          goalAngle);
     }
   }
 

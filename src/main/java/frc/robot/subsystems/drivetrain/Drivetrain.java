@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems.drivetrain;
 
+import java.time.Clock;
+
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -36,6 +38,8 @@ public abstract class Drivetrain extends SubsystemBase {
   protected final GyroIO gyro;
 
   protected final GyroInputsAutoLogged gyroInputs;
+
+  private int cycle = 0;
 
   public Drivetrain(ChassisConstants constants) {
     this.constants = constants;

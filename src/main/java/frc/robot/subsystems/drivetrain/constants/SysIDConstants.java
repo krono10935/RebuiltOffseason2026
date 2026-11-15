@@ -10,7 +10,7 @@ public class SysIDConstants {
     /**
      * Voltage to use in dynamic mode for SYSID
      */
-    public static final double VOLT = 12;
+    public static final double VOLT = 5;
 
     /**
      * How many volts/second to add per second of the SYSID routine
@@ -19,6 +19,7 @@ public class SysIDConstants {
 
     /**
      * How many seconds to perform the test for the sysID routine
+     * 
      */
     public static final double TIMEOUT = 10;
 }

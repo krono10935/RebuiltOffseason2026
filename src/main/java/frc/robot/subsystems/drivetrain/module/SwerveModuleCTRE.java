@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.Constants;
 import frc.robot.subsystems.drivetrain.configsStructure.moduleConfig.CTREModuleConstants;
+import frc.robot.subsystems.drivetrain.module.constants.SwerveModulesMK4;
 
 public abstract class SwerveModuleCTRE extends SwerveModuleIO {
 
@@ -80,6 +81,7 @@ public abstract class SwerveModuleCTRE extends SwerveModuleIO {
 
     @Override
     public void update(){
+        super.update();
 
 
 
@@ -109,7 +111,7 @@ public abstract class SwerveModuleCTRE extends SwerveModuleIO {
 
 
         Logger.recordOutput("drivetrain/ctre module/" + constants.NAME() + "/drive/position", 
-            drivingMotor.getPosition().getValueAsDouble());
+            drivingMotor.getPosition().getValueAsDouble() );
 
         Logger.recordOutput("drivetrain/ctre module/" + constants.NAME() + "/drive/velocity", 
             drivingMotor.getVelocity().getValueAsDouble());
