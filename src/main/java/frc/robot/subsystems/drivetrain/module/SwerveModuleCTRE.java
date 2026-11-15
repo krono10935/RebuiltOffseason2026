@@ -66,8 +66,7 @@ public abstract class SwerveModuleCTRE extends SwerveModuleIO {
 
     @Override
     public void setDriveVoltageAndSteerAngle(double voltage, Rotation2d angle) {
-        steeringMotor.setControl(new PositionTorqueCurrentFOC(
-            constants.STEER_GEAR_RATIO() * angle.getRotations()));
+        steeringMotor.setControl(new PositionTorqueCurrentFOC(angle.getRotations()));
         drivingMotor.setVoltage(voltage);
     }
 
@@ -81,6 +80,9 @@ public abstract class SwerveModuleCTRE extends SwerveModuleIO {
 
     @Override
     public void update(){
+
+
+
         Logger.recordOutput("drivetrain/ctre module/" + constants.NAME() + "/steer/position", 
             steeringMotor.getPosition().getValueAsDouble());
 
@@ -90,8 +92,20 @@ public abstract class SwerveModuleCTRE extends SwerveModuleIO {
         Logger.recordOutput("drivetrain/ctre module/" + constants.NAME() + "/steer/voltageOut", 
             steeringMotor.getMotorVoltage().getValueAsDouble());
 
-        Logger.recordOutput("drivetrain/ctre module/" + constants.NAME() + "/steer/Setpoint",
+        Logger.recordOutput("drivetrain/ctre module/" + constants.NAME() + "/steer/setpoint",
             steeringMotor.getClosedLoopReference().getValueAsDouble());
+
+        Logger.recordOutput("drivetrain/ctre module/" + constants.NAME() + "/steer/error",
+            steeringMotor.getClosedLoopError().getValueAsDouble());
+
+        Logger.recordOutput("drivetrain/ctre module/" + constants.NAME() + "/steer/dOuput",
+            steeringMotor.getClosedLoopDerivativeOutput().getValueAsDouble());
+
+        Logger.recordOutput("drivetrain/ctre module/" + constants.NAME() + "/steer/iOuput",
+            steeringMotor.getClosedLoopIntegratedOutput().getValueAsDouble());
+
+        Logger.recordOutput("drivetrain/ctre module/" + constants.NAME() + "/steer/pOuput",
+            steeringMotor.getClosedLoopProportionalOutput().getValueAsDouble());
 
 
         Logger.recordOutput("drivetrain/ctre module/" + constants.NAME() + "/drive/position", 

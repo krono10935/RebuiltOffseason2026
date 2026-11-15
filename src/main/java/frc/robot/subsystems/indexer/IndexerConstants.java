@@ -13,18 +13,18 @@ import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 
 public class IndexerConstants {
     /** CANIDs of all indexer motors */
-    public static final int[] CAN_IDS = {20, 21, 22}; //TODO: change to correct CANID
+    public static final int[] CAN_IDS = {50, 55, 57}; //TODO: change to correct CANID
     
     /**
      * 
      */
-    public static final boolean[] MOTORS_INVERTED = {false, false, true};
+    public static final boolean[] MOTORS_INVERTED = {false, true, true};
 
     /** what percentage of power to give the motors for spinning forward */
-    public static final double DUTY_CYCLE_FORWARD = 0.67; //TODO: tweak
+    public static final double DUTY_CYCLE_FORWARD = 1; //TODO: tweak
 
     /** what percentage of power to give the motors for spinning backwards */
-    public static final double DUTY_CYCLE_BACKWARD = -0.67; //TODO: tweak
+    public static final double DUTY_CYCLE_BACKWARD = -1; //TODO: tweak
 
     /** moment of inertia of the indexer */
     private static final double MOMENT_OF_INERTIA = 0.001; //TODO: get the real value from cad

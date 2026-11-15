@@ -10,7 +10,7 @@ public class SysIDConstants {
     /**
      * Voltage to use in dynamic mode for SYSID
      */
-    public static final double VOLT = 8;
+    public static final double VOLT = 12;
 
     /**
      * How many volts/second to add per second of the SYSID routine

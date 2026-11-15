@@ -65,9 +65,9 @@ public class RobotContainer {
 
   // private final GeneralRobotState generalRobotState;
   
-  private final DrivetrainReal drivetrain;
+  // private final DrivetrainReal drivetrain;
 
-  // private final DrivetrainSysID sysId;
+  private final DrivetrainSysID sysId;
   
     public static RobotContainer getInstance(){
       if (instance == null){
@@ -96,18 +96,20 @@ public class RobotContainer {
 
     driverXboxController = new CommandXboxController(0);
 
-    drivetrain = new DrivetrainReal(
-      ConduitApi.getInstance()::getPDPVoltage, Constants.CHASSIS_TYPE.constants
-    );
+    // drivetrain = new DrivetrainReal(
+    //   ConduitApi.getInstance()::getPDPVoltage, Constants.CHASSIS_TYPE.constants
+    // );
 
-    CommandScheduler.getInstance().schedule(drivetrain.driveCommand().ignoringDisable(true));
+    // CommandScheduler.getInstance().schedule(drivetrain.driveCommand().ignoringDisable(true));
 
-    // sysId = new DrivetrainSysID(Constants.CHASSIS_TYPE.COMPBOT.constants);
+    sysId = new DrivetrainSysID(Constants.CHASSIS_TYPE.COMPBOT.constants);
 
-    // driverXboxController.a().whileTrue(sysId.sysIdDynamicSteer(Direction.kForward));
-    // driverXboxController.b().whileTrue(sysId.sysIdDynamicSteer(Direction.kReverse));
-    // driverXboxController.y().whileTrue(sysId.sysIdQuasistaticSteer(Direction.kForward));
-    // driverXboxController.x().whileTrue(sysId.sysIdQuasistaticSteer(Direction.kReverse));
+    driverXboxController.a().whileTrue(sysId.sysIdDynamicDrive(Direction.kForward));
+    driverXboxController.b().whileTrue(sysId.sysIdDynamicDrive(Direction.kReverse));
+    driverXboxController.y().whileTrue(sysId.sysIdQuasistaticDrive(Direction.kForward));
+    driverXboxController.x().whileTrue(sysId.sysIdQuasistaticDrive(Direction.kReverse));
+
+    driverXboxController.leftBumper().onTrue(Commands.runOnce(sysId::resetGyro));
 
 
 
