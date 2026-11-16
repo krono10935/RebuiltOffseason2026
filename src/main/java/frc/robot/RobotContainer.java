@@ -30,9 +30,12 @@ import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.RobotState;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.drivetrain.DrivetrainReal;
 import frc.robot.subsystems.drivetrain.DrivetrainSysID;
@@ -65,9 +68,9 @@ public class RobotContainer {
 
   // private final GeneralRobotState generalRobotState;
   
-  // private final DrivetrainReal drivetrain;
+  private final DrivetrainReal drivetrain;
 
-  private final DrivetrainSysID sysId;
+  // private final DrivetrainSysID sysId;
   
     public static RobotContainer getInstance(){
       if (instance == null){
@@ -96,21 +99,28 @@ public class RobotContainer {
 
     driverXboxController = new CommandXboxController(0);
 
-    // drivetrain = new DrivetrainReal(
-    //   ConduitApi.getInstance()::getPDPVoltage, Constants.CHASSIS_TYPE.constants
-    // );
+    drivetrain = new DrivetrainReal(
+      ConduitApi.getInstance()::getPDPVoltage, Constants.CHASSIS_TYPE.constants
+    );
 
-    // CommandScheduler.getInstance().schedule(drivetrain.driveCommand().ignoringDisable(true));
+    CommandScheduler.getInstance().schedule(drivetrain.driveCommand().ignoringDisable(true));
 
-    sysId = new DrivetrainSysID(Constants.CHASSIS_TYPE.COMPBOT.constants);
+    // sysId = new DrivetrainSysID(Constants.CHASSIS_TYPE.COMPBOT.constants);
 
-    driverXboxController.a().whileTrue(sysId.sysIdDynamicDrive(Direction.kForward));
-    driverXboxController.b().whileTrue(sysId.sysIdDynamicDrive(Direction.kReverse));
-    driverXboxController.y().whileTrue(sysId.sysIdQuasistaticDrive(Direction.kForward));
-    driverXboxController.x().whileTrue(sysId.sysIdQuasistaticDrive(Direction.kReverse));
 
-    driverXboxController.leftBumper().onTrue(Commands.runOnce(sysId::resetGyro));
+    // driverXboxController.a().onTrue(
+    //   Commands.run(() -> sysId.setDriveVoltageAndSpin(SmartDashboard.getNumber("volts", 0))));
 
+    // SmartDashboard.putNumber("volts", 0);
+
+    // driverXboxController.a().whileTrue(sysId.sysIdDynamicDrive(Direction.kForward));
+    // driverXboxController.b().whileTrue(sysId.sysIdDynamicDrive(Direction.kReverse));
+    // driverXboxController.y().whileTrue(sysId.sysIdQuasistaticDrive(Direction.kForward));
+    // driverXboxController.x().whileTrue(sysId.sysIdQuasistaticDrive(Direction.kReverse));
+
+    driverXboxController.leftBumper().onTrue(Commands.runOnce(drivetrain::resetGyro));
+
+    drivetrain.setBrakeMode(true);
 
 
     // operatorXboxController = new CommandXboxController(1);

@@ -72,10 +72,10 @@ public enum SwerveModulesMK4 {
     private static final double DRIVE_GEAR_RATIO = 12.8;
 
 
-    public static double p = 1500;
-    public static double i = 100;
+    public static double p = 4000;
+    public static double i = 500;
     public static double d = 0;
-    public static double iMax = 0.67;
+    public static double iMax = 0;
 
     SwerveModulesMK4(int canCoderID,
                      double zeroOffset,

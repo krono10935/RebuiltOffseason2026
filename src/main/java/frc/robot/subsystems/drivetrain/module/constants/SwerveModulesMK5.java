@@ -6,6 +6,8 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.Slot1Configs;
 import com.ctre.phoenix6.configs.SlotConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.signals.GainSchedBehaviorValue;
+import com.ctre.phoenix6.signals.GainSchedKpBehaviorValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.geometry.Translation2d;
@@ -17,11 +19,11 @@ import frc.lib.math.FeedForwardsGains;
 
 public enum SwerveModulesMK5 {
     FRONT_LEFT(
-            6,  0, 12
+            6,  0-0.5, 12
             ,
-            new PIDGains(0, 0, 0, 0, 0, 0),
-            new FeedForwardsGains(0, 0),
-            0.32661,
+            new PIDGains(0.1, 0, 0, 0, 0, 0),
+            new FeedForwardsGains(0.87255, 0.6),
+            0.50306,
             4,
             new PIDGains(SwerveModulesMK4.p, SwerveModulesMK4.i, SwerveModulesMK4.d, 0, SwerveModulesMK4.iMax , 0),
             new FeedForwardsGains(0.099965, 0.52098),
@@ -36,9 +38,9 @@ public enum SwerveModulesMK5 {
     FRONT_RIGHT(
             8,  -0.188477, 13
             ,
-            new PIDGains(0, 0, 0, 0, 0, 0),
-            new FeedForwardsGains(0, 0),
-            0.40069,
+            new PIDGains(0.1, 0, 0, 0, 0, 0),
+            new FeedForwardsGains(0.86525, 0.6),
+            0.63881,
             5,
             new PIDGains(SwerveModulesMK4.p, SwerveModulesMK4.i, SwerveModulesMK4.d, 0, SwerveModulesMK4.iMax , 0),
             new FeedForwardsGains(0.10363, 0.29686),
@@ -50,11 +52,11 @@ public enum SwerveModulesMK5 {
             new FeedForwardsGains()),
 
     BACK_LEFT(
-            7, -0.015625, 11
+            7, -0.015625 - 0.5, 11
             ,
-            new PIDGains(0, 0, 0, 0, 0, 0),
-            new FeedForwardsGains(0, 0),
-            0.91735,
+            new PIDGains(0.1, 0, 0, 0, 0, 0),
+            new FeedForwardsGains(0.79738, 0.6),
+            0.16772,
             3,
             new PIDGains(SwerveModulesMK4.p, SwerveModulesMK4.i, SwerveModulesMK4.d, 0, SwerveModulesMK4.iMax , 0),
             new FeedForwardsGains(0.10471, 0.40178),
@@ -69,9 +71,9 @@ public enum SwerveModulesMK5 {
     BACK_RIGHT(
             9,  0.79, 10
             ,
-            new PIDGains(0, 0, 0, 0, 0, 0),
-            new FeedForwardsGains(0, 0),
-            0.71613,
+            new PIDGains(0.1, 0, 0, 0, 0, 0),
+            new FeedForwardsGains(0.75833, 0.6),
+            0.65297,
             2,
             new PIDGains(SwerveModulesMK4.p, SwerveModulesMK4.i, SwerveModulesMK4.d, 0, SwerveModulesMK4.iMax , 0),
             new FeedForwardsGains(0.10256, 0.52537),
@@ -125,6 +127,9 @@ public enum SwerveModulesMK5 {
                 steerPIDGains.applyConfigCTRE(steerConfigSlot0)
             )
         ));
+
+        steerConfig.Slot0.GainSchedBehavior = GainSchedBehaviorValue.ZeroOutput;
+        steerConfig.ClosedLoopGeneral.GainSchedErrorThreshold = 0.0067;
 
 
 
@@ -193,7 +198,7 @@ public enum SwerveModulesMK5 {
         driveConfig.CurrentLimits.SupplyCurrentLowerTime = 0.2;
 
         // TODO check how the motors react to this being enabled
-        driveConfig.Feedback.RotorToSensorRatio = DRIVE_GEAR_RATIO;
+        driveConfig.Feedback.SensorToMechanismRatio = DRIVE_GEAR_RATIO;
 
         var steerConfig = new TalonFXConfiguration();
 

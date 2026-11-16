@@ -15,10 +15,10 @@ public class DrivetrainConstants {
 
     /** If you want to understand the numbers please draw the module angles vectors */
     public static final Rotation2d[] SPIN_STEER_ANGLES = {
-        FRONT_LEFT_SPIN_ANGLE.minus(Rotation2d.kCW_90deg.times(0)), // FL
-        FRONT_LEFT_SPIN_ANGLE.minus(Rotation2d.kCW_90deg.times(1)), // FR
-        FRONT_LEFT_SPIN_ANGLE.minus(Rotation2d.kCW_90deg.times(3)), // BL
-        FRONT_LEFT_SPIN_ANGLE.minus(Rotation2d.kCW_90deg.times(2)) // BR
+        FRONT_LEFT_SPIN_ANGLE.plus(Rotation2d.kCW_90deg.times(0)), // FL
+        FRONT_LEFT_SPIN_ANGLE.plus(Rotation2d.kCW_90deg.times(1)), // FR
+        FRONT_LEFT_SPIN_ANGLE.plus(Rotation2d.kCW_90deg.times(3)), // BL
+        FRONT_LEFT_SPIN_ANGLE.plus(Rotation2d.kCW_90deg.times(2)) // BR
     };
 
     public static final SwerveModuleState[] DEFENSE_MODE_STATES = getDefenseModeStates();
