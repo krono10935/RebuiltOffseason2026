@@ -63,7 +63,13 @@ public class FlywheelIOReal implements FlywheelIO {
 
         inputs.speedMPS = getLeadMotor().getVelocity().getValueAsDouble() * FlywheelConstants.FLYWHEEL_CIRCUMFERENCE;
 
+        inputs.speedRPS = getLeadMotor().getVelocity().getValueAsDouble();
+
         inputs.isAtGoal = IsNear.isNear(inputs.speedMPS, getLeadMotor().getClosedLoopReference().getValueAsDouble() * FlywheelConstants.FLYWHEEL_CIRCUMFERENCE, FlywheelConstants.MPS_TOLERANCE);
+
+        inputs.positionRot = getLeadMotor().getPosition().getValueAsDouble();
+
+        inputs.voltage = getLeadMotor().getMotorVoltage().getValueAsDouble();
     }
 
     @Override

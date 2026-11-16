@@ -2,14 +2,17 @@ package frc.robot.subsystems.shooter.flywheel;
 
 import org.littletonrobotics.junction.AutoLog;
 
-import com.ctre.phoenix6.controls.DutyCycleOut;
-
 public interface FlywheelIO {
 
     @AutoLog
     public class FlywheelInputs {
         boolean isAtGoal; // is the flywheel at speed setpoint
         double speedMPS; // flywheel speed in meters/second
+
+        // SysId inputs
+        double positionRot; // the flywheel's position (in rotations)
+        double voltage; // the flywheel's voltage
+        double speedRPS; // the flywheel's speed in rotations
     }
 
     /**

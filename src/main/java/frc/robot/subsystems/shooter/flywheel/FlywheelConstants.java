@@ -51,7 +51,7 @@ public class FlywheelConstants {
     /**
      * How many volts/second to add per second of the SYSID routine
      */
-    public static final double VOLT_RAMP_RATE = 0.5;
+    public static final double VOLT_RAMP_RATE = 1;
 
     /**
      * How many seconds to perform the test for the sysID routine
