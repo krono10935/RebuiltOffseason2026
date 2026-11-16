@@ -140,4 +140,9 @@ public class IntakeCoordinator {
     public Command toggleDisableIntake(){
         return pivot.toggleDisablePivotCommand().alongWith(roller.toggleDisableRollerCommand());
     }
+
+
+    public Command haltAllIntakeCommand(){
+        return pivot.stopPivot().alongWith(roller.turnOffRoller());
+    }
 }
