@@ -31,6 +31,12 @@ public interface FlywheelIO {
     void holdSpeed(double mps);
 
     /**
+     * sets flywheel motors voltage
+     * @param voltage the voltage to give the motors
+     */
+    void setVoltage(double voltage);
+
+    /**
      * stops the flywheel
      */
     void stop();
