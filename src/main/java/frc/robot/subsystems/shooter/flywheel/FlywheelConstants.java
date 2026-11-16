@@ -40,6 +40,23 @@ public class FlywheelConstants {
     
     /** the offset from the robot's center to the flywheel's position */
     public static final Transform3d ROBOT_TO_FLYWHEEL = new Transform3d(0.23, 0.30, 0.20, new Rotation3d(0, 0, UnitConversions.degreesToRadians(90)));
+
+    // SYSID constants
+
+    /**
+     * Voltage to use in dynamic mode for SYSID
+     */
+    public static final double VOLT = 8;
+
+    /**
+     * How many volts/second to add per second of the SYSID routine
+     */
+    public static final double VOLT_RAMP_RATE = 1;
+
+    /**
+     * How many seconds to perform the test for the sysID routine
+     */
+    public static final double TIMEOUT = 10;
         
     /**
      * @param isInverted should the motor's output be inverted

@@ -1,9 +1,12 @@
 package frc.robot.subsystems.shooter;
 
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedNetworkNumber;
 
+import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -11,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.statemachine.StateMachine;
 import frc.lib.statemachine.StateMachine.State;
 import frc.robot.GeneralRobotState;
+import frc.robot.subsystems.drivetrain.constants.SysIDConstants;
 import frc.robot.subsystems.shooter.ShotCalculator.ShootingParameters;
 import frc.robot.subsystems.shooter.flywheel.FlywheelSubsystem;
 import frc.robot.subsystems.shooter.hood.HoodSubsystem;

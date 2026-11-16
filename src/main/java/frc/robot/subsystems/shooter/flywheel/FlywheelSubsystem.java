@@ -8,24 +8,43 @@ import java.util.function.Supplier;
 
 import org.littletonrobotics.junction.Logger;
 
-import com.ctre.phoenix6.controls.DutyCycleOut;
-
+import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import static edu.wpi.first.units.Units.Second;
+import static edu.wpi.first.units.Units.Volts;
 
 public class FlywheelSubsystem extends SubsystemBase {
-  /** Creates a new FlywheelSubsystem. */
-
+  /** whether the flywheel is disabled (controlled by ControlScheme)*/
   private boolean isDisabled = false;
+  /** the flywheel's IO */
   private final FlywheelIO io;
+  /** the inputs object for the flywheel */
   private final FlywheelInputsAutoLogged inputs;
+
+  /** the SysId routine for the flywheel */
+  private SysIdRoutine flywheelRoutine;
 
   public FlywheelSubsystem() {
     io = RobotBase.isReal() ? new FlywheelIOReal() : new FlywheelIOSim();
     inputs = new FlywheelInputsAutoLogged();
 
+    this.flywheelRoutine = new SysIdRoutine(
+    new SysIdRoutine.Config(
+        Units.Volts.per(Units.Second).of(FlywheelConstants.VOLT_RAMP_RATE),
+        Volts.of(FlywheelConstants.VOLT),
+        Second.of(FlywheelConstants.TIMEOUT),
+        (state) -> Logger.recordOutput("SysIdTestState", state.toString())
+    ),
+    new SysIdRoutine.Mechanism(
+        (volt) -> setVoltage(volt.baseUnitMagnitude()),
+        null,
+        this
+    )
+    );
   }
 
    /**
@@ -53,6 +72,11 @@ public class FlywheelSubsystem extends SubsystemBase {
   private void basicSpinUp(double dutyCycle){
     if (isDisabled) return;
     io.basicSpinUp(dutyCycle);
+  }
+
+  private void setVoltage(double voltage) {
+      if (isDisabled) return;
+      io.setVoltage(voltage);
   }
 
   /**
@@ -112,13 +136,31 @@ public class FlywheelSubsystem extends SubsystemBase {
   public Command basicSpinUpCommand(Supplier<Double> dutyCycleSupplier){
     return Commands.run(() -> this.basicSpinUp(dutyCycleSupplier.get()), this).withName("basicSpinUpFlywheel");
   }
-
+    
   /**
    * @return the command to stop the flywheel
    */
   public Command stopCommand(){
     return Commands.run(this::stop, this).withName("stopFlywheel");
   }
+
+  /**
+   * Factory for the Quasistatic Flywheel command
+   * @param direction Apply the test forward or backward
+   * @return A command to apply the sysID test
+   */
+   public Command sysIdQuasistaticSpin(SysIdRoutine.Direction direction) {
+      return flywheelRoutine.quasistatic(direction);
+   }
+
+  /**
+   * Factory for the Dynamic Flywheel command
+   * @param direction Apply the test forward or backward
+   * @return A command to apply the sysID test
+   */
+   public Command sysIdDynamicSpin(SysIdRoutine.Direction direction) {
+      return flywheelRoutine.dynamic(direction);
+   }
 
   /**
    * command used by ShooterSubsystem to toggle if the flywheel is enabled or disabled
