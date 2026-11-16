@@ -122,7 +122,9 @@ public class Robot extends LoggedRobot {
   }
 
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    // CommandScheduler.getInstance().schedule(RobotContainer.getInstance().getIndexer());
+  }
 
   @Override
   public void disabledPeriodic() {}

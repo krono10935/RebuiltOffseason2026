@@ -1,5 +1,7 @@
 package frc.robot.subsystems.shooter.flywheel;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.VelocityVoltage;
@@ -26,7 +28,7 @@ public class FlywheelIOReal implements FlywheelIO {
 
             flywheelMotors[i].getConfigurator().apply(FlywheelConstants.getFollowerConfig(inverted));
 
-            flywheelMotors[i].setControl(new Follower(FlywheelConstants.MOTOR_IDS[0], MotorAlignmentValue.Aligned)); // TODO: understand how aligned works, we set it to inverted above this so does it align with the original or the inverted mode
+            flywheelMotors[i].setControl(new Follower(FlywheelConstants.MOTOR_IDS[0], MotorAlignmentValue.Opposed)); // TODO: understand how aligned works, we set it to inverted above this so does it align with the original or the inverted mode
         }
     }
 

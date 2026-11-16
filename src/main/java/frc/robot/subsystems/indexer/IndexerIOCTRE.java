@@ -19,7 +19,7 @@ public class IndexerIOCTRE implements IndexerIO {
             motors[i].getConfigurator().apply(IndexerConstants.getConfig(IndexerConstants.MOTORS_INVERTED[i]));
 
             if(i != 0){
-                motors[i].setControl(new Follower(IndexerConstants.CAN_IDS[0], MotorAlignmentValue.Aligned));
+                motors[i].setControl(new Follower(IndexerConstants.CAN_IDS[0], MotorAlignmentValue.Opposed));
             }
         }
     }

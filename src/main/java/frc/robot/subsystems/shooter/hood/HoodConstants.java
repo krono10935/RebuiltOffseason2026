@@ -16,7 +16,7 @@ import frc.lib.statemachine.StateMachine.StateName;
 
 public class HoodConstants {
     /** CANID of the hood's motor */
-    public static final int HOOD_MOTOR_CANID = 30; // TODO: change to correct CANID
+    public static final int HOOD_MOTOR_CANID = 62; // TODO: change to correct CANID
 
     /** roborio port of the absolute encoder */
     public static final int ABSOLUTE_ENCODER_PORT = 0; // TODO: change to correct roborio port
@@ -25,7 +25,7 @@ public class HoodConstants {
     public static final Rotation2d DEGREE_TOLERANCE = Rotation2d.fromDegrees(0.75); // TODO: tweak
 
     /** gear ratio between absolute encoder and the hood */
-    public static final double ABSOLUTE_ENCODER_TO_HOOD_RATIO = 3.0;
+    public static final double ABSOLUTE_ENCODER_TO_HOOD_RATIO = 43.0/343.0 ;
 
     /** gear ratio between motor and hood */
     public static final double MOTOR_TO_MECHANISM_RATIO = 22.5;
@@ -65,16 +65,17 @@ public class HoodConstants {
 
         // general
 
+        config.inverted(false);
+
         config.idleMode(IdleMode.kBrake);
         config.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder);
 
         // unit conversion
-        config.absoluteEncoder.positionConversionFactor(1.0 / ABSOLUTE_ENCODER_TO_HOOD_RATIO);
-        config.encoder        .positionConversionFactor(1.0 / MOTOR_TO_MECHANISM_RATIO);
+        config.encoder        .positionConversionFactor(1/MOTOR_TO_MECHANISM_RATIO);
 
         // configure PIDs
-        config.closedLoop.pid(8.0, 0.0, 0.0); // TODO: tweak
-        config.closedLoop.pid(8.0, 1.0, 0.0, ClosedLoopSlot.kSlot1);
+        config.closedLoop.pid(30, 0.0, 0.012); // TODO: tweak
+        config.closedLoop.pid(1.0, 1.0, 0.0, ClosedLoopSlot.kSlot1);
 
         // current limits
 

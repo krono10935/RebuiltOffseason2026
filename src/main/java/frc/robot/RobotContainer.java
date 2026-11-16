@@ -29,6 +29,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -60,15 +61,15 @@ public class RobotContainer {
   // private final PivotSubsystem pivotSubsystem;
   // private final IntakeCoordinator intakeCoordinator;
 
-  // private final FlywheelSubsystem flywheelSubsystem;
+  private final HoodSubsystem hoodSubsystem;
   // private final HoodSubsystem hoodSubsystem;
   // private final ShooterSubsystem shooterSubsystem;
 
-  // private final IndexerSubsystem indexerSubsystem;
+  private final IndexerSubsystem indexerSubsystem;
 
   // private final GeneralRobotState generalRobotState;
   
-  private final DrivetrainReal drivetrain;
+  // private final DrivetrainReal drivetrain;
 
   // private final DrivetrainSysID sysId;
   
@@ -99,11 +100,16 @@ public class RobotContainer {
 
     driverXboxController = new CommandXboxController(0);
 
-    drivetrain = new DrivetrainReal(
-      ConduitApi.getInstance()::getPDPVoltage, Constants.CHASSIS_TYPE.constants
-    );
+    hoodSubsystem = new HoodSubsystem();
 
-    CommandScheduler.getInstance().schedule(drivetrain.driveCommand().ignoringDisable(true));
+    indexerSubsystem = new IndexerSubsystem();
+    
+
+    // drivetrain = new DrivetrainReal(
+    //   ConduitApi.getInstance()::getPDPVoltage, Constants.CHASSIS_TYPE.constants
+    // );
+
+    // CommandScheduler.getInstance().schedule(drivetrain.driveCommand().ignoringDisable(true));
 
     // sysId = new DrivetrainSysID(Constants.CHASSIS_TYPE.COMPBOT.constants);
 
@@ -118,11 +124,9 @@ public class RobotContainer {
     // driverXboxController.y().whileTrue(sysId.sysIdQuasistaticDrive(Direction.kForward));
     // driverXboxController.x().whileTrue(sysId.sysIdQuasistaticDrive(Direction.kReverse));
 
-    driverXboxController.leftBumper().onTrue(Commands.runOnce(drivetrain::resetGyro));
-
-    drivetrain.setBrakeMode(true);
-
-
+    driverXboxController.a().whileTrue(hoodSubsystem.setAngleCommand(() -> Rotation2d.fromDegrees(SmartDashboard.getNumber("goal", 0))));
+    SmartDashboard.putNumber("goal", 0.0);
+    
     // operatorXboxController = new CommandXboxController(1);
 
   }
@@ -139,9 +143,13 @@ public class RobotContainer {
   //     return shooterSubsystem;
   // }
 
-  // public IndexerSubsystem getIndexer(){
-  //     return indexerSubsystem;
+  // public FlywheelSubsystem getFlywheel() {
+  //   return flywheelSubsystem;
   // }
+
+  public IndexerSubsystem getIndexer(){
+      return indexerSubsystem;
+  }
 
   // public IntakeCoordinator getIntake(){
   //     return intakeCoordinator;

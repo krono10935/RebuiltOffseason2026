@@ -15,10 +15,10 @@ import frc.lib.math.UnitConversions;
 
 public class FlywheelConstants {
     /** CANIDs of all flywheel motors */
-    public static final int[] MOTOR_IDS = {26, 27, 28, 29}; // TODO:change to correct CANID
+    public static final int[] MOTOR_IDS = {56, 59, 58, 61}; // TODO:change to correct CANID
     
     /** flywheel radius */
-    private static final double FLYWHEEL_RADIUS = UnitConversions.inchesToMeters(4);
+    public static final double FLYWHEEL_RADIUS = UnitConversions.inchesToMeters(4);
 
     /** flywheel circumference */
     public static final double FLYWHEEL_CIRCUMFERENCE =  FLYWHEEL_RADIUS * 2 * Math.PI;
@@ -88,13 +88,13 @@ public class FlywheelConstants {
         config.Slot1.kI = 0.0;
         config.Slot1.kD = 0.0;
 
-        config.Slot1.kV = 0.171;
-        config.Slot1.kS = 0.25;
+        config.Slot1.kV = 0.17956;
+        config.Slot1.kS = 0.4412;
         
         // current limits
 
-        config.CurrentLimits.StatorCurrentLimit = 60;
-        config.CurrentLimits.SupplyCurrentLimit = 35;
+        config.CurrentLimits.StatorCurrentLimit = 120;
+        config.CurrentLimits.SupplyCurrentLimit = 80;
 
         config.CurrentLimits.StatorCurrentLimitEnable = true;
         config.CurrentLimits.SupplyCurrentLimitEnable = true;
@@ -119,8 +119,8 @@ public class FlywheelConstants {
         
         // current limits
 
-        config.CurrentLimits.StatorCurrentLimit = 60;
-        config.CurrentLimits.SupplyCurrentLimit = 35;
+        config.CurrentLimits.StatorCurrentLimit = 120;
+        config.CurrentLimits.SupplyCurrentLimit = 80;
 
         config.CurrentLimits.StatorCurrentLimitEnable = true;
         config.CurrentLimits.SupplyCurrentLimitEnable = true;

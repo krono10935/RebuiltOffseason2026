@@ -18,7 +18,7 @@ public class IndexerConstants {
     /**
      * 
      */
-    public static final boolean[] MOTORS_INVERTED = {false, true, true};
+    public static final boolean[] MOTORS_INVERTED = {true, false, false};
 
     /** what percentage of power to give the motors for spinning forward */
     public static final double DUTY_CYCLE_FORWARD = 1; //TODO: tweak
@@ -47,8 +47,8 @@ public class IndexerConstants {
        config.MotorOutput.Inverted = isInverted ? InvertedValue.CounterClockwise_Positive : InvertedValue.Clockwise_Positive; 
        config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
 
-       config.CurrentLimits.StatorCurrentLimit = 80;
-       config.CurrentLimits.SupplyCurrentLimit = 40;
+       config.CurrentLimits.StatorCurrentLimit = 120;
+       config.CurrentLimits.SupplyCurrentLimit = 80;
 
        config.CurrentLimits.StatorCurrentLimitEnable = true;
        config.CurrentLimits.SupplyCurrentLimitEnable = true;
