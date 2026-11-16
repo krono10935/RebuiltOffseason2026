@@ -71,6 +71,8 @@ public class SuperStructure extends SuperStructureBase {
     /** Singleton instance of the SuperStructure. */
     private static SuperStructure instance = null;
 
+    private static Command disabledAllCommand;
+
     /**
      * Returns the singleton instance of the SuperStructure.
      *
@@ -89,7 +91,7 @@ public class SuperStructure extends SuperStructureBase {
      * and SuperStructure state machine.
      */
     private SuperStructure() {
-        super();
+        super(() -> disabledAllCommand);
 
         driverXboxController =
                 RobotContainer.getInstance().getDriverXboxController();
@@ -101,6 +103,13 @@ public class SuperStructure extends SuperStructureBase {
         shooter = null; //RobotContainer.getInstance().getShooter();
         indexer = null; //RobotContainer.getInstance().getIndexer();
         intake = null; //RobotContainer.getInstance().getIntake();
+
+        disabledAllCommand = Commands.parallel(
+                shooter.disableShooterCommand(), 
+                drivetrain.stopCommand(), 
+                indexer.turnOffIndexer(), 
+                intake.haltAllIntakeCommand()
+        );
 
         SHOOTING_TRIGGER = driverXboxController.rightTrigger();
         INTAKE_TRIGGER = driverXboxController.leftTrigger();

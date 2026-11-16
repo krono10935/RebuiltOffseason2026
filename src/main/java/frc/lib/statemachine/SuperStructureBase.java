@@ -6,8 +6,10 @@ package frc.lib.statemachine;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.lib.statemachine.StateMachine.State;
@@ -28,14 +30,14 @@ public abstract class SuperStructureBase extends SubsystemBase {
     // The actual statemachine command
     private final StateMachine statemachine;
 
-    protected SuperStructureBase() {
+    protected SuperStructureBase(Supplier<Command> disabledAllCommand) {
         statemachine = new StateMachine("SuperStructure");
 
         registeredStates = new ArrayList<>();
 
         statemachine.setInitialState(
             registerState(
-                this.idle(), 
+                Commands.defer(disabledAllCommand, null), 
                 Constants.IDLE_STATE_NAME
             )
         );
