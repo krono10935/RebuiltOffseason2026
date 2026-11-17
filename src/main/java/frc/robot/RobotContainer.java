@@ -18,10 +18,12 @@ import frc.robot.subsystems.shooter.hood.HoodSubsystem;
 import org.json.simple.parser.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 import org.littletonrobotics.conduit.ConduitApi;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
+import org.littletonrobotics.junction.networktables.LoggedNetworkNumber;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -48,6 +50,8 @@ import frc.robot.subsystems.intake.roller.RollerSubsystem;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.shooter.flywheel.FlywheelSubsystem;
 import frc.robot.subsystems.shooter.hood.HoodSubsystem;
+import frc.robot.subsystems.vision.Vision;
+import frc.robot.subsystems.vision.Vision.VisionConsumer;
 
 public class RobotContainer {
 
@@ -64,6 +68,9 @@ public class RobotContainer {
   private final HoodSubsystem hoodSubsystem;
   // private final HoodSubsystem hoodSubsystem;
   // private final ShooterSubsystem shooterSubsystem;
+
+  private final Vision vision;
+  Supplier<Pose2d> lastPoseSupplier = () -> Pose2d.kZero;
 
   private final IndexerSubsystem indexerSubsystem;
 
@@ -103,6 +110,16 @@ public class RobotContainer {
     hoodSubsystem = new HoodSubsystem();
 
     indexerSubsystem = new IndexerSubsystem();
+    
+    LoggedNetworkNumber poseX = new LoggedNetworkNumber("PoseX", 3);
+    LoggedNetworkNumber poseY = new LoggedNetworkNumber("PoseY",4);
+    LoggedNetworkNumber poseYaw = new LoggedNetworkNumber("PoseYaw", 0);
+
+    lastPoseSupplier = () -> new Pose2d(poseX.get(), poseY.get(), Rotation2d.fromDegrees(poseYaw.get()));
+
+     
+
+    vision = new Vision(VisionConsumer.NO_OP, lastPoseSupplier);
     
 
     // drivetrain = new DrivetrainReal(

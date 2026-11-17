@@ -41,8 +41,8 @@ public class VisionConstants {
             PhotonPoseEstimator.PoseStrategy.LOWEST_AMBIGUITY,
             "front_camera",
             new Transform3d(
-                new Translation3d(0.315, 0, 0.423),
-                new Rotation3d(0, Units.degreesToRadians(-25), 0)
+                new Translation3d(0.238, 0.045, 0.17), //meters
+                new Rotation3d(0, Units.degreesToRadians(-35), 0)
     
             ),
             new StdDevsFactors(0.1,0.3,0.1,0.3),
