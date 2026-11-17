@@ -117,13 +117,13 @@ public class Robot extends LoggedRobot {
     }
     Logger.recordOutput("PDH/Total Power", conduit.getPDPTotalCurrent() * voltage);
 
-    // Logger.recordOutput("drivetrain/estimated pose", GeneralRobotState.getInstance().getEstimatedPose());
-    // GeneralRobotState.getInstance().getField().setRobotPose(GeneralRobotState.getInstance().getEstimatedPose());
+    Logger.recordOutput("drivetrain/estimated pose", GeneralRobotState.getInstance().getEstimatedPose());
+    GeneralRobotState.getInstance().getField().setRobotPose(GeneralRobotState.getInstance().getEstimatedPose());
   }
 
   @Override
   public void disabledInit() {
-    // CommandScheduler.getInstance().schedule(RobotContainer.getInstance().getIndexer());
+    RobotContainer.getInstance().getDrivetrain().setBrakeMode(false);
   }
 
   @Override
@@ -131,7 +131,7 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void disabledExit() {
-    // RobotContainer.getInstance().getDrivetrain().setBrakeMode(true);
+    RobotContainer.getInstance().getDrivetrain().setBrakeMode(true);
   }
 
   @Override

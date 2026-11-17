@@ -62,19 +62,19 @@ public class RobotContainer {
 
   private final CommandXboxController driverXboxController;
   // private final CommandXboxController operatorXboxController;
-  private final RollerSubsystem rollerSubsystem;
+  // private final RollerSubsystem rollerSubsystem;
   // private final PivotSubsystem pivotSubsystem;
   // private final IntakeCoordinator intakeCoordinator;
 
-  private final HoodSubsystem hoodSubsystem;
+  // private final HoodSubsystem hoodSubsystem;
   // private final ShooterSubsystem shooterSubsystem;
 
   private final Vision vision;
   Supplier<Pose2d> lastPoseSupplier = () -> Pose2d.kZero;
 
-  private final IndexerSubsystem indexerSubsystem;
+  // private final IndexerSubsystem indexerSubsystem;
 
-  private final FlywheelSubsystem flywheelSubsystem;
+  // private final FlywheelSubsystem flywheelSubsystem;
 
   // private final GeneralRobotState generalRobotState;
   
@@ -94,14 +94,14 @@ public class RobotContainer {
 
     // generalRobotState = GeneralRobotState.getInstance();
 
-    rollerSubsystem = new RollerSubsystem();
+    // rollerSubsystem = new RollerSubsystem();
     // pivotSubsystem = new PivotSubsystem();
 
-    flywheelSubsystem = new FlywheelSubsystem();
+    // flywheelSubsystem = new FlywheelSubsystem();
     // hoodSubsystem = new HoodSubsystem();
     // shooterSubsystem = new ShooterSubsystem(flywheelSubsystem, hoodSubsystem);
 
-    indexerSubsystem = new IndexerSubsystem();
+    // indexerSubsystem = new IndexerSubsystem();
 
     // intakeCoordinator = new IntakeCoordinator(pivotSubsystem, rollerSubsystem);
 
@@ -109,7 +109,7 @@ public class RobotContainer {
 
     driverXboxController = new CommandXboxController(0);
 
-    hoodSubsystem = new HoodSubsystem();
+    // hoodSubsystem = new HoodSubsystem();
 
     // indexerSubsystem = new IndexerSubsystem();
     
@@ -119,37 +119,37 @@ public class RobotContainer {
 
     lastPoseSupplier = () -> new Pose2d(poseX.get(), poseY.get(), Rotation2d.fromDegrees(poseYaw.get()));
 
-     
-
-    vision = new Vision(VisionConsumer.NO_OP, lastPoseSupplier);
+    vision = new Vision(GeneralRobotState.getInstance()::addVisionMeasurement, GeneralRobotState.getInstance()::getEstimatedPose);
     
 
     drivetrain = new DrivetrainReal(
       ConduitApi.getInstance()::getPDPVoltage, Constants.CHASSIS_TYPE.constants
     );
 
-    drivetrain.setBrakeMode(true);
+
+    drivetrain.setDefaultCommand(drivetrain.driveCommand());
+
 
     driverXboxController.y().onTrue(drivetrain.resetGyroCommand());
 
-    driverXboxController.leftTrigger(0.2).whileTrue(rollerSubsystem.turnOnRoller());
-    driverXboxController.leftBumper().whileTrue(rollerSubsystem.reverseRoller());
-    driverXboxController.b().whileTrue(rollerSubsystem.turnOffRoller());
+    // driverXboxController.leftTrigger(0.2).whileTrue(rollerSubsystem.turnOnRoller());
+    // driverXboxController.leftBumper().whileTrue(rollerSubsystem.reverseRoller());
+    // driverXboxController.b().whileTrue(rollerSubsystem.turnOffRoller());
 
-    driverXboxController.rightBumper().whileTrue(
-      flywheelSubsystem.spinUpCommand(() -> 10.0)
-      .alongWith(hoodSubsystem.setAngleCommand(() -> Rotation2d.fromDegrees(40)),
-      indexerSubsystem.turnOnIndexer()))
-      .onFalse(
-        flywheelSubsystem.stopCommand().alongWith(
-          hoodSubsystem.disableHoodCommand(), 
-          indexerSubsystem.turnOffIndexer())
-      );
-
-
+    // driverXboxController.rightBumper().whileTrue(
+    //   flywheelSubsystem.spinUpCommand(() -> 10.0)
+    //   .alongWith(hoodSubsystem.setAngleCommand(() -> Rotation2d.fromDegrees(40)),
+    //   indexerSubsystem.turnOnIndexer()))
+    //   .onFalse(
+    //     flywheelSubsystem.stopCommand().alongWith(
+    //       hoodSubsystem.disableHoodCommand(), 
+    //       indexerSubsystem.turnOffIndexer())
+    //   );
 
 
-    CommandScheduler.getInstance().schedule(drivetrain.driveCommand().ignoringDisable(true));
+
+
+    // CommandScheduler.getInstance().schedule(drivetrain.driveCommand().ignoringDisable(true));
 
     // sysId = new DrivetrainSysID(Constants.CHASSIS_TYPE.COMPBOT.constants);
 
@@ -195,9 +195,9 @@ public class RobotContainer {
   //     return intakeCoordinator;
   // }
 
-  // public DrivetrainReal getDrivetrain(){
-  //   return drivetrain;
-  // }
+  public DrivetrainReal getDrivetrain(){
+    return drivetrain;
+  }
 
   /**
    * @return the chosen autonomous command.

@@ -177,12 +177,12 @@ public class Vision extends VirtualSubSystem {
     double stdDevFactor = Math.pow(avragedistance, 2)/numTargets;
 
     double stdDevLinear = Math.max(
-      stdDevFactor * camera.selectedStd.xyStdFactor(),
+      stdDevFactor * camera.selectedStd.xyStdFactor().getAsDouble(),
       camera.selectedStd.minXyStd()
     );
 
     double stdDevAngular = Math.max(
-      stdDevFactor * camera.selectedStd.thetaStdFactor(),
+      stdDevFactor * camera.selectedStd.thetaStdFactor().getAsDouble(),
       camera.selectedStd.minThetaStd()
     );
 

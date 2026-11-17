@@ -231,6 +231,8 @@ public class DrivetrainReal extends Drivetrain {
     public void periodic() {
         super.periodic();
         drive();
+        GeneralRobotState.getInstance().updatePoseEstimator(getGyroAngle(), modulePositions);
+
     }
 
     /**
