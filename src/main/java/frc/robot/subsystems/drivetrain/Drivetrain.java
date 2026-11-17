@@ -82,9 +82,6 @@ public abstract class Drivetrain extends SubsystemBase {
     String currentCommand = getCurrentCommand() == null ? "None" : getCurrentCommand().getName();
 
     Logger.recordOutput(getName() + "/current command", currentCommand);
-
-
-    // GeneralRobotState.getInstance().updatePoseEstimator(getGyroAngle(), modulePositions);
   }
 
   /**

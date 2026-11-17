@@ -1,6 +1,9 @@
 
 package frc.robot.subsystems.vision;
 
+import java.util.function.DoubleSupplier;
+
+import org.littletonrobotics.junction.networktables.LoggedNetworkNumber;
 import org.photonvision.PhotonPoseEstimator;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
@@ -24,7 +27,7 @@ public class VisionConstants {
      */
     public static final double MAX_SINGLE_AMBIGUTY = 0.1;
 
-    public record StdDevsFactors(double xyStdFactor,double thetaStdFactor,double minXyStd,double minThetaStd) {
+    public record StdDevsFactors(DoubleSupplier xyStdFactor,DoubleSupplier thetaStdFactor,double minXyStd,double minThetaStd) {
     }
 
     public enum PipelineModes {
@@ -43,11 +46,9 @@ public class VisionConstants {
             new Transform3d(
                 new Translation3d(0.238, 0.045, 0.17), //meters
                 new Rotation3d(0, Units.degreesToRadians(-35), 0)
-    
             ),
-            new StdDevsFactors(0.1,0.3,0.1,0.3),
-            new StdDevsFactors(0.15,0.35,0.1,0.3)
-            
+            new StdDevsFactors(0, 0, 0.1, 0.3),
+            new StdDevsFactors(0.15, 0.35, 0.1, 0.3)
         );
         
 //         SIDE_CAMERA(
