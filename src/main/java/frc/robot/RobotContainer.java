@@ -5,6 +5,7 @@
 package frc.robot;
 
 import java.io.IOException;
+import java.lang.constant.DirectMethodHandleDesc;
 
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
@@ -57,19 +58,20 @@ public class RobotContainer {
 
   private final CommandXboxController driverXboxController;
   // private final CommandXboxController operatorXboxController;
-  // private final RollerSubsystem rollerSubsystem;
+  private final RollerSubsystem rollerSubsystem;
   // private final PivotSubsystem pivotSubsystem;
   // private final IntakeCoordinator intakeCoordinator;
 
   private final HoodSubsystem hoodSubsystem;
-  // private final HoodSubsystem hoodSubsystem;
   // private final ShooterSubsystem shooterSubsystem;
 
   private final IndexerSubsystem indexerSubsystem;
 
+  private final FlywheelSubsystem flywheelSubsystem;
+
   // private final GeneralRobotState generalRobotState;
   
-  // private final DrivetrainReal drivetrain;
+  private final DrivetrainReal drivetrain;
 
   // private final DrivetrainSysID sysId;
   
@@ -85,14 +87,14 @@ public class RobotContainer {
 
     // generalRobotState = GeneralRobotState.getInstance();
 
-    // rollerSubsystem = new RollerSubsystem();
+    rollerSubsystem = new RollerSubsystem();
     // pivotSubsystem = new PivotSubsystem();
 
-    // flywheelSubsystem = new FlywheelSubsystem();
+    flywheelSubsystem = new FlywheelSubsystem();
     // hoodSubsystem = new HoodSubsystem();
     // shooterSubsystem = new ShooterSubsystem(flywheelSubsystem, hoodSubsystem);
 
-    // indexerSubsystem = new IndexerSubsystem();
+    indexerSubsystem = new IndexerSubsystem();
 
     // intakeCoordinator = new IntakeCoordinator(pivotSubsystem, rollerSubsystem);
 
@@ -102,16 +104,39 @@ public class RobotContainer {
 
     hoodSubsystem = new HoodSubsystem();
 
-    indexerSubsystem = new IndexerSubsystem();
+    // indexerSubsystem = new IndexerSubsystem();
     
 
-    // drivetrain = new DrivetrainReal(
-    //   ConduitApi.getInstance()::getPDPVoltage, Constants.CHASSIS_TYPE.constants
-    // );
+    drivetrain = new DrivetrainReal(
+      ConduitApi.getInstance()::getPDPVoltage, Constants.CHASSIS_TYPE.constants
+    );
 
-    // CommandScheduler.getInstance().schedule(drivetrain.driveCommand().ignoringDisable(true));
+    drivetrain.setBrakeMode(true);
+
+    driverXboxController.y().onTrue(drivetrain.resetGyroCommand());
+
+    driverXboxController.leftTrigger(0.2).whileTrue(rollerSubsystem.turnOnRoller());
+    driverXboxController.leftBumper().whileTrue(rollerSubsystem.reverseRoller());
+    driverXboxController.b().whileTrue(rollerSubsystem.turnOffRoller());
+
+    driverXboxController.rightBumper().whileTrue(
+      flywheelSubsystem.spinUpCommand(() -> 10.0)
+      .alongWith(hoodSubsystem.setAngleCommand(() -> Rotation2d.fromDegrees(40)),
+      indexerSubsystem.turnOnIndexer()))
+      .onFalse(
+        flywheelSubsystem.stopCommand().alongWith(
+          hoodSubsystem.disableHoodCommand(), 
+          indexerSubsystem.turnOffIndexer())
+      );
+
+
+
+
+    CommandScheduler.getInstance().schedule(drivetrain.driveCommand().ignoringDisable(true));
 
     // sysId = new DrivetrainSysID(Constants.CHASSIS_TYPE.COMPBOT.constants);
+
+    // sysId.setBrakeMode(true);
 
 
     // driverXboxController.a().onTrue(
@@ -124,8 +149,6 @@ public class RobotContainer {
     // driverXboxController.y().whileTrue(sysId.sysIdQuasistaticDrive(Direction.kForward));
     // driverXboxController.x().whileTrue(sysId.sysIdQuasistaticDrive(Direction.kReverse));
 
-    driverXboxController.a().whileTrue(hoodSubsystem.setAngleCommand(() -> Rotation2d.fromDegrees(SmartDashboard.getNumber("goal", 0))));
-    SmartDashboard.putNumber("goal", 0.0);
     
     // operatorXboxController = new CommandXboxController(1);
 
@@ -147,9 +170,9 @@ public class RobotContainer {
   //   return flywheelSubsystem;
   // }
 
-  public IndexerSubsystem getIndexer(){
-      return indexerSubsystem;
-  }
+  // public IndexerSubsystem getIndexer(){
+  //     return indexerSubsystem;
+  // }
 
   // public IntakeCoordinator getIntake(){
   //     return intakeCoordinator;

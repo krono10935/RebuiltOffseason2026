@@ -21,9 +21,10 @@ public enum SwerveModulesMK5 {
     FRONT_LEFT(
             6,  0-0.5, 12
             ,
-            new PIDGains(0.1, 0, 0, 0, 0, 0),
-            new FeedForwardsGains(0.87255, 0.6),
-            0.50306,
+            new PIDGains(10
+            , 0, 0, 0, 0, 0),
+            new FeedForwardsGains(0.89531, 0.6),
+            0.11406,
             4,
             new PIDGains(SwerveModulesMK4.p, SwerveModulesMK4.i, SwerveModulesMK4.d, 0, SwerveModulesMK4.iMax , 0),
             new FeedForwardsGains(0.099965, 0.52098),
@@ -38,9 +39,9 @@ public enum SwerveModulesMK5 {
     FRONT_RIGHT(
             8,  -0.188477, 13
             ,
-            new PIDGains(0.1, 0, 0, 0, 0, 0),
-            new FeedForwardsGains(0.86525, 0.6),
-            0.63881,
+            new PIDGains(10, 0, 0, 0, 0, 0),
+            new FeedForwardsGains(0.88424, 0.6),
+            0.10722,
             5,
             new PIDGains(SwerveModulesMK4.p, SwerveModulesMK4.i, SwerveModulesMK4.d, 0, SwerveModulesMK4.iMax , 0),
             new FeedForwardsGains(0.10363, 0.29686),
@@ -54,9 +55,9 @@ public enum SwerveModulesMK5 {
     BACK_LEFT(
             7, -0.015625 - 0.5, 11
             ,
-            new PIDGains(0.1, 0, 0, 0, 0, 0),
-            new FeedForwardsGains(0.79738, 0.6),
-            0.16772,
+            new PIDGains(10, 0, 0, 0, 0, 0),
+            new FeedForwardsGains(0.93247, 0.6),
+            0.16696,
             3,
             new PIDGains(SwerveModulesMK4.p, SwerveModulesMK4.i, SwerveModulesMK4.d, 0, SwerveModulesMK4.iMax , 0),
             new FeedForwardsGains(0.10471, 0.40178),
@@ -71,9 +72,9 @@ public enum SwerveModulesMK5 {
     BACK_RIGHT(
             9,  0.79, 10
             ,
-            new PIDGains(0.1, 0, 0, 0, 0, 0),
-            new FeedForwardsGains(0.75833, 0.6),
-            0.65297,
+            new PIDGains(10, 0, 0, 0, 0, 0),
+            new FeedForwardsGains(0.91425, 0.6),
+            0.23967,
             2,
             new PIDGains(SwerveModulesMK4.p, SwerveModulesMK4.i, SwerveModulesMK4.d, 0, SwerveModulesMK4.iMax , 0),
             new FeedForwardsGains(0.10256, 0.52537),
@@ -88,7 +89,7 @@ public enum SwerveModulesMK5 {
     private static final double UNIT_CONVERSION = 2 * Math.PI * RADIUS;
 
     private static final double STEER_GEAR_RATIO = 26.1;
-    private static final double DRIVE_GEAR_RATIO = 6.03;
+    private static final double DRIVE_GEAR_RATIO = 7.03;
 
 
 

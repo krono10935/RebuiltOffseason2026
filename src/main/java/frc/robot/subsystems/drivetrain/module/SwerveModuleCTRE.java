@@ -6,6 +6,7 @@ import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.ControlModeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -118,5 +119,8 @@ public abstract class SwerveModuleCTRE extends SwerveModuleIO {
 
         Logger.recordOutput("drivetrain/ctre module/" + constants.NAME() + "/drive/voltageOut", 
             drivingMotor.getMotorVoltage().getValueAsDouble());
+
+        Logger.recordOutput("drivetrain/ctre module/" + constants.NAME() + "/drive/isBrake", 
+        drivingMotor.getControlMode().getValue() == ControlModeValue.StaticBrake);
     }
 }

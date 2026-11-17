@@ -126,6 +126,11 @@ public class ControllerChassisSpeedsCalculator {
         double ySpeed = CONTROLLER_MODE.calculateStick(deadband(-controller.getLeftX())) * speed;
         double thetaSpeed = CONTROLLER_MODE.calculateStick(deadband(-controller.getRightX())) * angularSpeed;
 
+        Logger.recordOutput("drivetrain/controller/xSpeed", xSpeed);
+        Logger.recordOutput("drivetrain/controller/ySpeed", ySpeed);
+        Logger.recordOutput("drivetrain/controller/thetaSpeed", thetaSpeed);
+
+
         return new ChassisSpeeds(xSpeed, ySpeed, thetaSpeed);
     }
 
