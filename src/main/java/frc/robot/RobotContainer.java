@@ -63,7 +63,7 @@ public class RobotContainer {
   private final CommandXboxController driverXboxController;
   // private final CommandXboxController operatorXboxController;
   // private final RollerSubsystem rollerSubsystem;
-  // private final PivotSubsystem pivotSubsystem;
+  private final PivotSubsystem pivotSubsystem;
   // private final IntakeCoordinator intakeCoordinator;
 
   // private final HoodSubsystem hoodSubsystem;
@@ -95,7 +95,7 @@ public class RobotContainer {
     // generalRobotState = GeneralRobotState.getInstance();
 
     // rollerSubsystem = new RollerSubsystem();
-    // pivotSubsystem = new PivotSubsystem();
+    pivotSubsystem = new PivotSubsystem();
 
     // flywheelSubsystem = new FlywheelSubsystem();
     // hoodSubsystem = new HoodSubsystem();
@@ -112,7 +112,7 @@ public class RobotContainer {
     // hoodSubsystem = new HoodSubsystem();
 
     // indexerSubsystem = new IndexerSubsystem();
-    
+
     LoggedNetworkNumber poseX = new LoggedNetworkNumber("PoseX", 3);
     LoggedNetworkNumber poseY = new LoggedNetworkNumber("PoseY",4);
     LoggedNetworkNumber poseYaw = new LoggedNetworkNumber("PoseYaw", 0);
@@ -126,11 +126,12 @@ public class RobotContainer {
       ConduitApi.getInstance()::getPDPVoltage, Constants.CHASSIS_TYPE.constants
     );
 
-
     drivetrain.setDefaultCommand(drivetrain.driveCommand());
 
-
+    driverXboxController.a().whileTrue(pivotSubsystem.openPivot()).onFalse(pivotSubsystem.closePivot());
     driverXboxController.y().onTrue(drivetrain.resetGyroCommand());
+
+
 
     // driverXboxController.leftTrigger(0.2).whileTrue(rollerSubsystem.turnOnRoller());
     // driverXboxController.leftBumper().whileTrue(rollerSubsystem.reverseRoller());

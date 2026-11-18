@@ -77,8 +77,8 @@ public class ControllerChassisSpeedsCalculator {
 
     public ControllerChassisSpeedsCalculator(ChassisSpeedConfig speedConfig, double moduleDistanceFromCenterMeters){
         this.speedConfig = speedConfig;
-        this.MIN_ANGULAR_SPEED = speedConfig.minLinearSpeed() / moduleDistanceFromCenterMeters;
-        this.MAX_ANGULAR_SPEED = speedConfig.maxLinearSpeed() / moduleDistanceFromCenterMeters;
+        this.MIN_ANGULAR_SPEED = speedConfig.minLinearSpeed() / moduleDistanceFromCenterMeters / 2;
+        this.MAX_ANGULAR_SPEED = speedConfig.maxLinearSpeed() / moduleDistanceFromCenterMeters / 2;
     }
 
         /**

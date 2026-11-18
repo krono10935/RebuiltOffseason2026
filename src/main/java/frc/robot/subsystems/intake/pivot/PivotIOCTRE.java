@@ -1,15 +1,23 @@
 package frc.robot.subsystems.intake.pivot;
 
-import com.ctre.phoenix6.controls.MotionMagicVoltage;
-import com.ctre.phoenix6.controls.PositionVoltage;
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 
 public class PivotIOCTRE implements PivotIO {
-    final DutyCycleEncoder dutyCycleEncoder;
+    private final DutyCycleEncoder dutyCycleEncoder;
     private final TalonFX motor;
+    private boolean isActive = false;
+
+    private final ProfiledPIDController controller = 
+        new ProfiledPIDController(8,3,0.5, new Constraints(5, 5));
+
     public PivotIOCTRE() {
         motor = new TalonFX(PivotConstants.MOTOR_CANID);
         dutyCycleEncoder = new DutyCycleEncoder(PivotConstants.DUTY_CYCLE_ENCODER_PORT);
@@ -20,32 +28,54 @@ public class PivotIOCTRE implements PivotIO {
 
     @Override
     public void setRotationSlow(Rotation2d rotation) {
-        motor.setControl(new MotionMagicVoltage(rotation.getRotations()).withSlot(1));
+        controller.setGoal(rotation.getRotations());
+        isActive = true;
     }
 
     @Override
     public void setRotation(Rotation2d rotation) {
-        motor.setControl(new PositionVoltage(rotation.getRotations()));
+        controller.setGoal(rotation.getRotations());
+        isActive = true;
     }
 
     @Override
     public void stop() {
         motor.stopMotor();
+        isActive = false;
     }   
 
     /**
      * Reset the encoder of the motor, based on the readings of an absoluteEncoder.
      */
     public void resetMotorEncoder() {
-        motor.setPosition(dutyCycleEncoder.get() * PivotConstants.MOTOR_TO_ABSOLUTE_ENCODER_RATIO);
+        motor.setPosition(getAbsoluteEncoderPos());
+    }
+
+    private double getAbsoluteEncoderPos(){
+        return dutyCycleEncoder.get() - PivotConstants.ABS_ENCODER_OFFSET.getRotations();
     }
         
     
     @Override
     public void updateInputs(PivotInputs inputs) {
-        inputs.angle = Rotation2d.fromRotations(motor.getPosition().getValueAsDouble());
+        inputs.angle = Rotation2d.fromRotations(getAbsoluteEncoderPos());
         inputs.motorTemperatureC = motor.getDeviceTemp().getValueAsDouble();
         inputs.angularVelocityRPS = motor.getVelocity().getValueAsDouble();
+
+        if (isActive){
+            double volts = controller.calculate(getAbsoluteEncoderPos());
+            Logger.recordOutput("Pivot/PIDController/TotalOutput", volts);
+            motor.setVoltage(volts);
+
+
+
+        }
+
+        Logger.recordOutput("Pivot/PIDController/Error", controller.getPositionError());
+        Logger.recordOutput("Pivot/PIDController/Goal", controller.getGoal());
+        Logger.recordOutput("Pivot/PIDController/Measurment", getAbsoluteEncoderPos());
+
+
     }
 
 

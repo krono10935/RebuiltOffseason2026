@@ -2,6 +2,7 @@ package frc.robot.subsystems.intake.pivot;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.signals.GravityTypeValue;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -15,9 +16,11 @@ import frc.lib.statemachine.StateMachine.StateName;
 
 
 public class PivotConstants {
-    public final static int MOTOR_CANID = 23; //TODO: get the real value
+    public final static int MOTOR_CANID = 60; //TODO: get the real value
     /**The port of the duty cycle encoder */
     public final static int DUTY_CYCLE_ENCODER_PORT = 1;
+
+    public final static Rotation2d ABS_ENCODER_OFFSET = Rotation2d.fromDegrees(234);
 
     /**The motors that are spinning the pivot*/
     public final static DCMotor GEAR_BOX = DCMotor.getKrakenX60(1);
@@ -25,9 +28,9 @@ public class PivotConstants {
     private static final double PIVOT_LENGTH_METERS = 0.366;
     
     /** The angle where the pivot is closed */
-    public static final Rotation2d PIVOT_CLOSE_ANGLE = Rotation2d.fromDegrees(69); // TODO: get real value from encoder measurements
+    public static final Rotation2d PIVOT_CLOSE_ANGLE = Rotation2d.fromDegrees(105); // TODO: get real value from encoder measurements
     /** The angle where the pivot is opened */
-    public static final Rotation2d PIVOT_OPEN_ANGLE = Rotation2d.fromDegrees(180);// TODO: get value from encoder measurements
+    public static final Rotation2d PIVOT_OPEN_ANGLE = Rotation2d.fromDegrees(0);// TODO: get value from encoder measurements
     /**whether we are accounting for gravity in the simulation */
     private static final boolean SIMULATE_GRAVITY = false;                              // TODO: change to wanted mode
     /** The gear ratio between the motor and the pivot arm (a single roation of the pivot is equal to GEAR_RATIO roations of the motor).*/
@@ -79,16 +82,15 @@ public class PivotConstants {
     public static TalonFXConfiguration getMotorConfig(){
         TalonFXConfiguration config = new TalonFXConfiguration();
         //TODO: Tweak the PID values
-        config.Slot0.kP = 5;
+        config.Slot0.kP = 0.1;
         config.Slot0.kD = 0;
-        config.Slot0.kI = 4.0;
-        config.Slot0.kG = 0;
-        config.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
+        config.Slot0.kI = 0;
+
+
+        config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
 
         //TODO: Tweak the PID values for setRotationSlow()
-        config.Slot1.kP = 5;
-        config.Slot1.kG = 0;
-        config.Slot1.GravityType = GravityTypeValue.Arm_Cosine;
+        config.Slot1.kP = 0;
         //The trapezoid profile for setRotationSlow()
         config.MotionMagic.MotionMagicAcceleration = 100;
         config.MotionMagic.MotionMagicCruiseVelocity = 100;
@@ -103,10 +105,10 @@ public class PivotConstants {
 
         config.Feedback.SensorToMechanismRatio = MOTOR_TO_ARM_RATIO;
 
-        config.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
-        config.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
-        config.SoftwareLimitSwitch.ForwardSoftLimitThreshold = PIVOT_OPEN_ANGLE.minus(Rotation2d.fromDegrees(3)).getRotations();
-        config.SoftwareLimitSwitch.ReverseSoftLimitThreshold = PIVOT_CLOSE_ANGLE.plus(Rotation2d.fromDegrees(3)).getRotations();
+        // config.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
+        // config.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
+        config.SoftwareLimitSwitch.ForwardSoftLimitThreshold = PIVOT_OPEN_ANGLE.minus(TOLERANCE).getRotations();
+        config.SoftwareLimitSwitch.ReverseSoftLimitThreshold = PIVOT_CLOSE_ANGLE.plus(TOLERANCE).getRotations();
 
         return config;
     }
