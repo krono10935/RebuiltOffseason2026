@@ -39,6 +39,14 @@ public class ShooterSubsystem extends SubsystemBase {
         flywheelSpeedDutyCycle = new LoggedNetworkNumber("/Tuning/Shooter/flywheel speed duty cycle", 0);
     }
 
+    public FlywheelSubsystem getFlywheel() {
+        return flywheel;
+    }
+
+    public HoodSubsystem getHood() {
+        return hood;
+    }
+
     /**
      * @return basic shoot command using duty cycles (not used in tournament)
      */
@@ -119,6 +127,10 @@ public class ShooterSubsystem extends SubsystemBase {
         setHoodAndFlywheelCommand.addRequirements(this);
 
         return setHoodAndFlywheelCommand;
+    }
+
+    public ShootingParameters getParams() {
+        return params;
     }
 
     @Override

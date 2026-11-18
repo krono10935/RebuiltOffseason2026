@@ -75,6 +75,7 @@ public class RobotContainer {
   
   private final HoodSubsystem hoodSubsystem;
   private final FlywheelSubsystem flywheelSubsystem;
+  private final ShooterSubsystem shooterSubsystem;
 
   // private final GeneralRobotState generalRobotState;
   
@@ -111,6 +112,7 @@ public class RobotContainer {
 
     hoodSubsystem = new HoodSubsystem();
     flywheelSubsystem = new FlywheelSubsystem();
+    shooterSubsystem = new ShooterSubsystem(flywheelSubsystem, hoodSubsystem);
 
     indexerSubsystem = new IndexerSubsystem();
     
@@ -135,11 +137,12 @@ public class RobotContainer {
     LoggedNetworkNumber hoodAngle = new LoggedNetworkNumber("ShooterTweak/HoodAngle", 0);
     LoggedNetworkNumber flywheelSpeed = new LoggedNetworkNumber("ShooterTweak/FlywheelSpeed", 0);
 
-    driverXboxController.a().whileTrue(Commands.parallel(
+    driverXboxController.leftBumper().whileTrue(Commands.parallel(
       flywheelSubsystem.spinUpCommand(flywheelSpeed::get), 
       hoodSubsystem.setAngleCommand(() -> Rotation2d.fromDegrees(hoodAngle.get()))
     ));
-
+    
+    driverXboxController.a().whileTrue(drivetrain.driveAndHomeToAngleSupplier(shooterSubsystem.getParams()::robotAngle));
     driverXboxController.b().whileTrue(indexerSubsystem.turnOnIndexer());
     driverXboxController.x().whileTrue(indexerSubsystem.turnOffIndexer());
 
