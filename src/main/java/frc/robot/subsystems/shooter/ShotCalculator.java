@@ -249,11 +249,9 @@ public class ShotCalculator {
             getShooterFieldRelativeSpeeds(ChassisSpeeds.fromRobotRelativeSpeeds(robotRelativeVelocity, estimatedPose.getRotation()),
             shooterPosition);
         if (ShooterConstants.SHOOT_WITH_MOVEMENT){
-
             return calculateShootingParametersWithMovement(shooterPosition, shooterFieldRelativeSpeeds, hub, robotRelativeVelocity);
 
         } else {
-
             return calculateShootingParametersWithoutMovement(shooterPosition, shooterFieldRelativeSpeeds, hub, robotRelativeVelocity);
         }
 
@@ -413,6 +411,8 @@ public class ShotCalculator {
      Translation2d hub, ChassisSpeeds robotRelativeVelocity){
         
         double distanceFromHub = shooterPosition.getTranslation().getDistance(hub);
+
+        Logger.recordOutput("ShooterTweak/HubDistance", distanceFromHub);
 
         Rotation2d robotAngle = hub.minus(shooterPosition.getTranslation()).getAngle();
 
