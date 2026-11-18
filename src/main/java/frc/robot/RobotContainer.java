@@ -66,15 +66,15 @@ public class RobotContainer {
   private final PivotSubsystem pivotSubsystem;
   // private final IntakeCoordinator intakeCoordinator;
 
-  // private final HoodSubsystem hoodSubsystem;
   // private final ShooterSubsystem shooterSubsystem;
-
+  
   private final Vision vision;
   Supplier<Pose2d> lastPoseSupplier = () -> Pose2d.kZero;
-
-  // private final IndexerSubsystem indexerSubsystem;
-
-  // private final FlywheelSubsystem flywheelSubsystem;
+  
+  private final IndexerSubsystem indexerSubsystem;
+  
+  private final HoodSubsystem hoodSubsystem;
+  private final FlywheelSubsystem flywheelSubsystem;
 
   // private final GeneralRobotState generalRobotState;
   
@@ -109,10 +109,11 @@ public class RobotContainer {
 
     driverXboxController = new CommandXboxController(0);
 
-    // hoodSubsystem = new HoodSubsystem();
+    hoodSubsystem = new HoodSubsystem();
+    flywheelSubsystem = new FlywheelSubsystem();
 
-    // indexerSubsystem = new IndexerSubsystem();
-
+    indexerSubsystem = new IndexerSubsystem();
+    
     LoggedNetworkNumber poseX = new LoggedNetworkNumber("PoseX", 3);
     LoggedNetworkNumber poseY = new LoggedNetworkNumber("PoseY",4);
     LoggedNetworkNumber poseYaw = new LoggedNetworkNumber("PoseYaw", 0);
@@ -131,7 +132,16 @@ public class RobotContainer {
     driverXboxController.a().whileTrue(pivotSubsystem.openPivot()).onFalse(pivotSubsystem.closePivot());
     driverXboxController.y().onTrue(drivetrain.resetGyroCommand());
 
+    LoggedNetworkNumber hoodAngle = new LoggedNetworkNumber("ShooterTweak/HoodAngle", 0);
+    LoggedNetworkNumber flywheelSpeed = new LoggedNetworkNumber("ShooterTweak/FlywheelSpeed", 0);
 
+    driverXboxController.a().whileTrue(Commands.parallel(
+      flywheelSubsystem.spinUpCommand(flywheelSpeed::get), 
+      hoodSubsystem.setAngleCommand(() -> Rotation2d.fromDegrees(hoodAngle.get()))
+    ));
+
+    driverXboxController.b().whileTrue(indexerSubsystem.turnOnIndexer());
+    driverXboxController.x().whileTrue(indexerSubsystem.turnOffIndexer());
 
     // driverXboxController.leftTrigger(0.2).whileTrue(rollerSubsystem.turnOnRoller());
     // driverXboxController.leftBumper().whileTrue(rollerSubsystem.reverseRoller());
