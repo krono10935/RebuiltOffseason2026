@@ -27,7 +27,7 @@ public class VisionConstants {
      */
     public static final double MAX_SINGLE_AMBIGUTY = 0.1;
 
-    public record StdDevsFactors(DoubleSupplier xyStdFactor,DoubleSupplier thetaStdFactor,double minXyStd,double minThetaStd) {
+    public record StdDevsFactors(double xyStdFactor,double thetaStdFactor,double minXyStd,double minThetaStd) {
     }
 
     public enum PipelineModes {

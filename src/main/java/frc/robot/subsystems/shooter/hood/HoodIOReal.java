@@ -102,7 +102,9 @@ public class HoodIOReal implements HoodIO {
         inputs.isAtGoal = IsNear.isNear(inputs.currentAngle, Rotation2d.fromRotations(hoodMotor.getClosedLoopController().getSetpoint()), HoodConstants.DEGREE_TOLERANCE);
 
         resetEncoder();
-        hoodMotor.setVoltage(controller.calculate(getHoodPosition()/8.0, setpoint));
+        if (state != HoodState.DISABLED){
+            hoodMotor.setVoltage(controller.calculate(getHoodPosition()/8.0, setpoint));
+        }
         
         Logger.recordOutput("Hood/Error" , controller.getError());
 
