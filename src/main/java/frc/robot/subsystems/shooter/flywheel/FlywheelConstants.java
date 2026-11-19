@@ -27,7 +27,7 @@ public class FlywheelConstants {
     public static final boolean LEAD_INVERTED = false; // TODO: get the real value from cad
 
     /** how much we are willing to tolerate differences between set PID speed and the actual speed (in meters/second) */
-    public static final double MPS_TOLERANCE = 1; // TODO: tweak
+    public static final double MPS_TOLERANCE = 0.25; // TODO: tweak
 
     /** the gear reduction between the motors and the flywheel */
     public static final double GEAR_RATIO = 3.0/2.0;
@@ -75,8 +75,8 @@ public class FlywheelConstants {
 
         // spinup gains
 
-        config.Slot0.kP = 0.1;
-        config.Slot0.kI = 0.0;
+        config.Slot0.kP = 0.8;
+        config.Slot0.kI = 0.2;
         config.Slot0.kD = 0.0;
 
         config.Slot0.kV = 0.171;
@@ -84,12 +84,12 @@ public class FlywheelConstants {
 
         // hold gains
 
-        config.Slot1.kP = 0.0;
-        config.Slot1.kI = 0.0;
+        config.Slot1.kP = 0.4;
+        config.Slot1.kI = 0.4;
         config.Slot1.kD = 0.0;
 
-        config.Slot1.kV = 0.17956;
-        config.Slot1.kS = 0.4412;
+        config.Slot1.kV = 0.171;
+        config.Slot1.kS = 0.25;
         
         // current limits
 

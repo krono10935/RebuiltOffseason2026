@@ -109,7 +109,7 @@ public class GeneralRobotState {
 
     Logger.recordOutput("VisionMeasurement/Pose", pose);
     Logger.recordOutput("VisionMeasurement/timestamp", timeStamp);
-    Logger.recordOutput("VisionMeasurement/stdDevs", stdDevs);
+    Logger.recordOutput("VisionMeasurement/stdDevs", stdDevs.getData());
 
     poseEstimator.addVisionMeasurement(
       pose,

@@ -69,7 +69,7 @@ public class HoodIOReal implements HoodIO {
         // if (state != HoodState.SETTING_ANGLE)
         //     resetPIDController();
         setpoint = angle.getRotations();
-        // state = HoodState.SETTING_ANGLE;
+        state = HoodState.SETTING_ANGLE;
         // hoodMotor.getClosedLoopController().setSetpoint(angle.getRotations(), ControlType.kPosition, ClosedLoopSlot.kSlot0);
     }
 
