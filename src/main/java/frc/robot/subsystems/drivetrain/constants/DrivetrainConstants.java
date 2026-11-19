@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DrivetrainConstants {
     private static final Rotation2d FRONT_LEFT_SPIN_ANGLE = Rotation2d.fromDegrees(135);
@@ -30,8 +31,16 @@ public class DrivetrainConstants {
     public static final int BALLS_CLOSED_LOOP_SLOT = 1;
 
     /** Angular PID Controller */
-    public static final ProfiledPIDController THETA_CONTROLLER = new ProfiledPIDController(0, 0, 0,
-     new Constraints(100, 1000));
+    public static final ProfiledPIDController THETA_CONTROLLER = new ProfiledPIDController(1.5, 0, 0.2,
+     new Constraints(10, 5));
+
+     static {
+        THETA_CONTROLLER.enableContinuousInput(-Math.PI, Math.PI);
+        THETA_CONTROLLER.setIntegratorRange(-10, 10);
+        THETA_CONTROLLER.setIZone(Rotation2d.fromDegrees(20).getRadians());
+        THETA_CONTROLLER.setTolerance(Rotation2d.fromDegrees(2).getRadians());
+        SmartDashboard.putData(THETA_CONTROLLER);
+     }
 
     /** Small threshold to eliminate rotation jitter */
     public static final double ANGULAR_DEADBAND =

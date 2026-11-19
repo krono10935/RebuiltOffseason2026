@@ -62,7 +62,7 @@ public class RobotContainer {
 
   private final CommandXboxController driverXboxController;
   // private final CommandXboxController operatorXboxController;
-  // private final RollerSubsystem rollerSubsystem;
+  private final RollerSubsystem rollerSubsystem;
   private final PivotSubsystem pivotSubsystem;
   // private final IntakeCoordinator intakeCoordinator;
 
@@ -115,6 +115,8 @@ public class RobotContainer {
     shooterSubsystem = new ShooterSubsystem(flywheelSubsystem, hoodSubsystem);
 
     indexerSubsystem = new IndexerSubsystem();
+
+    rollerSubsystem = new RollerSubsystem();
     
     LoggedNetworkNumber poseX = new LoggedNetworkNumber("PoseX", 3);
     LoggedNetworkNumber poseY = new LoggedNetworkNumber("PoseY",4);
@@ -131,20 +133,26 @@ public class RobotContainer {
 
     drivetrain.setDefaultCommand(drivetrain.driveCommand());
 
-    driverXboxController.a().whileTrue(pivotSubsystem.openPivot()).onFalse(pivotSubsystem.closePivot());
     driverXboxController.y().onTrue(drivetrain.resetGyroCommand());
 
-    LoggedNetworkNumber hoodAngle = new LoggedNetworkNumber("ShooterTweak/HoodAngle", 0);
     LoggedNetworkNumber flywheelSpeed = new LoggedNetworkNumber("ShooterTweak/FlywheelSpeed", 0);
 
-    driverXboxController.leftBumper().whileTrue(Commands.parallel(
-      flywheelSubsystem.spinUpCommand(flywheelSpeed::get), 
-      hoodSubsystem.setAngleCommand(() -> Rotation2d.fromDegrees(hoodAngle.get()))
-    ));
-    
-    driverXboxController.a().whileTrue(drivetrain.driveAndHomeToAngleSupplier(shooterSubsystem.getParams()::robotAngle));
-    driverXboxController.b().whileTrue(indexerSubsystem.turnOnIndexer());
-    driverXboxController.x().whileTrue(indexerSubsystem.turnOffIndexer());
+    Command rBumperCommand = Commands.parallel(
+      flywheelSubsystem.spinUpCommand(() -> flywheelSpeed.get()),
+      indexerSubsystem.turnOnIndexer(),
+      rollerSubsystem.turnOnRoller()
+    );
+
+    Command rBumperCommandOff = Commands.parallel(
+      flywheelSubsystem.stopCommand(),
+      indexerSubsystem.turnOffIndexer(),
+      rollerSubsystem.turnOffRoller()
+    );
+
+    driverXboxController.rightBumper().whileTrue(rBumperCommand);
+    driverXboxController.rightBumper().onFalse(rBumperCommandOff);
+  
+    driverXboxController.a().whileTrue(drivetrain.driveAndHomeToAngleSupplier(() -> shooterSubsystem.getParams().robotAngle()));
 
     // driverXboxController.leftTrigger(0.2).whileTrue(rollerSubsystem.turnOnRoller());
     // driverXboxController.leftBumper().whileTrue(rollerSubsystem.reverseRoller());
