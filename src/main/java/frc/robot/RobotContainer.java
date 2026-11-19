@@ -129,7 +129,7 @@ public class RobotContainer {
 
     drivetrain.setDefaultCommand(drivetrain.driveCommand());
 
-    driverXboxController.a().whileTrue(pivotSubsystem.openPivot()).onFalse(pivotSubsystem.closePivot());
+    driverXboxController.x().whileTrue(pivotSubsystem.openPivot()).onFalse(pivotSubsystem.closePivot());
     driverXboxController.y().onTrue(drivetrain.resetGyroCommand());
 
     LoggedNetworkNumber hoodAngle = new LoggedNetworkNumber("ShooterTweak/HoodAngle", 0);
@@ -140,8 +140,7 @@ public class RobotContainer {
       hoodSubsystem.setAngleCommand(() -> Rotation2d.fromDegrees(hoodAngle.get()))
     ));
 
-    driverXboxController.b().whileTrue(indexerSubsystem.turnOnIndexer());
-    driverXboxController.x().whileTrue(indexerSubsystem.turnOffIndexer());
+    driverXboxController.b().whileTrue(indexerSubsystem.turnOnIndexer()).onFalse(indexerSubsystem.turnOffIndexer());
 
     // driverXboxController.leftTrigger(0.2).whileTrue(rollerSubsystem.turnOnRoller());
     // driverXboxController.leftBumper().whileTrue(rollerSubsystem.reverseRoller());
