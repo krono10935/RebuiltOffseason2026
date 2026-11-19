@@ -26,9 +26,9 @@ public class FlywheelIOReal implements FlywheelIO {
 
             boolean inverted = i >= flywheelMotors.length / 2; // half the motors are inverted
 
-            flywheelMotors[i].getConfigurator().apply(FlywheelConstants.getFollowerConfig(inverted));
+            flywheelMotors[i].getConfigurator().apply(FlywheelConstants.getLeadConfig(inverted));
 
-            flywheelMotors[i].setControl(new Follower(FlywheelConstants.MOTOR_IDS[0], MotorAlignmentValue.Opposed)); // TODO: understand how aligned works, we set it to inverted above this so does it align with the original or the inverted mode
+            // flywheelMotors[i].setControl(new Follower(FlywheelConstants.MOTOR_IDS[0], MotorAlignmentValue.Opposed)); // TODO: understand how aligned works, we set it to inverted above this so does it align with the original or the inverted mode
         }
     }
 
@@ -53,6 +53,9 @@ public class FlywheelIOReal implements FlywheelIO {
     @Override
     public void setVoltage(double voltage) {
         getLeadMotor().setVoltage(voltage);
+        flywheelMotors[1].setVoltage(voltage);
+        flywheelMotors[2].setVoltage(-voltage);
+        flywheelMotors[3].setVoltage(-voltage);
     }
 
     @Override

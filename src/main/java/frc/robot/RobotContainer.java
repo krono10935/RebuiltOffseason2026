@@ -39,6 +39,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.drivetrain.DrivetrainReal;
@@ -117,43 +118,46 @@ public class RobotContainer {
     indexerSubsystem = new IndexerSubsystem();
 
     rollerSubsystem = new RollerSubsystem();
-    
-    LoggedNetworkNumber poseX = new LoggedNetworkNumber("PoseX", 3);
-    LoggedNetworkNumber poseY = new LoggedNetworkNumber("PoseY",4);
-    LoggedNetworkNumber poseYaw = new LoggedNetworkNumber("PoseYaw", 0);
-
-    lastPoseSupplier = () -> new Pose2d(poseX.get(), poseY.get(), Rotation2d.fromDegrees(poseYaw.get()));
-
+  
     vision = new Vision(GeneralRobotState.getInstance()::addVisionMeasurement, GeneralRobotState.getInstance()::getEstimatedPose);
     
-
     drivetrain = new DrivetrainReal(
       ConduitApi.getInstance()::getPDPVoltage, Constants.CHASSIS_TYPE.constants
     );
 
     drivetrain.setDefaultCommand(drivetrain.driveCommand());
 
-    driverXboxController.x().whileTrue(pivotSubsystem.openPivot()).onFalse(pivotSubsystem.closePivot());
-    driverXboxController.y().onTrue(drivetrain.resetGyroCommand());
+    driverXboxController.a().whileTrue(flywheelSubsystem.sysIdDynamicSpin(Direction.kForward));
+    driverXboxController.b().whileTrue(flywheelSubsystem.sysIdDynamicSpin(Direction.kReverse));
+    driverXboxController.y().whileTrue(flywheelSubsystem.sysIdQuasistaticSpin(Direction.kForward));
+    driverXboxController.x().whileTrue(flywheelSubsystem.sysIdQuasistaticSpin(Direction.kReverse));
 
-    LoggedNetworkNumber flywheelSpeed = new LoggedNetworkNumber("ShooterTweak/FlywheelSpeed", 0);
+    // driverXboxController.x().whileTrue(pivotSubsystem.openPivot()).onFalse(pivotSubsystem.closePivot());
+    // driverXboxController.y().onTrue(drivetrain.resetGyroCommand());
+
+    LoggedNetworkNumber flywheelSpeed = new LoggedNetworkNumber("ShooterTweak/FlywheelSpeed", 20);
+    LoggedNetworkNumber hoodAngle = new LoggedNetworkNumber("ShooterTweak/HoodAngle",30);
 
     Command rBumperCommand = Commands.parallel(
       flywheelSubsystem.spinUpCommand(() -> flywheelSpeed.get()),
-      indexerSubsystem.turnOnIndexer(),
-      rollerSubsystem.turnOnRoller()
+      hoodSubsystem.setAngleCommand(() -> Rotation2d.fromDegrees(hoodAngle.get())),
+      Commands.sequence(new WaitCommand(2), indexerSubsystem.turnOnIndexer())
     );
+
 
     Command rBumperCommandOff = Commands.parallel(
       flywheelSubsystem.stopCommand(),
-      indexerSubsystem.turnOffIndexer(),
-      rollerSubsystem.turnOffRoller()
+      hoodSubsystem.disableHoodCommand(),
+      indexerSubsystem.turnOffIndexer()
     );
 
-    driverXboxController.rightBumper().whileTrue(rBumperCommand);
-    driverXboxController.rightBumper().onFalse(rBumperCommandOff);
+    driverXboxController.rightBumper().whileTrue(rBumperCommand).onFalse(rBumperCommandOff);
+    // driverXboxController.b().whileTrue(rollerSubsystem.turnOnRoller())
+    // .onFalse(rollerSubsystem.turnOffRoller());
+
+    // driverXboxController.x().onTrue(hoodSubsystem.setAngleCommand(() -> Rotation2d.fromDegrees(30.0)).alongWith(Commands.sequence(new WaitCommand(2),indexerSubsystem.turnOnIndexer())));
   
-    driverXboxController.a().whileTrue(drivetrain.driveAndHomeToAngleSupplier(() -> shooterSubsystem.getParams().robotAngle()));
+    // driverXboxController.a().whileTrue(drivetrain.driveAndHomeToAngleSupplier(() -> shooterSubsystem.getParams().robotAngle()));
 
     // driverXboxController.leftTrigger(0.2).whileTrue(rollerSubsystem.turnOnRoller());
     // driverXboxController.leftBumper().whileTrue(rollerSubsystem.reverseRoller());

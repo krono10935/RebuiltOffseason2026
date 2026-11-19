@@ -75,14 +75,15 @@ public class FlywheelConstants {
 
         // spinup gains
 
-        config.Slot0.kP = 0.8;
-        config.Slot0.kI = 0.2;
-        config.Slot0.kD = 0.0;
+        // config.Slot0.kP = 5;
+        // config.Slot0.kI = 0.2;
+        // config.Slot0.kD = 0.0;
 
-        config.Slot0.kV = 0.171;
-        config.Slot0.kS = 0.25;
+        // config.Slot0.kV = 0.171;
+        // config.Slot0.kS = 0.25;
 
         // hold gains
+
 
         config.Slot1.kP = 0.4;
         config.Slot1.kI = 0.4;
@@ -93,8 +94,8 @@ public class FlywheelConstants {
         
         // current limits
 
-        config.CurrentLimits.StatorCurrentLimit = 120;
-        config.CurrentLimits.SupplyCurrentLimit = 80;
+        config.CurrentLimits.StatorCurrentLimit = 60;
+        config.CurrentLimits.SupplyCurrentLimit = 35;
 
         config.CurrentLimits.StatorCurrentLimitEnable = true;
         config.CurrentLimits.SupplyCurrentLimitEnable = true;
@@ -119,8 +120,8 @@ public class FlywheelConstants {
         
         // current limits
 
-        config.CurrentLimits.StatorCurrentLimit = 120;
-        config.CurrentLimits.SupplyCurrentLimit = 80;
+        config.CurrentLimits.StatorCurrentLimit = 60;
+        config.CurrentLimits.SupplyCurrentLimit = 35;
 
         config.CurrentLimits.StatorCurrentLimitEnable = true;
         config.CurrentLimits.SupplyCurrentLimitEnable = true;
