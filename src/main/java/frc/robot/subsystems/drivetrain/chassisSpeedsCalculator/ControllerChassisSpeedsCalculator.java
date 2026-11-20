@@ -15,13 +15,14 @@ public class ControllerChassisSpeedsCalculator {
         NONE(1),
 
         /** Exponent only on the brake. */
-        BRAKE_EXPONENTIAL(0.5),
+        BRAKE_EXPONENTIAL(2),
 
         /** Exponent only on the drive sticks */
-        STICKS_EXPONENTIAL(0.5),
+        STICKS_EXPONENTIAL(2),
 
         /** Exponent on both the sticks and the brakes. */
-        BOTH_EXPONENTIAL(0.5);
+        BOTH_EXPONENTIAL(2);
+
 
         /** The exponent to apply */
         public final double exponent;
@@ -68,7 +69,7 @@ public class ControllerChassisSpeedsCalculator {
     private final ChassisSpeedConfig speedConfig;
     private final double MIN_ANGULAR_SPEED;
     private final double MAX_ANGULAR_SPEED;
-    private static final ControllerMode CONTROLLER_MODE = ControllerMode.BRAKE_EXPONENTIAL;
+    private static final ControllerMode CONTROLLER_MODE = ControllerMode.STICKS_EXPONENTIAL;
 
     /**
      * Deadband threshold for controller inputs

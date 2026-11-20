@@ -88,7 +88,7 @@ public abstract class Drivetrain extends SubsystemBase {
    * Resets the gyro
    */
   public void resetGyro(){
-      gyro.reset(AllianceFlipUtil.apply(new Rotation2d()));
+      gyro.reset(AllianceFlipUtil.apply(Rotation2d.k180deg));
   }
 
   /**
