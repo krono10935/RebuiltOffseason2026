@@ -29,7 +29,7 @@ public class HoodIOReal implements HoodIO {
     private final SparkMax hoodMotor;
 
     private final DutyCycleEncoder absoluteEncoder;
-    private final double realPositionOffsetRot = 0.031;
+    private final double realPositionOffsetRot = 0.272;
 
     double setpoint = 0 ;
 

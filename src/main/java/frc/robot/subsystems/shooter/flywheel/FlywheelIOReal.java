@@ -2,6 +2,7 @@ package frc.robot.subsystems.shooter.flywheel;
 
 import org.littletonrobotics.junction.Logger;
 
+import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.VelocityVoltage;
@@ -21,16 +22,26 @@ public class FlywheelIOReal implements FlywheelIO {
         flywheelMotors[0] = new TalonFX(FlywheelConstants.MOTOR_IDS[0]); // flywheelMotors[0] is the leading motor
         flywheelMotors[0].getConfigurator().apply(FlywheelConstants.getLeadConfig(FlywheelConstants.LEAD_INVERTED));
 
-        for (int i = 1; i < flywheelMotors.length; i++){
-            flywheelMotors[i] = new TalonFX(FlywheelConstants.MOTOR_IDS[i]);
 
-            boolean inverted = i >= flywheelMotors.length / 2; // half the motors are inverted
+        flywheelMotors[1] = new TalonFX(FlywheelConstants.MOTOR_IDS[1]);
+        flywheelMotors[1].getConfigurator().apply(FlywheelConstants.getLeadConfig(false));
 
-            flywheelMotors[i].getConfigurator().apply(FlywheelConstants.getLeadConfig(inverted));
+        flywheelMotors[2] = new TalonFX(FlywheelConstants.MOTOR_IDS[2]);
+        flywheelMotors[2].getConfigurator().apply(FlywheelConstants.getLeadConfig(true));
 
-            // flywheelMotors[i].setControl(new Follower(FlywheelConstants.MOTOR_IDS[0], MotorAlignmentValue.Opposed)); // TODO: understand how aligned works, we set it to inverted above this so does it align with the original or the inverted mode
-        }
+        flywheelMotors[3] = new TalonFX(FlywheelConstants.MOTOR_IDS[2]);
+        flywheelMotors[3].getConfigurator().apply(FlywheelConstants.getLeadConfig(true));
+        // for (int i = 1; i < flywheelMotors.length; i++){
+        //     flywheelMotors[i] = new TalonFX(FlywheelConstants.MOTOR_IDS[i]);
+
+        //     boolean inverted = i >= flywheelMotors.length / 2; // half the motors are inverted
+
+        //     flywheelMotors[i].getConfigurator().apply(FlywheelConstants.getFollowerConfig(inverted));
+
+        //     flywheelMotors[i].setControl(new Follower(FlywheelConstants.MOTOR_IDS[0], MotorAlignmentValue.Opposed)); // TODO: understand how aligned works, we set it to inverted above this so does it align with the original or the inverted mode
+        // }
     }
+
 
     /**
      * @return returns the lead motor
@@ -42,7 +53,11 @@ public class FlywheelIOReal implements FlywheelIO {
 
     @Override
     public void spinUp(double mps) {
-        getLeadMotor().setControl(new VelocityVoltage(mps / FlywheelConstants.FLYWHEEL_CIRCUMFERENCE).withSlot(0));
+        ControlRequest request = new VelocityVoltage(mps / FlywheelConstants.FLYWHEEL_CIRCUMFERENCE).withSlot(0);
+        getLeadMotor().setControl(request);
+        flywheelMotors[1].setControl(request);
+        flywheelMotors[2].setControl(request);
+        flywheelMotors[3].setControl(request);
     }
 
     @Override
@@ -60,7 +75,9 @@ public class FlywheelIOReal implements FlywheelIO {
 
     @Override
     public void stop() {
-        getLeadMotor().stopMotor();
+        for (TalonFX talon : flywheelMotors){
+            talon.stopMotor();
+        }
     }
 
     @Override

@@ -39,7 +39,7 @@ public class FlywheelConstants {
     private static final DCMotor GEAR_BOX = DCMotor.getKrakenX60(MOTOR_IDS.length);
     
     /** the offset from the robot's center to the flywheel's position */
-    public static final Transform3d ROBOT_TO_FLYWHEEL = new Transform3d(0.23, 0.30, 0.20, new Rotation3d(0, 0, UnitConversions.degreesToRadians(90)));
+    public static final Transform3d ROBOT_TO_FLYWHEEL = new Transform3d(0.0, 0.30, 0.20, new Rotation3d(0, 0, UnitConversions.degreesToRadians(90)));
 
     // SYSID constants
 
@@ -75,18 +75,18 @@ public class FlywheelConstants {
 
         // spinup gains
 
-        // config.Slot0.kP = 5;
-        // config.Slot0.kI = 0.2;
-        // config.Slot0.kD = 0.0;
+        config.Slot0.kP = 0.8;
+        config.Slot0.kI = 0.2;
+        config.Slot0.kD = 0.0;
 
-        // config.Slot0.kV = 0.171;
-        // config.Slot0.kS = 0.25;
+        config.Slot0.kV = 0.171;
+        config.Slot0.kS = 0.25;
 
         // hold gains
 
 
-        config.Slot1.kP = 0.4;
-        config.Slot1.kI = 0.4;
+        config.Slot1.kP = 0.0;
+        config.Slot1.kI = 0.0;
         config.Slot1.kD = 0.0;
 
         config.Slot1.kV = 0.171;
@@ -94,8 +94,8 @@ public class FlywheelConstants {
         
         // current limits
 
-        config.CurrentLimits.StatorCurrentLimit = 60;
-        config.CurrentLimits.SupplyCurrentLimit = 35;
+        config.CurrentLimits.StatorCurrentLimit = 90;
+        config.CurrentLimits.SupplyCurrentLimit = 60;
 
         config.CurrentLimits.StatorCurrentLimitEnable = true;
         config.CurrentLimits.SupplyCurrentLimitEnable = true;

@@ -12,6 +12,7 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import static edu.wpi.first.units.Units.Second;
@@ -117,7 +118,7 @@ public class FlywheelSubsystem extends SubsystemBase {
    * @return the command the set the flywheel's speed
    */
   public Command spinUpCommand(Supplier<Double> mpsSupplier){
-    return Commands.runEnd(() -> this.spinUp(mpsSupplier.get()),this::stop, this).withName("spinUpFlywheel");
+    return new FunctionalCommand(() -> {}, () -> this.spinUp(mpsSupplier.get()),(fin) -> this.stop(),() -> false, this).withName("spinUpFlywheel");
   }
 
   /**

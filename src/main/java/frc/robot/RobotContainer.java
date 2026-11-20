@@ -136,12 +136,12 @@ public class RobotContainer {
     driverXboxController.y().onTrue(drivetrain.resetGyroCommand());
 
     LoggedNetworkNumber flywheelSpeed = new LoggedNetworkNumber("ShooterTweak/FlywheelSpeed", 20);
-    LoggedNetworkNumber hoodAngle = new LoggedNetworkNumber("ShooterTweak/HoodAngle",30);
-    LoggedNetworkNumber indexerDelay = new LoggedNetworkNumber("ShooterTweak/IndexerDelaySeconds", 2);
+    LoggedNetworkNumber hoodAngle = new LoggedNetworkNumber("ShooterTweak/HoodAngle", 15);
+    LoggedNetworkNumber indexerDelay = new LoggedNetworkNumber("ShooterTweak/IndexerDelaySeconds", 1);
 
     Command shootingCommand = Commands.parallel(
-        flywheelSubsystem.spinUpCommand(flywheelSpeed::getAsDouble), 
-        hoodSubsystem.setAngleCommand(() -> Rotation2d.fromDegrees(hoodAngle.getAsDouble())),
+        flywheelSubsystem.spinUpCommand(() -> shooterSubsystem.getParams().flywheelSpeed()), 
+        hoodSubsystem.setAngleCommand(() -> shooterSubsystem.getParams().hoodAngle()),
         drivetrain.driveAndHomeToAngleSupplier(() -> shooterSubsystem.getParams().robotAngle()),
         Commands.sequence(
           Commands.waitSeconds(indexerDelay.getAsDouble()),
@@ -156,10 +156,10 @@ public class RobotContainer {
     );
 
     driverXboxController.rightBumper().whileTrue(shootingCommand).onFalse(disableShootingCommand);
-
-    driverXboxController.leftTrigger()
-      .whileTrue(rollerSubsystem.turnOffRoller())
-      .onFalse(rollerSubsystem.turnOffRoller());
+    driverXboxController.b().whileTrue(pivotSubsystem.closePivotSlow()).whileFalse(pivotSubsystem.openPivot());
+    //driverXboxController.leftTrigger()
+    //  .whileTrue(rollerSubsystem.turnOnRoller())
+    //  .onFalse(rollerSubsystem.turnOffRoller());
 
     // Command rBumperCommand = Commands.parallel(
     //   flywheelSubsystem.spinUpCommand(() -> flywheelSpeed.get()),
