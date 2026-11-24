@@ -8,7 +8,11 @@ import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 
+import edu.wpi.first.math.geometry.Rotation2d;
+import frc.lib.logging.MotorLogger;
 import frc.lib.math.IsNear;
+import frc.robot.subsystems.shooter.hood.HoodConstants;
+import frc.robot.subsystems.shooter.hood.HoodIO.HoodInputs;
 
 public class FlywheelIOReal implements FlywheelIO {
 
@@ -25,7 +29,6 @@ public class FlywheelIOReal implements FlywheelIO {
             flywheelMotors[i] = new TalonFX(FlywheelConstants.MOTOR_IDS[i]);
 
             boolean inverted = i >= flywheelMotors.length / 2; // half the motors are inverted
-
             flywheelMotors[i].getConfigurator().apply(FlywheelConstants.getLeadConfig(inverted));
 
             // flywheelMotors[i].setControl(new Follower(FlywheelConstants.MOTOR_IDS[0], MotorAlignmentValue.Opposed)); // TODO: understand how aligned works, we set it to inverted above this so does it align with the original or the inverted mode
@@ -62,6 +65,17 @@ public class FlywheelIOReal implements FlywheelIO {
     public void stop() {
         getLeadMotor().stopMotor();
     }
+    
+    private void logSubsystem(FlywheelInputs inputs) {
+        // Subsystem logs
+        Logger.recordOutput(FlywheelConstants.LOGGING_DIRECTORY_SUBSYSTEM + "Position", Rotation2d.fromRotations(inputs.positionRot));
+        Logger.recordOutput(FlywheelConstants.LOGGING_DIRECTORY_SUBSYSTEM + "Is At Goal", inputs.isAtGoal);
+        Logger.recordOutput(FlywheelConstants.LOGGING_DIRECTORY_SUBSYSTEM + "Speed (MPS)", inputs.speedMPS);
+
+        // Motor logs
+        for (int i = 0; i < flywheelMotors.length; i++)
+            MotorLogger.log(FlywheelConstants.LOGGING_DIRECTORY_MOTORS + "FlywheelMotor" + i, flywheelMotors[i]);
+    }
 
     @Override
     public void updateInputs(FlywheelInputs inputs) {
@@ -75,6 +89,8 @@ public class FlywheelIOReal implements FlywheelIO {
         inputs.positionRot = getLeadMotor().getPosition().getValueAsDouble();
 
         inputs.voltage = getLeadMotor().getMotorVoltage().getValueAsDouble();
+
+        logSubsystem(inputs);
     }
 
     @Override

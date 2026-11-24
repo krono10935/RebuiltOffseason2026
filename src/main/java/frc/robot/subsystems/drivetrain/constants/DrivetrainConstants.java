@@ -46,6 +46,12 @@ public class DrivetrainConstants {
     public static final double ANGULAR_DEADBAND =
             Rotation2d.fromDegrees(1).getRadians();
 
+    /** the key for debugging the drivetrain subsystem through Logger.recordOutput */
+    public static final String LOGGING_DIRECTORY_SUBSYSTEM = "Debugging/Subsystems/Drivetrain/";
+
+    /** the key for debugging the drivetrain's motors through Logger.recordOutput */
+    public static final String LOGGING_DIRECTORY_MOTORS = "Debugging/Motors/Drivetrain/";
+
     /**
      * Make the states for the swerve to make an x shape with its wheels.
      * @return The configuration of the swerve wheels to make x shape

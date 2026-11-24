@@ -57,6 +57,12 @@ public class HoodConstants {
     /** the state name of the disable hood state machine command */
     public static final StateName ZERO_HOOD_STATE_NAME = new StateName("close hood");
 
+    /** the key for debugging the hood subsystem through Logger.recordOutput */
+    public static final String LOGGING_DIRECTORY_SUBSYSTEM = "Debugging/Subsystems/Shooter/Hood/";
+
+    /** the key for debugging the hood's motors through Logger.recordOutput */
+    public static final String LOGGING_DIRECTORY_MOTORS = "Debugging/Motors/Shooter/Hood/";
+
     /**
      * @return the hood motor's configuration
      */

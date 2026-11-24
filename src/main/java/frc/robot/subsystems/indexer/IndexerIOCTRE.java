@@ -1,8 +1,13 @@
 package frc.robot.subsystems.indexer;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
+
+import edu.wpi.first.math.geometry.Rotation2d;
+import frc.lib.logging.MotorLogger;
 
 public class IndexerIOCTRE implements IndexerIO {
 
@@ -42,6 +47,15 @@ public class IndexerIOCTRE implements IndexerIO {
         getLeadMotor().set(dutyCycle);
     }
 
+    private void logSubsystem(IndexerInputs inputs) {
+        // Subsystem logs
+        Logger.recordOutput(IndexerConstants.LOGGING_DIRECTORY_SUBSYSTEM + "Speed (RPS)", inputs.speedRPS);
+
+        // Motor logs
+        for (int i = 0; i < motors.length; i++)
+            MotorLogger.log(IndexerConstants.LOGGING_DIRECTORY_MOTORS + "IndexerMotor" + i, motors[i]);
+    }
+
     @Override
     public void updateInputs(IndexerInputs inputs) {
         inputs.speedRPS = getLeadMotor().getVelocity().getValueAsDouble();
@@ -54,7 +68,7 @@ public class IndexerIOCTRE implements IndexerIO {
 
         inputs.tempCel = temps;
 
-        
+        logSubsystem(inputs);
     }
 
 }

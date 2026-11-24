@@ -41,6 +41,12 @@ public class RollerConstants {
     /**The state name of turning off the roller for state machines */
     public static final StateName OFF_ROLLER_STATE_NAME = new StateName("OffRollerState");
 
+    /** the key for debugging the intake subsystem through Logger.recordOutput */
+    public static final String LOGGING_DIRECTORY_SUBSYSTEM = "Debugging/Subsystems/Intake/Roller/";
+
+    /** the key for debugging the intake's motors through Logger.recordOutput */
+    public static final String LOGGING_DIRECTORY_MOTORS = "Debugging/Motors/Intake/Roller/";
+
     /**
      * Get the motor config of the lead motor
      * @return The SparkMaxConfig of the lead motor

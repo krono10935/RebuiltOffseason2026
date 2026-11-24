@@ -35,6 +35,12 @@ public class IndexerConstants {
     /** gear box of all three motors */
     private static final DCMotor GEAR_BOX = DCMotor.getKrakenX60(3);
 
+    /** the key for debugging the indexer subsystem through Logger.recordOutput */
+    public static final String LOGGING_DIRECTORY_SUBSYSTEM = "Debugging/Subsystems/Indexer/";
+
+    /** the key for debugging the indexer's motors through Logger.recordOutput */
+    public static final String LOGGING_DIRECTORY_MOTORS = "Debugging/Motors/Indexer/";
+
     /**
      * get the config
      * @param isInverted is the motor going to spin clockwise or counter clockwise

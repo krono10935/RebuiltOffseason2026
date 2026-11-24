@@ -2,6 +2,9 @@ package frc.robot.subsystems.drivetrain.module;
 
 import frc.robot.Constants;
 import frc.robot.subsystems.drivetrain.configsStructure.moduleConfig.CTREModuleConstants;
+import frc.robot.subsystems.shooter.flywheel.FlywheelConstants;
+import frc.robot.subsystems.shooter.flywheel.FlywheelIO.FlywheelInputs;
+
 import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
@@ -10,6 +13,7 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 
@@ -33,7 +37,6 @@ public class SwerveModuleReal extends SwerveModuleCTRE {
     }
 
     
-
     @Override
     public void update(){
         super.update();

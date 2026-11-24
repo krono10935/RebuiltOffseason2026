@@ -15,6 +15,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.lib.math.IsNear;
+import frc.lib.logging.MotorLogger;
 
 public class HoodIOReal implements HoodIO {
 
@@ -94,6 +95,15 @@ public class HoodIOReal implements HoodIO {
         hoodMotor.stopMotor();
     }
     
+    private void logSubsystem(HoodInputs inputs) {
+        // Subsystem logs
+        Logger.recordOutput(HoodConstants.LOGGING_DIRECTORY_SUBSYSTEM + "Hood Angle", inputs.currentAngle);
+        Logger.recordOutput(HoodConstants.LOGGING_DIRECTORY_SUBSYSTEM + "Is At Goal", inputs.isAtGoal);
+
+        // Motor logs
+        MotorLogger.log(HoodConstants.LOGGING_DIRECTORY_MOTORS + "HoodMotor", hoodMotor);
+    }
+
     @Override
     public void updateInputs(HoodInputs inputs) {
         //inputs.currentAngle = Rotation2d.fromRotations(absoluteEncoderToEncoderPosition() - realPositionOffsetRot); // TODO: make sure it's an absolute encoder
@@ -109,5 +119,7 @@ public class HoodIOReal implements HoodIO {
         Logger.recordOutput("Hood/Error" , controller.getError());
 
         Logger.recordOutput("Hood/current state", state);
+
+        logSubsystem(inputs);
     }
 }

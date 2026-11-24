@@ -27,6 +27,11 @@ public class VisionConstants {
      */
     public static final double MAX_SINGLE_AMBIGUTY = 0.1;
 
+    /** 
+    * the key for debugging the vision subsystem through Logger.recordOutput 
+    */
+    public static final String LOGGING_DIRECTORY_SUBSYSTEM = "Debugging/Subsystems/Vision/";
+
     public record StdDevsFactors(double xyStdFactor,double thetaStdFactor,double minXyStd,double minThetaStd) {
     }
 

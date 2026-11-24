@@ -47,6 +47,12 @@ public class PivotConstants {
     /**The state name of closing the pivot for state machine */
     public static final StateName CLOSE_PIVOT_STATE_NAME = new StateName("ClosePivotState");
 
+    /** the key for debugging the pivot subsystem through Logger.recordOutput */
+    public static final String LOGGING_DIRECTORY_SUBSYSTEM = "Debugging/Subsystems/Intake/Pivot/";
+
+    /** the key for debugging the pivot's motors through Logger.recordOutput */
+    public static final String LOGGING_DIRECTORY_MOTORS = "Debugging/Motors/Intake/Pivot/";
+
     /**
      * @return The plant for the sim
      */

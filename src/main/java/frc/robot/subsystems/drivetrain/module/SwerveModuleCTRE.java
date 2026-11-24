@@ -11,9 +11,13 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import frc.lib.logging.MotorLogger;
 import frc.robot.Constants;
 import frc.robot.subsystems.drivetrain.configsStructure.moduleConfig.CTREModuleConstants;
+import frc.robot.subsystems.drivetrain.constants.DrivetrainConstants;
 import frc.robot.subsystems.drivetrain.module.constants.SwerveModulesMK4;
+import frc.robot.subsystems.shooter.flywheel.FlywheelConstants;
+import frc.robot.subsystems.shooter.flywheel.FlywheelIO.FlywheelInputs;
 
 public abstract class SwerveModuleCTRE extends SwerveModuleIO {
 
@@ -80,11 +84,15 @@ public abstract class SwerveModuleCTRE extends SwerveModuleIO {
         steeringMotor.setNeutralMode(neutralMode);
     }
 
+    private void logSubsystem() {
+        // Motor logs
+        MotorLogger.log(DrivetrainConstants.LOGGING_DIRECTORY_MOTORS + constants.NAME() + "/drive", drivingMotor);
+        MotorLogger.log(DrivetrainConstants.LOGGING_DIRECTORY_MOTORS + constants.NAME() + "/steer", steeringMotor);
+    }
+
     @Override
     public void update(){
         super.update();
-
-
 
         Logger.recordOutput("drivetrain/ctre module/" + constants.NAME() + "/steer/position", 
             steeringMotor.getPosition().getValueAsDouble());

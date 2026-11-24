@@ -9,6 +9,9 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import frc.lib.logging.MotorLogger;
+import frc.robot.subsystems.shooter.flywheel.FlywheelConstants;
+import frc.robot.subsystems.shooter.flywheel.FlywheelIO.FlywheelInputs;
 
 public class PivotIOCTRE implements PivotIO {
     private final DutyCycleEncoder dutyCycleEncoder;
@@ -55,6 +58,15 @@ public class PivotIOCTRE implements PivotIO {
         return dutyCycleEncoder.get() - PivotConstants.ABS_ENCODER_OFFSET.getRotations();
     }
         
+    private void logSubsystem(PivotInputs inputs) {
+        // Subsystem logs
+        Logger.recordOutput(PivotConstants.LOGGING_DIRECTORY_SUBSYSTEM + "Speed (RPS)", inputs.angularVelocityRPS);
+        Logger.recordOutput(PivotConstants.LOGGING_DIRECTORY_SUBSYSTEM + "Angle", inputs.angle);
+        Logger.recordOutput(PivotConstants.LOGGING_DIRECTORY_SUBSYSTEM + "Motor Temperature (Celisus)", inputs.motorTemperatureC);
+
+        // Motor logs
+        MotorLogger.log(PivotConstants.LOGGING_DIRECTORY_MOTORS + "PivotMotor", motor);
+    }
     
     @Override
     public void updateInputs(PivotInputs inputs) {
@@ -66,16 +78,13 @@ public class PivotIOCTRE implements PivotIO {
             double volts = controller.calculate(getAbsoluteEncoderPos());
             Logger.recordOutput("Pivot/PIDController/TotalOutput", volts);
             motor.setVoltage(volts);
-
-
-
         }
 
         Logger.recordOutput("Pivot/PIDController/Error", controller.getPositionError());
         Logger.recordOutput("Pivot/PIDController/Goal", controller.getGoal());
         Logger.recordOutput("Pivot/PIDController/Measurment", getAbsoluteEncoderPos());
 
-
+        logSubsystem(inputs);
     }
 
 

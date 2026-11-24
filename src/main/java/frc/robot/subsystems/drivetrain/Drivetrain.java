@@ -15,13 +15,17 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.field.AllianceFlipUtil;
 import frc.robot.GeneralRobotState;
+import frc.robot.subsystems.drivetrain.DrivetrainReal.DrivetrainInputs;
 import frc.robot.subsystems.drivetrain.configsStructure.ChassisConstants;
+import frc.robot.subsystems.drivetrain.constants.DrivetrainConstants;
 import frc.robot.subsystems.drivetrain.gyro.GyroIO;
 import frc.robot.subsystems.drivetrain.gyro.GyroIOPigeon;
 import frc.robot.subsystems.drivetrain.gyro.GyroIOSim;
 import frc.robot.subsystems.drivetrain.gyro.GyroInputsAutoLogged;
 import frc.robot.subsystems.drivetrain.module.SwerveModuleReal;
 import frc.robot.subsystems.drivetrain.module.SwerveModuleSim;
+import frc.robot.subsystems.shooter.flywheel.FlywheelConstants;
+import frc.robot.subsystems.shooter.flywheel.FlywheelIO.FlywheelInputs;
 import frc.robot.subsystems.drivetrain.module.SwerveModuleIO;
 
 public abstract class Drivetrain extends SubsystemBase {
@@ -64,6 +68,12 @@ public abstract class Drivetrain extends SubsystemBase {
     }
   }
 
+  private void logSubsystem(DrivetrainInputs inputs) {
+    // Subsystem logs
+    Logger.recordOutput(DrivetrainConstants.LOGGING_DIRECTORY_SUBSYSTEM + "Module States", inputs.moduleStates);
+    Logger.recordOutput(DrivetrainConstants.LOGGING_DIRECTORY_SUBSYSTEM + "Chassis Speeds", inputs.speeds);
+  }
+
   @Override
   public void periodic() {
     this.gyro.updateInputs(gyroInputs);
@@ -82,6 +92,8 @@ public abstract class Drivetrain extends SubsystemBase {
     String currentCommand = getCurrentCommand() == null ? "None" : getCurrentCommand().getName();
 
     Logger.recordOutput(getName() + "/current command", currentCommand);
+
+    logSubsystem(inputs);
   }
 
   /**

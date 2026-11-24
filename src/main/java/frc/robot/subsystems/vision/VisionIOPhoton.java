@@ -12,7 +12,11 @@ import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.targeting.PhotonPipelineResult;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.RobotController;
+import frc.lib.logging.MotorLogger;
+import frc.robot.subsystems.shooter.flywheel.FlywheelConstants;
+import frc.robot.subsystems.shooter.flywheel.FlywheelIO.FlywheelInputs;
 import frc.robot.subsystems.vision.VisionConstants.CamerasConstants;
 
 /**
@@ -102,6 +106,13 @@ public class VisionIOPhoton implements VisionIO {
         );
     }
 
+    private void logSubsystem(VisionInputs inputs) {
+        // Subsystem logs
+        Logger.recordOutput(VisionConstants.LOGGING_DIRECTORY_SUBSYSTEM + "Is Connected", inputs.isConnected);
+        Logger.recordOutput(VisionConstants.LOGGING_DIRECTORY_SUBSYSTEM + "Is Enabled", inputs.isEnabled);
+        Logger.recordOutput(VisionConstants.LOGGING_DIRECTORY_SUBSYSTEM + "Pipeline Index", inputs.pipelineIndex);
+    }
+
     /**
      * Updates the provided VisionInputs object with the latest camera data.
      * Populates visionFrames and targetIDs arrays for further processing.
@@ -145,6 +156,8 @@ public class VisionIOPhoton implements VisionIO {
 
 
         Logger.recordOutput("VisionIO/Last pose", lastPoseSupplier.get());
+
+        logSubsystem(inputs);
     }
 
     @Override

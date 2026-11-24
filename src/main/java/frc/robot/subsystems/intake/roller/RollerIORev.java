@@ -4,9 +4,15 @@
 
 package frc.robot.subsystems.intake.roller;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.revrobotics.PersistMode;
 import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkMax;
+
+import edu.wpi.first.math.geometry.Rotation2d;
+import frc.lib.logging.MotorLogger;
+
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
@@ -35,12 +41,23 @@ public class RollerIORev implements RollerIO {
     motorOne.stopMotor();
   }
 
+  private void logSubsystem(RollerInputs inputs) {
+    // Subsystem logs
+    Logger.recordOutput(RollerConstants.LOGGING_DIRECTORY_SUBSYSTEM + "Speed (MPS)", inputs.speedMPS);
+
+    // Motor logs
+    MotorLogger.log(RollerConstants.LOGGING_DIRECTORY_MOTORS + "RollerMotor1", motorOne);
+    MotorLogger.log(RollerConstants.LOGGING_DIRECTORY_MOTORS + "RollerMotor2", motorTwo);
+  }
+
   @Override
   public void updateInputs(RollerInputs inputs) {
     inputs.motorOneTemperatureC = motorOne.getMotorTemperature();
     inputs.motorTwoTemperatureC = motorTwo.getMotorTemperature();
 
     inputs.speedMPS = motorOne.getEncoder().getVelocity();
+
+    logSubsystem(inputs);
   }
 
 

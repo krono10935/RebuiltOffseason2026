@@ -41,6 +41,12 @@ public class FlywheelConstants {
     /** the offset from the robot's center to the flywheel's position */
     public static final Transform3d ROBOT_TO_FLYWHEEL = new Transform3d(0.23, 0.30, 0.20, new Rotation3d(0, 0, UnitConversions.degreesToRadians(90)));
 
+    /** the key for debugging the flywheel subsystem through Logger.recordOutput */
+    public static final String LOGGING_DIRECTORY_SUBSYSTEM = "Debugging/Subsystems/Shooter/Flywheel/";
+
+    /** the key for debugging the flywheel's motors through Logger.recordOutput */
+    public static final String LOGGING_DIRECTORY_MOTORS = "Debugging/Motors/Shooter/Flywheel/";
+
     // SYSID constants
 
     /**
