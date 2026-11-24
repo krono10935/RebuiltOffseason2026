@@ -130,5 +130,7 @@ public abstract class SwerveModuleCTRE extends SwerveModuleIO {
 
         Logger.recordOutput("drivetrain/ctre module/" + constants.NAME() + "/drive/isBrake", 
         drivingMotor.getControlMode().getValue() == ControlModeValue.StaticBrake);
+
+        logSubsystem();
     }
 }
